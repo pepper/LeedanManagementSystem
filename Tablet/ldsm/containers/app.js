@@ -1,7 +1,7 @@
 "use strict";
 
 import React, { Component, StyleSheet, Text, View } from "react-native";
-import { connect } from "react-redux";
+import { connect } from "react-redux/native";
 import ActionCreators, { Database } from "../actions";
 
 var styles = StyleSheet.create({

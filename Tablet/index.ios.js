@@ -2,21 +2,10 @@
  * Sample React Native App
  * https://github.com/facebook/react-native
  */
+/* @flow */
 "use strict";
 
-import Promise from "bluebird";
-import React, { AppRegistry, Component } from "react-native";
-import App from "./ldsm/containers/app";
-
-class Tablet extends Component{
-	render(){
-		return (
-			<App />
-		);
-	}
-}
-
-AppRegistry.registerComponent("Tablet", () => Tablet);
+import LDSM from "./ldsm/containers";
 
 // var React = require('react-native');
 // var {

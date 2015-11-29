@@ -1,5 +1,5 @@
-import DatabseAction from "./database";
+import DatabaseAction from "./database";
 
-exports.module = {
-	Databse: DatabseAction,
+module.exports = {
+	Database: DatabaseAction,
 };
