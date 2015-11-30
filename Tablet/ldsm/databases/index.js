@@ -1,16 +1,24 @@
 "use strict";
 
 import validator from "validator";
+import md5 from "md5";
+import uuid from "uuid";
 import Promise from "bluebird";
 import React, { NativeModules } from "react-native";
 
 var CouchbaseLite = NativeModules.CouchbaseLite;
 
 var dbPath = "";
-var connectToCouchbaseLite = Promise.promisify(CouchbaseLite.connectToCouchbaseLite);
-var createDatabase = Promise.promisify(CouchbaseLite.createDatabase);
-var createView = Promise.promisify(CouchbaseLite.createView);
+
+// Delegate functions
+let connectToCouchbaseLite = Promise.promisify(CouchbaseLite.connectToCouchbaseLite);
+let createDatabase = Promise.promisify(CouchbaseLite.createDatabase);
+let createView = Promise.promisify(CouchbaseLite.createView);
 let createDocument = Promise.promisify(CouchbaseLite.createDocument);
+let query = Promise.promisify(CouchbaseLite.query);
+
+// TOOD: This key must fetch from https link with time base ramdom url  
+let privateKey = "leedanKey";
 
 let viewList = [{
 	name: "login",
@@ -25,7 +33,7 @@ class Company {
 		Object.assign(this, {
 			title:			"",
 			description:	"",
-			serial_number:	"",
+			uuid:			"",
 			username:		"",
 			password:		"",
 			employee_list:	[],
@@ -61,23 +69,34 @@ exports.register = (title, username, password) => {
 		if(validator.toString(username) == ""){
 			return reject("Property: username is required.");
 		}
+		// TODO: Must check passsword weak
 		if(validator.toString(password) == ""){
 			return reject("Property: password is required.");
 		}
-		var number = Math.floor(Math.random() * 1000000000);
-		var serialNumber = ("9" + (new Array(10 - number.toString().length)).join("0") + number);
-		// Must check serial number not exist
 
-		
-
-		var company = new Company();
-		company.title = title;
-		company.username = username;
-		company.password = password;
-		company.serial_number = serialNumber;
-		createDocument(company).then((newCompany) => {
+		var queryObject = {
+			name: "login",
+			startKey: username,
+			endKey: username,
+			limit: 1,
+		}
+		query(queryObject).then((results) => {
+			console.log(results);
+			if(results && results.length > 0){
+				return Promise.reject("Property: username already exist.");
+			}
+			return Promise.resolve();
+		}).then(() => {
+			var company = new Company();
+			company.title = title;
+			company.username = username;
+			company.password = md5(password + privateKey);
+			company.uuid = uuid.v4();
+			return createDocument(company);
+		}).then((newCompany) => {
 			console.log("Company in DB");
 			console.log(newCompany);
+			return resolve(newCompany);
 		}).catch((err) => {
 			console.log(err);
 			return reject(err);

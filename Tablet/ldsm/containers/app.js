@@ -5,6 +5,7 @@ import React, { Component, StyleSheet, Text, View } from "react-native";
 import { connect } from "react-redux/native";
 import ActionCreators, { Database } from "../actions";
 import Login from "./login";
+import Message from "./message";
 import { Color } from "../definitions";
 
 var style = StyleSheet.create({
@@ -19,6 +20,8 @@ var style = StyleSheet.create({
 	}
 });
 
+// TODO: Need add i18n support react-native-i18n-complete
+
 class App extends Component{
 	constructor(props){
 		super(props);
@@ -30,6 +33,7 @@ class App extends Component{
 		return (
 			<View style={style.container}>
 				<Login style={style.login}/>
+				<Message />
 			</View>
 		);
 	}

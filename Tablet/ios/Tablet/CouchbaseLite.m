@@ -70,6 +70,11 @@ RCT_EXPORT_METHOD(databaseAction:(NSArray *)actionList){
   }
 }
 
+// TODO:
+// Must seperate three function:
+// createView (store the doc and emit temp)
+// setKeyForView (by name)
+// setValueForView (by name)
 RCT_EXPORT_METHOD(createView:(NSString *)name forKey:(NSString *)key callback:(RCTResponseSenderBlock)callback){
   dispatch_async(dispatch_get_main_queue(), ^(){
     CBLView *view = [self.database viewNamed: name];
@@ -80,13 +85,38 @@ RCT_EXPORT_METHOD(createView:(NSString *)name forKey:(NSString *)key callback:(R
   });
 }
 
-CBLQuery *query = [[database viewNamed:@"products"] createQuery];
-// we don't need the reduce here
-[query setMapOnly:YES];
-CBLQueryEnumerator *result = [query run:nil];
-for (CBLQueryRow *row in result) {
-  NSString *productName = [row value];
-  NSLog(@"Product name %@", productName);
+RCT_EXPORT_METHOD(query: (NSDictionary *)queryDict callback:(RCTResponseSenderBlock)callback){
+  dispatch_async(dispatch_get_main_queue(), ^(){
+    CBLQuery *query = [[self.database viewNamed: queryDict[@"name"]] createQuery];
+    NSLog(@"%@", queryDict);
+    query.mapOnly = YES;
+    NSString *startKey = [queryDict valueForKey:@"startKey"];
+    if(startKey){
+      query.startKey = [NSString stringWithString: startKey];
+    }
+    NSString *endKey = [queryDict valueForKey:@"endKey"];
+    if(endKey){
+      query.endKey = [NSString stringWithString: endKey];
+    }
+    int limit = [[queryDict valueForKey:@"limit"] intValue];
+    if(limit){
+      query.limit = limit;
+    }
+    NSError *error;
+    CBLQueryEnumerator *result = [query run: &error];
+    if(error){
+      callback(@[[@"Cannot query. Error message: " stringByAppendingString: error.localizedDescription]]);
+    }
+    else{
+      NSArray *results = @[];
+      for(CBLQueryRow *row in result){
+        NSLog(@"%@", [row document].properties);
+        results = [results arrayByAddingObject:[row document].properties];
+      }
+      NSLog(@"%@", results);
+      callback(@[[NSNull null], results]);
+    }
+  });
 }
 
 RCT_EXPORT_METHOD(createDocument:(NSDictionary *)properties callback:(RCTResponseSenderBlock)callback){

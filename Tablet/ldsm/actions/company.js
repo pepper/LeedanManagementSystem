@@ -9,8 +9,16 @@ exports.register = (title, username, password) => {
 			dispatch(createAction(Constant.REGISTER_FINISH)());
 		}).catch((err) => {
 			console.log(err);
+			dispatch(createAction(Constant.ERROR_MESSAGE)(err));
 			dispatch(createAction(Constant.REGISTER_FAIL)());
 		});
+	}
+}
+
+exports.login = () => {
+	// TODO: must store id in keychain by react-native-keychain
+	return (dispatch) => {
+		dispatch(createAction(Constant.INFO_MESSAGE)("登入中...."));
 	}
 }
 

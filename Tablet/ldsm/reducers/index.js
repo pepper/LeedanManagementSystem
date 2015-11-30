@@ -1,9 +1,3 @@
-import { handleActions } from "redux-actions";
+var messageReducer = require("./message");
 
-var Constant = require("../constants/index");
-
-exports.database = handleActions({
-
-}, {
-	
-});
+module.exports = { ...messageReducer };

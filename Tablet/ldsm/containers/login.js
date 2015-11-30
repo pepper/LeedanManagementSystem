@@ -7,7 +7,7 @@ import { connect } from "react-redux/native";
 import TextInput from "../components/basic/text_input";
 import Button from "../components/basic/button";
 
-import ActionCreators, { Company } from "../actions";
+import ActionCreators, { Company, Message } from "../actions";
 
 let style = StyleSheet.create({
 	container:{
@@ -30,21 +30,20 @@ class Login extends Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			mode: "register",
-			title: "Leedan Company",
-			username: "leedan",
-			password: "1234",
-			password_again: "1234",
+			mode: "login",
+			title: "",
+			username: "",
+			password: "",
+			password_again: "",
 		};
 	}
 	onLoginPressHandler(){
 		if(validator.toString(this.state.username) != "" && validator.toString(this.state.password) != ""){
-			// Login!!!
+			this.props.dispatch(Company.login(this.state.username, this.state.password));
 		}
 		else{
-			alert("請輸入正確的帳號密碼");
+			this.props.dispatch(Message.showErrorMessage("請輸入正確的帳號密碼"));
 		}
-		// Action.companyLogin(this.state.username, this.state.password);
 	}
 	onRegisterPressHandler(){
 		if(
@@ -55,9 +54,16 @@ class Login extends Component{
 			&& this.state.password_again == this.state.password
 		){
 			this.props.dispatch(Company.register(this.state.title ,this.state.username, this.state.password));
+			this.setState({
+				mode: "login",
+				title: "",
+				username: "",
+				password: "",
+				password_again: "",
+			});
 		}
 		else{
-			alert("所有項目均為必填項目");
+			this.props.dispatch(Message.showErrorMessage("所有項目均為必填項目，並且密碼必須輸入一致"));
 		}
 	}
 	render(){
@@ -118,4 +124,4 @@ class Login extends Component{
 
 export default connect(
   state => ({})
-)(Login)
+)(Login);
