@@ -43,7 +43,7 @@ class Login extends Component{
 			this.props.dispatch(Company.login(this.state.username, this.state.password));
 		}
 		else{
-			this.props.dispatch(Message.showErrorMessage("請輸入正確的帳號密碼"));
+			this.props.dispatch(Message.showErrorMessage(I18n.t("login_username_format_wong")));
 		}
 	}
 	onRegisterPressHandler(){
@@ -64,7 +64,7 @@ class Login extends Component{
 			});
 		}
 		else{
-			this.props.dispatch(Message.showErrorMessage("所有項目均為必填項目，並且密碼必須輸入一致"));
+			this.props.dispatch(Message.showErrorMessage(I18n.t("login_register_format_wong")));
 		}
 	}
 	render(){
@@ -79,11 +79,11 @@ class Login extends Component{
 					(null)
 				}
 				<TextInput onChangeText={(text) => this.setState({username: text})} placeholder={I18n.t("login_enter_username")} />
-				<TextInput onChangeText={(text) => this.setState({password: text})} placeholder={"Please enter your password."} password={true} />
+				<TextInput onChangeText={(text) => this.setState({password: text})} placeholder={I18n.t("login_enter_password")} password={true} />
 				{
 					(this.state.mode == "register")?
 					(
-						<TextInput onChangeText={(text) => this.setState({password_again: text})} placeholder={"Please enter your password again."} password={true} />
+						<TextInput onChangeText={(text) => this.setState({password_again: text})} placeholder={I18n.t("login_enter_password_again")} password={true} />
 					)
 					:
 					(null)
@@ -93,10 +93,10 @@ class Login extends Component{
 					(
 						<View style={style.buttonContainer}>
 							<Button style={style.button} onPress={() => this.setState({mode: "login"})}>
-								<Text>{"Cancel"}</Text>
+								<Text>{I18n.t("cancel")}</Text>
 							</Button>
 							<Button style={style.button} onPress={this.onRegisterPressHandler.bind(this)}>
-								<Text>{"Submit"}</Text>
+								<Text>{I18n.t("submit")}</Text>
 							</Button>
 						</View>
 					)
@@ -108,10 +108,10 @@ class Login extends Component{
 					(
 						<View style={style.buttonContainer}>
 							<Button style={style.button} onPress={() => this.setState({mode: "register"})}>
-								<Text>{"Register"}</Text>
+								<Text>{I18n.t("login_register")}</Text>
 							</Button>
 							<Button style={style.button} onPress={this.onLoginPressHandler.bind(this)}>
-								<Text>{"Login"}</Text>
+								<Text>{I18n.t("login_login")}</Text>
 							</Button>
 						</View>
 					)
