@@ -3,10 +3,10 @@
 
 import validator from "validator";
 import React, { Component, StyleSheet, View, Text } from "react-native";
-import I18n from "react-native-i18n-complete";
 import { connect } from "react-redux/native";
 import TextInput from "../components/basic/text_input";
 import Button from "../components/basic/button";
+import { I18n } from "../definitions";
 
 import ActionCreators, { Company, Message } from "../actions";
 
@@ -26,18 +26,6 @@ let style = StyleSheet.create({
 		marginLeft: 10,
 	}
 });
-
-I18n.fallbacks = true;
-I18n.translations = {
-	en: {
-		enter_title: "Please enter your company title.",
-		enter_username: "Please enter your company username.",
-	},
-	zh: {
-		enter_title: "請輸入您的公司名稱",
-		enter_username: "請輸入您的登入帳號",
-	}
-}
 
 class Login extends Component{
 	constructor(props){
@@ -85,12 +73,12 @@ class Login extends Component{
 				{
 					(this.state.mode == "register")?
 					(
-						<TextInput onChangeText={(text) => this.setState({title: text})} placeholder={I18n.t("enter_title")} />
+						<TextInput onChangeText={(text) => this.setState({title: text})} placeholder={I18n.t("login_enter_title")} />
 					)
 					:
 					(null)
 				}
-				<TextInput onChangeText={(text) => this.setState({username: text})} placeholder={I18n.t("enter_username")} />
+				<TextInput onChangeText={(text) => this.setState({username: text})} placeholder={I18n.t("login_enter_username")} />
 				<TextInput onChangeText={(text) => this.setState({password: text})} placeholder={"Please enter your password."} password={true} />
 				{
 					(this.state.mode == "register")?
