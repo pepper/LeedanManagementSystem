@@ -8,8 +8,6 @@ import React, { NativeModules } from "react-native";
 
 var CouchbaseLite = NativeModules.CouchbaseLite;
 
-var dbPath = "";
-
 // Delegate functions
 let connectToCouchbaseLite = Promise.promisify(CouchbaseLite.connectToCouchbaseLite);
 let createDatabase = Promise.promisify(CouchbaseLite.createDatabase);
@@ -44,6 +42,7 @@ class Company {
 
 exports.initDatabase = (dbName) => {
 	return new Promise((resolve, reject) => {
+		var dbPath = "";
 		connectToCouchbaseLite().then(() => createDatabase(dbName)).then((result) => {
 			dbPath = result;
 			console.log("Couchbacse Lite DB:" + dbPath);
@@ -81,7 +80,6 @@ exports.register = (title, username, password) => {
 			limit: 1,
 		}
 		query(queryObject).then((results) => {
-			console.log(results);
 			if(results && results.length > 0){
 				return Promise.reject("Property: username already exist.");
 			}
@@ -94,8 +92,6 @@ exports.register = (title, username, password) => {
 			company.uuid = uuid.v4();
 			return createDocument(company);
 		}).then((newCompany) => {
-			console.log("Company in DB");
-			console.log(newCompany);
 			return resolve(newCompany);
 		}).catch((err) => {
 			console.log(err);
@@ -105,7 +101,31 @@ exports.register = (title, username, password) => {
 }
 
 exports.login = (username, password) => {
-
+	return new Promise((resolve, reject) => {
+		if(validator.toString(username) == ""){
+			return reject("Property: username is required.");
+		}
+		if(validator.toString(password) == ""){
+			return reject("Property: password is required.");
+		}
+		var queryObject = {
+			name: "login",
+			startKey: username,
+			endKey: username,
+			limit: 1,
+		}
+		query(queryObject).then((results) => {
+			if(results && results.length > 0 && results[0].password == md5(password + privateKey)){
+				return resolve(results[0]._id);
+			}
+			else{
+				return reject("Username or password wrong.");
+			}
+		}).catch((err) => {
+			console.log(err);
+			return reject(err);
+		});
+	});
 }
 
 exports.checkLogin = () => {

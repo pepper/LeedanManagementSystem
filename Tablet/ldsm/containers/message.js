@@ -57,7 +57,7 @@ class MessageContainer extends Component{
 	}
 	componentWillReceiveProps(props){
 		while(this.state.hide_message_interval_list.length < props.message.message_list.length){
-			this.state.hide_message_interval_list.push(setTimeout(this.hideOneMessage.bind(this), 3000));
+			this.state.hide_message_interval_list.push(setTimeout(this.hideOneMessage.bind(this), 5000));
 		}
 	}
 	render(){

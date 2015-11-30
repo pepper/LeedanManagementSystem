@@ -1,4 +1,6 @@
 var constantArray = [
+	"LOGIN_COMPANY_ID",
+
 	"ALREADY_SHOW_MESSAGE",
 	"ERROR_MESSAGE",
 	"INFO_MESSAGE",
@@ -6,9 +8,9 @@ var constantArray = [
 	"INIT_DATABASE_START",
 	"INIT_DATABASE_FINISH",
 	"INIT_DATABASE_FAIL",
-	"REGISTER_START",
-	"REGISTER_FINISH",
-	"REGISTER_FAIL",
+
+	"LOGIN_FINISH",
+	"LOGOUT_FINISH",
 ];
 
 var constantObject = {};

@@ -11,14 +11,16 @@ exports.message = handleActions({
 		message_list: _.chain(state.message_list).push({
 			index: state.message_list.length,
 			type: "error",
-			message: action.payload,
+			message: action.payload + " [" + (new Date()).toLocaleDateString() + " " + (new Date()).toLocaleTimeString() + "]",
+			date: new Date(),
 		}).value(),
 	}),
 	[Constant.INFO_MESSAGE]: (state, action) => Object.assign({}, state, {
 		message_list: _.chain(state.message_list).push({
 			index: state.message_list.length,
 			type: "info",
-			message: action.payload,
+			message: action.payload + " [" + (new Date()).toLocaleDateString() + " " + (new Date()).toLocaleTimeString() + "]",
+			date: new Date(),
 		}).value(),
 	}),
 }, {

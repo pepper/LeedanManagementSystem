@@ -5,6 +5,20 @@ I18n.translations = {
 	en: {
 		cancel: "Cancel",
 		submit: "Submit",
+
+		company_register_start: "Registing company...",
+		company_register_success: "Company register success",
+		company_register_fail: "Company register fail",
+
+		company_login_start: "Loging company...",
+		company_login_success: "Company login success",
+		company_login_fail: "Company login fail",
+
+		company_login_status_save_success: "Login status save success",
+		company_login_status_save_fail: "Login status save fail",
+
+		company_logout_finish: "Logout success",
+		company_logout_fail: "Logout fail",
 		
 		login_register: "Register",
 		login_login: "Login",
@@ -20,6 +34,20 @@ I18n.translations = {
 	zh: {
 		cancel: "取消",
 		submit: "送出",
+
+		company_register_start: "開始進行公司註冊",
+		company_register_success: "公司帳號註冊完成",
+		company_register_fail: "公司帳號註冊失敗",
+
+		company_login_start: "開始登入公司帳號",
+		company_login_success: "公司帳號登入成功",
+		company_login_fail: "公司帳號登入失敗",
+
+		company_login_status_save_success: "登入記錄儲存成功，下次可不用再次登入",
+		company_login_status_save_fail: "登入記錄儲存失敗",
+
+		company_logout_finish: "登出成功",
+		company_logout_fail: "登出失敗",
 
 		login_register: "註冊新公司帳戶",
 		login_login: "登入公司帳戶",

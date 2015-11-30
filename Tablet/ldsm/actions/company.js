@@ -1,33 +1,68 @@
+/* @flow */
+"use strict";
+
+import Promise from "bluebird";
+import React, { AsyncStorage } from "react-native";
 import { createAction } from "redux-actions";
 import Constant from "../constants/";
 import database from "../databases";
+import { I18n } from "../definitions";
 
 exports.register = (title, username, password) => {
 	return (dispatch) => {
-		dispatch(createAction(Constant.REGISTER_START)());
+		dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_register_start")));
 		database.register(title, username, password).then(() => {
-			dispatch(createAction(Constant.REGISTER_FINISH)());
+			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_register_success")));
 		}).catch((err) => {
-			console.log(err);
-			dispatch(createAction(Constant.ERROR_MESSAGE)(err));
-			dispatch(createAction(Constant.REGISTER_FAIL)());
+			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("company_register_fail") + ": " + err));
 		});
 	}
 }
 
-exports.login = () => {
+exports.login = (username, password) => {
 	// TODO: must store id in keychain by react-native-keychain
 	return (dispatch) => {
-		dispatch(createAction(Constant.INFO_MESSAGE)("登入中...."));
+		var companyId;
+		dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_start")));
+		database.login(username, password).then((result) => {
+			companyId = result;
+			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_success")));
+			return Promise.promisify(AsyncStorage.setItem)(Constant.LOGIN_COMPANY_ID, companyId);
+		}).then(() => {
+			dispatch(createAction(Constant.LOGIN_FINISH)(companyId));
+			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_status_save_success")));
+		}).catch((err) => {
+			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("company_login_fail") + ": " + err));
+		});
 	}
 }
 
-// exports.companyCheckLogin = () => {
-// 	return (dispatch) => {
-// 		dispatch(createAction(Constant.CHECK_LOGIN_START)());
+exports.checkLogin = () => {
+	return (dispatch) => {
+		Promise.promisify(AsyncStorage.getItem)(Constant.LOGIN_COMPANY_ID).then((companyId) => {
+			if(companyId != ""){
+				dispatch(createAction(Constant.LOGIN_FINISH)(companyId));
+				dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_success")));
+			}
+			else{
+				dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_status_no_record")));
+			}
+		}).catch((err) => {
+			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("company_login_status_read_fail") + ": " + err));
+		});
+	}
+}
 
-// 	}
-// }
+exports.logout = () => {
+	return (dispatch) => {
+		Promise.promisify(AsyncStorage.clear)().then(() => {
+			dispatch(createAction(Constant.LOGOUT_FINISH)());
+			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_logout_finish")));
+		}).catch((err) => {
+			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("company_logout_fail") + ": " + err));
+		});
+	}
+}
 
 exports.initDatabase = (daName) => {
 	return (dispatch) => {

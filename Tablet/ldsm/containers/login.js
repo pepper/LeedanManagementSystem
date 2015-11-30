@@ -37,6 +37,7 @@ class Login extends Component{
 			password: "",
 			password_again: "",
 		};
+		props.dispatch(Company.checkLogin());
 	}
 	onLoginPressHandler(){
 		if(validator.toString(this.state.username) != "" && validator.toString(this.state.password) != ""){
