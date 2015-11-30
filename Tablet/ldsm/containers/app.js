@@ -1,20 +1,22 @@
+/* @flow */
 "use strict";
 
 import React, { Component, StyleSheet, Text, View } from "react-native";
 import { connect } from "react-redux/native";
 import ActionCreators, { Database } from "../actions";
+import Login from "./login";
+import { Color } from "../definitions";
 
-var styles = StyleSheet.create({
+var style = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: "#F5FCFF",
+		backgroundColor: Color.dark,
 	},
-	hello_text: {
-		fontSize: 50,
-		color: "#FF0000",
-	},
+	login: {
+		width: 400,
+	}
 });
 
 class App extends Component{
@@ -26,8 +28,8 @@ class App extends Component{
 	}
 	render(){
 		return (
-			<View style={styles.container}>
-				<Text style={styles.hello_text}>{"Hello World!!!"}</Text>
+			<View style={style.container}>
+				<Login style={style.login}/>
 			</View>
 		);
 	}
