@@ -4,6 +4,7 @@
 import _ from "underscore";
 import React, { Component, StyleSheet, Text, View, Image, ListView, TouchableOpacity } from "react-native";
 import { Color, Size } from "../../definitions";
+import Logout from "./logout";
 
 let style = StyleSheet.create({
 	container:{
@@ -51,13 +52,26 @@ export default class MainMenu extends Component{
 		});
 	}
 	buildMenuItemList(props){
-		return this.state.menuItemList.cloneWithRows(_(props.moduleList).filter((module) => (props.activeModule.indexOf(module.key) >= 0)).map((module) => {
+		var menuItemList = _(props.moduleList).filter((module) => (props.activeModule.indexOf(module.key) >= 0)).map((module) => {
 			return {
 				key: module.key,
 				menu: module.menu,
 				selected: props.currentModule == module.key
 			};
-		}));
+		}) || [];
+		while(menuItemList.length < 9){
+			menuItemList.push({
+				key: "",
+				menu: View,
+				selected: false,
+			});
+		}
+		menuItemList.push({
+			key: "logout",
+			menu: Logout,
+			selected: true,
+		});
+		return this.state.menuItemList.cloneWithRows(menuItemList);
 	}
 	render(){
 		return (

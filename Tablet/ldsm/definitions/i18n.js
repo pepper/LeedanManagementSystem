@@ -14,6 +14,8 @@ I18n.translations = {
 		company_login_success: "Company login success",
 		company_login_fail: "Company login fail",
 
+		company_login_status_no_record: "You are not login before",
+		company_login_status_read_fail: "Login status read fail",
 		company_login_status_save_success: "Login status save success",
 		company_login_status_save_fail: "Login status save fail",
 
@@ -43,6 +45,8 @@ I18n.translations = {
 		company_login_success: "公司帳號登入成功",
 		company_login_fail: "公司帳號登入失敗",
 
+		company_login_status_no_record: "查詢不到您的登入記錄，請重新登入",
+		company_login_status_read_fail: "登入記錄讀取失敗",
 		company_login_status_save_success: "登入記錄儲存成功，下次可不用再次登入",
 		company_login_status_save_fail: "登入記錄儲存失敗",
 

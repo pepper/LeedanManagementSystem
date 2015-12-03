@@ -22,6 +22,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		56507BC71C0CAC600078D81E /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56507BC41C0CAC550078D81E /* libRNI18n.a */; };
+		567069F71C10092B006571ED /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 567069F61C10092B006571ED /* FontAwesome.ttf */; };
 		568D7DFE1C0B427600583686 /* CouchbaseLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 568D7DFD1C0B427600583686 /* CouchbaseLite.m */; };
 		568D7E0C1C0B42F500583686 /* CouchbaseLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 568D7E0B1C0B42F500583686 /* CouchbaseLite.framework */; };
 		568D7E0E1C0B431800583686 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 568D7E0D1C0B431800583686 /* Security.framework */; };
@@ -147,6 +148,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Tablet/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		56507BB41C0CAC550078D81E /* RNI18n.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNI18n.xcodeproj; path = "../node_modules/react-native-i18n-complete/iOS/RNI18n.xcodeproj"; sourceTree = "<group>"; };
+		567069F61C10092B006571ED /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		568D7DFC1C0B427600583686 /* CouchbaseLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CouchbaseLite.h; path = Tablet/CouchbaseLite.h; sourceTree = "<group>"; };
 		568D7DFD1C0B427600583686 /* CouchbaseLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CouchbaseLite.m; path = Tablet/CouchbaseLite.m; sourceTree = "<group>"; };
 		568D7E0B1C0B42F500583686 /* CouchbaseLite.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CouchbaseLite.framework; sourceTree = "<group>"; };
@@ -300,6 +302,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		56706A041C100930006571ED /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				567069F61C10092B006571ED /* FontAwesome.ttf */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
 		568D7E171C0B434700583686 /* CouchbaseLite */ = {
 			isa = PBXGroup;
 			children = (
@@ -350,6 +360,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				56706A041C100930006571ED /* Fonts */,
 				568D7E171C0B434700583686 /* CouchbaseLite */,
 				13B07FAE1A68108700A75B9A /* Tablet */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -589,6 +600,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				567069F71C10092B006571ED /* FontAwesome.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

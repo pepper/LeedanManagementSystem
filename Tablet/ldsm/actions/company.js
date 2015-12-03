@@ -1,6 +1,7 @@
 /* @flow */
 "use strict";
 
+import validator from "validator";
 import Promise from "bluebird";
 import React, { AsyncStorage } from "react-native";
 import { createAction } from "redux-actions";
@@ -27,7 +28,7 @@ exports.login = (username, password) => {
 		database.login(username, password).then((result) => {
 			companyId = result;
 			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_success")));
-			return Promise.promisify(AsyncStorage.setItem)(Constant.LOGIN_COMPANY_ID, companyId);
+			return AsyncStorage.setItem(Constant.LOGIN_COMPANY_ID, companyId);
 		}).then(() => {
 			dispatch(createAction(Constant.LOGIN_FINISH)(companyId));
 			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_status_save_success")));
@@ -39,8 +40,8 @@ exports.login = (username, password) => {
 
 exports.checkLogin = () => {
 	return (dispatch) => {
-		Promise.promisify(AsyncStorage.getItem)(Constant.LOGIN_COMPANY_ID).then((companyId) => {
-			if(companyId != ""){
+		AsyncStorage.getItem(Constant.LOGIN_COMPANY_ID).then((companyId) => {
+			if(validator.toString(companyId) != ""){
 				dispatch(createAction(Constant.LOGIN_FINISH)(companyId));
 				dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_success")));
 			}
@@ -55,7 +56,7 @@ exports.checkLogin = () => {
 
 exports.logout = () => {
 	return (dispatch) => {
-		Promise.promisify(AsyncStorage.clear)().then(() => {
+		AsyncStorage.removeItem(Constant.LOGIN_COMPANY_ID).then(() => {
 			dispatch(createAction(Constant.LOGOUT_FINISH)());
 			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_logout_finish")));
 		}).catch((err) => {

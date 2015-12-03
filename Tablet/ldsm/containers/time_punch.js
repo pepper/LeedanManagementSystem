@@ -2,13 +2,12 @@
 "use strict";
 
 import React, { Component, View, Text } from "react-native";
+import IconMenuItem from "../components/main_menu/icon_menu_item";
 
 exports.Menu = class extends Component {
 	render(){
 		return (
-			<View>
-				<Text style={[this.props.selected && {color:"#FF0000"}]}>{"Pu"}</Text>
-			</View>
+			<IconMenuItem text={"Time Punch"} icon={"bell-o"} selected={this.props.selected}/>
 		);
 	}
 }

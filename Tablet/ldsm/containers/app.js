@@ -1,9 +1,10 @@
 /* @flow */
 "use strict";
 
+import validator from "validator";
 import React, { Component, StyleSheet, Text, View } from "react-native";
 import { connect } from "react-redux/native";
-import ActionCreators, { Database, Module } from "../actions";
+import ActionCreators, { Database, Module, Company } from "../actions";
 import Login from "./login";
 import Message from "./message";
 import { Color } from "../definitions";
@@ -34,7 +35,6 @@ var style = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: Color.yellow,
 	},
 	login: {
 		width: 400,
@@ -58,10 +58,16 @@ class App extends Component{
 		props.dispatch(Database.initDatabase("ldsm"));
 	}
 	changeModuleHandler(key){
-		this.props.dispatch(Module.changeModule(key));
+		if(validator.toString(key) == "logout"){
+			this.props.dispatch(Company.logout());
+		}
+		else if(validator.toString(key) != ""){
+			this.props.dispatch(Module.changeModule(key));
+		}
 	}
 	render(){
 		let company = this.props.company || {};
+		console.log(company);
 		let module = this.props.module || {};
 		return (
 			<View style={style.container}>
