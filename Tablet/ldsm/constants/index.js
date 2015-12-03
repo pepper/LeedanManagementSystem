@@ -11,6 +11,8 @@ var constantArray = [
 
 	"LOGIN_FINISH",
 	"LOGOUT_FINISH",
+
+	"CHANGE_MODULE",
 ];
 
 var constantObject = {};

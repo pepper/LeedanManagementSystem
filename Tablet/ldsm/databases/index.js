@@ -127,9 +127,3 @@ exports.login = (username, password) => {
 		});
 	});
 }
-
-exports.checkLogin = () => {
-	return new Promise((resolve, reject) => {
-
-	});
-}

@@ -2,6 +2,10 @@
 "use strict";
 
 module.exports = {
+	first_row_height: 64,
+	first_row_padding_top: 35,
+	row_height: 70.5,
+
 	ios:{
 		full_width: 1024,
 		full_height: 768,

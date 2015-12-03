@@ -2,8 +2,8 @@
 "use strict";
 
 import React, { Component, StyleSheet, TouchableOpacity } from "react-native";
-
 import { Color } from "../../definitions";
+
 var style = StyleSheet.create({
 	textInput: {
 		height: 40,
