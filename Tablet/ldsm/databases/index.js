@@ -9,17 +9,19 @@ import React, { NativeModules } from "react-native";
 var CouchbaseLite = NativeModules.CouchbaseLite;
 
 // Delegate functions
+// TODO: Must check all delegate function are impletemented.
+
 // let connectToCouchbaseLite = Promise.promisify(CouchbaseLite.connectToCouchbaseLite);
 // let createDatabase = Promise.promisify(CouchbaseLite.createDatabase);
 // let createView = Promise.promisify(CouchbaseLite.createView);
 // let createDocument = Promise.promisify(CouchbaseLite.createDocument);
 // let query = Promise.promisify(CouchbaseLite.query);
 
-let connectToCouchbaseLite = Promise.promisify((callback) => { return callback; })
-let createDatabase = Promise.promisify((callback) => { return callback; })
-let createView = Promise.promisify((callback) => { return callback; })
-let createDocument = Promise.promisify((callback) => { return callback; })
-let query = Promise.promisify((callback) => { return callback; })
+// let connectToCouchbaseLite = Promise.promisify((callback) => { return callback; })
+// let createDatabase = Promise.promisify((callback) => { return callback; })
+// let createView = Promise.promisify((callback) => { return callback; })
+// let createDocument = Promise.promisify((callback) => { return callback; })
+// let query = Promise.promisify((callback) => { return callback; })
 
 
 // TOOD: This key must fetch from https link with time base ramdom url  
@@ -48,27 +50,23 @@ class Company {
 }
 
 exports.initDatabase = (dbName) => {
-	return new Promise((resolve, reject) => {
-		var dbPath = "";
-		connectToCouchbaseLite().then(() => createDatabase(dbName)).then((result) => {
-			dbPath = result;
-			console.log("Couchbacse Lite DB:" + dbPath);
-			var promiseList = [];
-			for(var {name, key} of viewList){
-				promiseList.push(createView(name, key));
-			}
-			return Promise.all(promiseList);
-		}).then(() => {
+	return new Promise(async (resolve, reject) => {
+		try{
+			await CouchbaseLite.connectToCouchbaseLite();
+			var dbPath = await CouchbaseLite.createDatabase(dbName);
+			let promiseList = viewList.map(({name, key}) =>  CouchbaseLite.createView(name, key));
+			let results = await* promiseList;
 			return resolve(dbPath);
-		}).catch((err) => {
-			console.log(err);
+		}
+		catch(err){
+			console.error(err);
 			return reject(err);
-		});
+		}
 	});
 }
 
 exports.register = (title, username, password) => {
-	return new Promise((resolve, reject) => {
+	return new Promise(async (resolve, reject) => {
 		if(validator.toString(title) == ""){
 			return reject("Property: title is required.");
 		}
@@ -86,29 +84,29 @@ exports.register = (title, username, password) => {
 			endKey: username,
 			limit: 1,
 		}
-		query(queryObject).then((results) => {
+
+		try{
+			let results = await CouchbaseLite.query(queryObject);
 			if(results && results.length > 0){
-				return Promise.reject("Property: username already exist.");
+				return reject("Property: username already exist.");
 			}
-			return Promise.resolve();
-		}).then(() => {
-			var company = new Company();
+			let company = new Company();
 			company.title = title;
 			company.username = username;
 			company.password = md5(password + privateKey);
 			company.uuid = uuid.v4();
-			return createDocument(company);
-		}).then((newCompany) => {
+			let newCompany = await CouchbaseLite.createDocument(company);
 			return resolve(newCompany);
-		}).catch((err) => {
-			console.log(err);
+		}
+		catch(err){
+			console.error(err);
 			return reject(err);
-		});
+		}
 	});
 }
 
 exports.login = (username, password) => {
-	return new Promise((resolve, reject) => {
+	return new Promise(async (resolve, reject) => {
 		if(validator.toString(username) == ""){
 			return reject("Property: username is required.");
 		}
@@ -121,16 +119,19 @@ exports.login = (username, password) => {
 			endKey: username,
 			limit: 1,
 		}
-		query(queryObject).then((results) => {
+
+		try{
+			let results = await CouchbaseLite.query(queryObject);
 			if(results && results.length > 0 && results[0].password == md5(password + privateKey)){
 				return resolve(results[0]._id);
 			}
 			else{
 				return reject("Username or password wrong.");
 			}
-		}).catch((err) => {
-			console.log(err);
+		}
+		catch(err){
+			console.error(err);
 			return reject(err);
-		});
+		}
 	});
 }

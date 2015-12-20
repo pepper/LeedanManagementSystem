@@ -77,9 +77,11 @@ class App extends Component{
 	}
 	changeModuleHandler(key){
 		if(validator.toString(key) == "logout"){
-			this.setState({
-				showLogoutPanel: true,
-			});
+			console.log("Must remove this");
+			this.props.dispatch(Company.logout());
+			// this.setState({
+			// 	showLogoutPanel: true,
+			// });
 		}
 		else if(validator.toString(key) != ""){
 			this.props.dispatch(Module.changeModule(key));
