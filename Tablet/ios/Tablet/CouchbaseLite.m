@@ -14,41 +14,42 @@ RCT_EXPORT_MODULE()
 
 CBLManager *manager;
 
-RCT_EXPORT_METHOD(connectToCouchbaseLite: (RCTResponseSenderBlock)callback){
+RCT_EXPORT_METHOD(connectToCouchbaseLite:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
   // create a shared instance of CBLManager
   dispatch_async(dispatch_get_main_queue(), ^(){
     self.manager = [CBLManager sharedInstance];
     if (!self.manager) {
-      NSString *errorMessage = @"Cannot create shared instance of CBLManager";
-      callback(@[errorMessage]);
-      NSLog(@"Error: %@", errorMessage);
+      NSError *error = [NSError errorWithDomain:@"Cannot create shared instance of CBLManager" code:-101 userInfo:nil];
+      NSLog(@"Error: %@", error);
+      reject(error);
       return;
     }
-    callback(@[]);
     NSLog (@"Manager created");
+    resolve([self.manager allDatabaseNames]);
   });
 }
 
-RCT_EXPORT_METHOD(createDatabase:(NSString *)dbName callback:(RCTResponseSenderBlock)callback){
+RCT_EXPORT_METHOD(createDatabase:(NSString *)dbName resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
   dispatch_async(dispatch_get_main_queue(), ^(){
     NSError *error;
     
     // Check database name
     if (![CBLManager isValidDatabaseName: dbName]) {
-      callback(@[@"Bad database name"]);
+      error = [NSError errorWithDomain:@"Bad database name" code:-103 userInfo:nil];
+      reject(error);
       return;
     }
     
     // create a new database
     self.database = [self.manager databaseNamed: dbName error: &error];
     if (!self.database) {
-      callback(@[[@"Cannot create database. Error message: " stringByAppendingString: error.localizedDescription]]);
+      reject(error);
       return;
     }
     
     // log the database location
     NSString *databaseLocation = [[[[NSBundle mainBundle] bundlePath] stringByDeletingLastPathComponent] stringByAppendingString: @"/Library/Application Support/CouchbaseLite"];
-    callback(@[[NSNull null], [NSString stringWithFormat:@"%@/%@%@", databaseLocation, dbName, @".cblite"]]);
+    resolve([NSString stringWithFormat:@"%@/%@%@", databaseLocation, dbName, @".cblite"]);
   });
 }
 
@@ -75,17 +76,17 @@ RCT_EXPORT_METHOD(databaseAction:(NSArray *)actionList){
 // createView (store the doc and emit temp)
 // setKeyForView (by name)
 // setValueForView (by name)
-RCT_EXPORT_METHOD(createView:(NSString *)name forKey:(NSString *)key callback:(RCTResponseSenderBlock)callback){
+RCT_EXPORT_METHOD(createView:(NSString *)name forKey:(NSString *)key resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
   dispatch_async(dispatch_get_main_queue(), ^(){
     CBLView *view = [self.database viewNamed: name];
     [view setMapBlock:MAPBLOCK({
       emit(doc[key], doc);
     }) version:@"1"];
-    callback(@[[NSNull null]]);
+    resolve([NSNull null]);
   });
 }
 
-RCT_EXPORT_METHOD(query: (NSDictionary *)queryDict callback:(RCTResponseSenderBlock)callback){
+RCT_EXPORT_METHOD(query: (NSDictionary *)queryDict resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
   dispatch_async(dispatch_get_main_queue(), ^(){
     CBLQuery *query = [[self.database viewNamed: queryDict[@"name"]] createQuery];
     NSLog(@"%@", queryDict);
@@ -105,7 +106,7 @@ RCT_EXPORT_METHOD(query: (NSDictionary *)queryDict callback:(RCTResponseSenderBl
     NSError *error;
     CBLQueryEnumerator *result = [query run: &error];
     if(error){
-      callback(@[[@"Cannot query. Error message: " stringByAppendingString: error.localizedDescription]]);
+      reject(error);
     }
     else{
       NSArray *results = @[];
@@ -114,32 +115,32 @@ RCT_EXPORT_METHOD(query: (NSDictionary *)queryDict callback:(RCTResponseSenderBl
         results = [results arrayByAddingObject:[row document].properties];
       }
       NSLog(@"%@", results);
-      callback(@[[NSNull null], results]);
+      resolve(results);
     }
   });
 }
 
-RCT_EXPORT_METHOD(createDocument:(NSDictionary *)properties callback:(RCTResponseSenderBlock)callback){
+RCT_EXPORT_METHOD(createDocument:(NSDictionary *)properties resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
   dispatch_async(dispatch_get_main_queue(), ^(){
     CBLDocument* document = [self.database createDocument];
     NSError* error;
     if (![document putProperties: properties error: &error]) {
-      callback(@[[@"Cannot create document. Error message: " stringByAppendingString: error.localizedDescription]]);
+      reject(error);
     }
     else{
-      callback(@[[NSNull null], document.properties]);
+      resolve(document.properties);
     }
   });
 }
 
-RCT_EXPORT_METHOD(readDocument:(NSString *)documentId callback:(RCTResponseSenderBlock)callback){
+RCT_EXPORT_METHOD(readDocument:(NSString *)documentId resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
   dispatch_async(dispatch_get_main_queue(), ^(){
     CBLDocument* document = [self.database existingDocumentWithID: documentId];
     if(!document){
-      callback(@[[@"Document not exist with id: " stringByAppendingString: documentId]]);
+      reject([NSError errorWithDomain:[@"Document not exist with id: " stringByAppendingString: documentId] code:-107 userInfo:nil]);
     }
     else{
-      callback(@[[NSNull null], document.properties]);
+      resolve(document.properties);
     }
   });
 }

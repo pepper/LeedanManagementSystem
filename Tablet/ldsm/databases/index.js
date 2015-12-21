@@ -1,3 +1,4 @@
+/* @flow */
 "use strict";
 
 import validator from "validator";
@@ -9,20 +10,13 @@ import React, { NativeModules } from "react-native";
 var CouchbaseLite = NativeModules.CouchbaseLite;
 
 // Delegate functions
-// TODO: Must check all delegate function are impletemented.
-
-// let connectToCouchbaseLite = Promise.promisify(CouchbaseLite.connectToCouchbaseLite);
-// let createDatabase = Promise.promisify(CouchbaseLite.createDatabase);
-// let createView = Promise.promisify(CouchbaseLite.createView);
-// let createDocument = Promise.promisify(CouchbaseLite.createDocument);
-// let query = Promise.promisify(CouchbaseLite.query);
-
-// let connectToCouchbaseLite = Promise.promisify((callback) => { return callback; })
-// let createDatabase = Promise.promisify((callback) => { return callback; })
-// let createView = Promise.promisify((callback) => { return callback; })
-// let createDocument = Promise.promisify((callback) => { return callback; })
-// let query = Promise.promisify((callback) => { return callback; })
-
+if(!CouchbaseLite.connectToCouchbaseLite ||
+	!CouchbaseLite.createDatabase ||
+	!CouchbaseLite.createView ||
+	!CouchbaseLite.createDocument ||
+	!CouchbaseLite.query){
+	throw new Error("CouchbaseLite delegate functions not loaded.");
+}
 
 // TOOD: This key must fetch from https link with time base ramdom url  
 let privateKey = "leedanKey";
