@@ -38,7 +38,7 @@ let style = StyleSheet.create({
 	}
 });
 
-export default class extends Component{
+export default class ConfirmPanel extends Component{
 	render(){
 		return (
 			<Modal

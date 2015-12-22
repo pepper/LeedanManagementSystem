@@ -4,7 +4,7 @@
 import React, { Component, View } from "react-native";
 import IconMenuItem from "./icon_menu_item";
 
-export default class extends Component {
+export default class Logout extends Component {
 	render(){
 		return (
 			<View>

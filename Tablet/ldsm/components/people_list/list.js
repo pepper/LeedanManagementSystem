@@ -9,7 +9,7 @@ let style = StyleSheet.create({
 	},
 });
 
-export default class extends Component{
+export default class PeopleList extends Component{
 	constructor(props){
 		super(props);
 		this.state = {

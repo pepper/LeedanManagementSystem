@@ -16,7 +16,7 @@ var style = StyleSheet.create({
 	}
 });
 
-export default class Button{
+export default class Button extends Component{
 	render(){
 		var renderProp = Object.assign({}, this.props);
 		delete renderProp.style;

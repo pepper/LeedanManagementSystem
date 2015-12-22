@@ -64,4 +64,4 @@ I18n.translations = {
 	}
 }
 
-export default I18n;
+module.exports = I18n;

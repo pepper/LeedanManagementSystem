@@ -14,7 +14,7 @@ var style = StyleSheet.create({
 	}
 });
 
-export default class CustomTextInput{
+export default class CustomTextInput extends Component{
 	render(){
 		var renderProp = Object.assign({}, this.props);
 		delete renderProp.style;
