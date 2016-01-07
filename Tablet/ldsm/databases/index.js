@@ -49,7 +49,7 @@ exports.initDatabase = (dbName) => {
 			await CouchbaseLite.connectToCouchbaseLite();
 			var dbPath = await CouchbaseLite.createDatabase(dbName);
 			let promiseList = viewList.map(({name, key}) =>  CouchbaseLite.createView(name, key));
-			let results = await* promiseList;
+			let results = await Promise.all(promiseList);
 			return resolve(dbPath);
 		}
 		catch(err){
