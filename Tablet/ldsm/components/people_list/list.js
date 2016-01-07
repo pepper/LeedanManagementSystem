@@ -1,7 +1,7 @@
 /* @flow */
 "use strict";
 
-import React, { Component, StyleSheet, ListView } from "react-native";
+import React, { Component, StyleSheet, ListView, PropTypes } from "react-native";
 
 let style = StyleSheet.create({
 	container:{
@@ -15,14 +15,14 @@ export default class PeopleList extends Component{
 		this.state = {
 			itemList: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
 		};
-		this.state.menuItemList = this.buildMenuItemList(props);
+		this.state.itemList = this.buildItemList(props);
 	}
 	componentWillReceiveProps(nextProps){
 		this.setState({
-			menuItemList: this.buildMenuItemList(nextProps),
+			itemList: this.buildItemList(nextProps),
 		});
 	}
-	buildMenuItemList(props){
+	buildItemList(props){
 		var menuItemList = _(props.moduleList).filter((module) => (props.activeModule.indexOf(module.key) >= 0)).map((module) => {
 			return {
 				key: module.key,
@@ -63,3 +63,6 @@ export default class PeopleList extends Component{
 		);
 	}
 }
+
+PeopleList.propTypes = { initialCount: React.PropTypes.number };
+PeopleList.defaultProps = { initialCount: 0 };
