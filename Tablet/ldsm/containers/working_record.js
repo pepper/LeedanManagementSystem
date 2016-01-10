@@ -2,17 +2,9 @@
 "use strict";
 
 import React, { Component, View, Text } from "react-native";
-import IconMenuItem from "../components/main_menu/icon_menu_item";
+import { connect } from "react-redux/native";
 
-exports.Menu = class extends Component {
-	render(){
-		return (
-			<IconMenuItem text={"Working Record"} icon={"dashboard"} selected={this.props.selected}/>
-		);
-	}
-}
-
-exports.Container = class extends Component {
+class WorkingRecordContainer extends Component {
 	render(){
 		return (
 			<View>
@@ -21,3 +13,9 @@ exports.Container = class extends Component {
 		);
 	}
 }
+
+export default connect((state) => {
+	return {
+		company: state.company
+	};
+})(WorkingRecordContainer);

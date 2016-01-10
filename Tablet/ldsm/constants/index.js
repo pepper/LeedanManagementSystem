@@ -1,4 +1,9 @@
-var constantArray = [
+/* @flow */
+"use strict";
+
+import _ from "underscore";
+
+let apiActionConstant = [
 	"LOGIN_COMPANY_ID",
 
 	"ALREADY_SHOW_MESSAGE",
@@ -12,8 +17,15 @@ var constantArray = [
 	"LOGIN_FINISH",
 	"LOGOUT_FINISH",
 
-	"CHANGE_MODULE",
+	"CHANGE_MODULE"
 ];
+
+let viewActionConstant = [
+	"SHOW_PANEL",
+	"HIDE_PANEL"
+];
+
+let constantArray = _.union(apiActionConstant, viewActionConstant);
 
 var constantObject = {};
 constantArray.forEach(function(constant){

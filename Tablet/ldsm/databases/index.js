@@ -5,7 +5,7 @@ import validator from "validator";
 import md5 from "md5";
 import uuid from "uuid";
 import Promise from "bluebird";
-import React, { NativeModules } from "react-native";
+import { NativeModules } from "react-native";
 
 var CouchbaseLite = NativeModules.CouchbaseLite;
 
@@ -23,14 +23,14 @@ let privateKey = "leedanKey";
 
 let viewList = [{
 	name: "login",
-	key: "username",
+	key: "username"
 }, {
 	name: "search_company",
-	key: "title",
+	key: "title"
 }];
 
 class Company {
-	constructor(title, description, username, password){
+	constructor(){
 		Object.assign(this, {
 			title:			"",
 			description:	"",
@@ -38,7 +38,7 @@ class Company {
 			username:		"",
 			password:		"",
 			employee_list:	[],
-			avtive_module:	[],
+			avtive_module:	[]
 		});
 	}
 }
@@ -49,7 +49,7 @@ exports.initDatabase = (dbName) => {
 			await CouchbaseLite.connectToCouchbaseLite();
 			var dbPath = await CouchbaseLite.createDatabase(dbName);
 			let promiseList = viewList.map(({name, key}) =>  CouchbaseLite.createView(name, key));
-			let results = await Promise.all(promiseList);
+			await Promise.all(promiseList);
 			return resolve(dbPath);
 		}
 		catch(err){
@@ -57,7 +57,7 @@ exports.initDatabase = (dbName) => {
 			return reject(err);
 		}
 	});
-}
+};
 
 exports.register = (title, username, password) => {
 	return new Promise(async (resolve, reject) => {
@@ -76,8 +76,8 @@ exports.register = (title, username, password) => {
 			name: "login",
 			startKey: username,
 			endKey: username,
-			limit: 1,
-		}
+			limit: 1
+		};
 
 		try{
 			let results = await CouchbaseLite.query(queryObject);
@@ -97,7 +97,7 @@ exports.register = (title, username, password) => {
 			return reject(err);
 		}
 	});
-}
+};
 
 exports.login = (username, password) => {
 	return new Promise(async (resolve, reject) => {
@@ -111,8 +111,8 @@ exports.login = (username, password) => {
 			name: "login",
 			startKey: username,
 			endKey: username,
-			limit: 1,
-		}
+			limit: 1
+		};
 
 		try{
 			let results = await CouchbaseLite.query(queryObject);
@@ -128,4 +128,4 @@ exports.login = (username, password) => {
 			return reject(err);
 		}
 	});
-}
+};

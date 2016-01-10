@@ -8,7 +8,12 @@ export default class Logout extends Component {
 	render(){
 		return (
 			<View>
-				<IconMenuItem text={"Logout"} icon={"power-off"} selected={true}/>
+				<IconMenuItem
+					{...this.props}
+					text={"Logout"}
+					icon={"power-off"}
+					selected={true}
+				/>
 			</View>
 		);
 	}

@@ -1,38 +1,26 @@
 /* @flow */
 "use strict";
 
-import React, { Component, StyleSheet, View, Text } from "react-native";
+import React, { Component, StyleSheet, View } from "react-native";
 import { connect } from "react-redux/native";
-
-import IconMenuItem from "../components/main_menu/icon_menu_item";
-
-exports.Menu = class extends Component {
-	render(){
-		return (
-			<IconMenuItem text={"Time Punch"} icon={"bell-o"} selected={this.props.selected}/>
-		);
-	}
-}
 
 let style = StyleSheet.create({
 	container: {
 		flex: 1,
-		flexDirection: "row",
+		flexDirection: "row"
 	}
 });
 
-class Container extends Component {
+class TimePunchContainer extends Component {
 	render(){
 		return (
-			<View style={style.container}>
-				
-			</View>
+			<View style={style.container} />
 		);
 	}
 }
 
-exports.Container = connect((state) => {
+export default connect((state) => {
 	return {
-		company: state.company,
+		company: state.company
 	};
-})(Container);
+})(TimePunchContainer);

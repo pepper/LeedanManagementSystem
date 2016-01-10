@@ -3,108 +3,88 @@
 
 import _ from "underscore";
 import validator from "validator";
-import React, { Component, StyleSheet, Text, View } from "react-native";
+import React, { Component, PropTypes, StyleSheet, View } from "react-native";
 import { connect } from "react-redux/native";
-import ActionCreators, { Database, Module, Company } from "../actions";
+import { Database, Module, Panel } from "../actions";
+import { Color } from "../definitions";
+
+// Container
 import Login from "./login";
 import Message from "./message";
-import { Color } from "../definitions";
+import PanelContainer from "./panel";
+
+//Component
 import MainMenu from "../components/main_menu";
-import ConfirmPanel from "../components/basic/confirm_panel";
-
-// Module import
-import TimePunch from "./time_punch";
-import WorkingRecord from "./working_record";
-
-let moduleList = [{
-	key: "time_punch",
-	menu: TimePunch.Menu,
-	container: TimePunch.Container,
-}, {
-	key: "working_record",
-	menu: WorkingRecord.Menu,
-	container: WorkingRecord.Container,
-}];
 
 var style = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "stretch",
-		backgroundColor: Color.dark,
+		backgroundColor: Color.dark
 	},
 	loginContainer: {
 		flex: 1,
 		justifyContent: "center",
-		alignItems: "center",
+		alignItems: "center"
 	},
 	login: {
-		width: 400,
+		width: 400
 	},
 	app: {
 		flex: 1,
-		flexDirection: "row",
+		flexDirection: "row"
 	},
 	mainMenu: {
 		flex: 0,
-		width: 90,
+		width: 90
 	},
 	moduleContainer: {
 		flex: 1,
-		backgroundColor: Color.red,
-	},
-	panelContainer: {
-		position: "absolute",
-		top: 0,
-		left: 0,
-		width: 1024,
-		height: 768,
-		flexDirection: "column",
-		backgroundColor: Color.transparent_black,
-	},
+		backgroundColor: Color.red
+	}
 });
 
 class App extends Component{
+	static propTypes = {
+		company: PropTypes.object,
+		dispatch: PropTypes.func,
+		module: PropTypes.module
+	};
 	constructor(props){
 		super(props);
 
 		this.state = {
-			showLogoutPanel: false,
-		}
+			showLogoutPanel: false
+		};
 
 		// Allocate the local database
 		props.dispatch(Database.initDatabase("ldsm"));
+		props.dispatch(Module.changeModule("time_punch"));
 	}
-	changeModuleHandler(key){
+	handlerChangeModule = (key) => {
 		if(validator.toString(key) == "logout"){
-			console.log("Must remove this");
-			this.props.dispatch(Company.logout());
-			// this.setState({
-			// 	showLogoutPanel: true,
-			// });
+			this.props.dispatch(Panel.showPanel("logout"));
 		}
 		else if(validator.toString(key) != ""){
 			this.props.dispatch(Module.changeModule(key));
 		}
-	}
+	};
 	render(){
 		let company = this.props.company || {};
 		let module = this.props.module || {};
-		let currentModule = _(moduleList).find((item) => item.key == module.current_mudule) || {};
+		let currentModule = _(module.module_list).find((item) => item.key == module.current_mudule) || {};
 		let ModuleContainer = currentModule.container || View;
 		return (
 			<View style={style.container}>
 				{
-					//company.avtive_module
 					(company.login)?
 					(
 						<View style={style.app}>
 							<MainMenu
 								style={style.mainMenu}
-								moduleList={moduleList}
-								activeModule={["time_punch", "working_record"]}
-								currentModule={module.current_mudule}
-								changeModule={this.changeModuleHandler.bind(this)}
+								moduleListDatasource={module.module_list_datasource}
+								onChangeModule={this.handlerChangeModule}
 							/>
 							<View style={style.moduleContainer}>
 								<ModuleContainer />
@@ -118,26 +98,7 @@ class App extends Component{
 						</View>
 					)
 				}
-				{
-					(this.state.showLogoutPanel)?
-					(
-						<View style={style.panelContainer}>
-							<ConfirmPanel
-								visible={this.state.showLogoutPanel}
-								message={"確定要登出系統嗎？"}
-								cancelButtonText={"取消"}
-								confirmButtonText={"登出"}
-								onCancel={() => this.setState({showLogoutPanel: false})}
-								onConfirm={() =>{
-									this.setState({showLogoutPanel: false});
-									this.props.dispatch(Company.logout());
-								}}
-							/>
-						</View>
-					)
-					:
-					(null)
-				}
+				<PanelContainer />
 				<Message />
 			</View>
 		);
@@ -147,6 +108,6 @@ class App extends Component{
 export default connect((state) => {
 	return {
 		company: state.company,
-		module: state.module,
+		module: state.module
 	};
 })(App);

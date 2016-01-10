@@ -1,7 +1,7 @@
 /* @flow */
 "use strict";
 
-var Config = require("../config");
+// var Config = require("../config");
 var Animation = require("./animation");
 var Color = require("./color");
 // var Size = require("./size")[Config.platform];
@@ -14,5 +14,5 @@ module.exports = {
 	Color: Color,
 	Size: Size,
 	ErrorDinifition: ErrorDinifition,
-	I18n: I18n,
+	I18n: I18n
 };

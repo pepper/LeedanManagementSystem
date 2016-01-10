@@ -1,7 +1,7 @@
 /* @flow */
 "use strict";
 
-import React, { Component, StyleSheet, TouchableOpacity } from "react-native";
+import React, { Component, PropTypes, View, StyleSheet, TouchableOpacity } from "react-native";
 import { Color } from "../../definitions";
 
 var style = StyleSheet.create({
@@ -12,17 +12,24 @@ var style = StyleSheet.create({
 		marginBottom: 10,
 		paddingLeft: 10,
 		paddingRight: 10,
-		borderRadius: 10,
+		borderRadius: 10
 	}
 });
 
 export default class Button extends Component{
+	static propTypes = {
+		children: PropTypes.node,
+		style: View.propTypes.style
+	};
+	static defaultProps = {
+		style: {}
+	};
 	render(){
-		var renderProp = Object.assign({}, this.props);
-		delete renderProp.style;
-
 		return (
-			<TouchableOpacity style={[style.textInput, this.props.style || {} ]} {...renderProp}>
+			<TouchableOpacity
+				{...this.props}
+				style={[style.textInput, this.props.style]}
+			>
 				{this.props.children}
 			</TouchableOpacity>
 		);

@@ -6,6 +6,10 @@ I18n.translations = {
 		cancel: "Cancel",
 		submit: "Submit",
 
+		logout: "Logout",
+
+		database_init_fail: "Database initialize fail",
+
 		company_register_start: "Registing company...",
 		company_register_success: "Company register success",
 		company_register_fail: "Company register fail",
@@ -31,11 +35,15 @@ I18n.translations = {
 		login_username_format_wong: "Please input your company username and password.",
 		login_register_format_wong: "All the field are required, and password and check password must same.",
 
-
+		logout_panel_msssage: "Are you sure you want to logout system?"
 	},
 	zh: {
 		cancel: "取消",
 		submit: "送出",
+
+		logout: "登出",
+
+		database_init_fail: "資料庫初始化錯誤",
 
 		company_register_start: "開始進行公司註冊",
 		company_register_success: "公司帳號註冊完成",
@@ -61,7 +69,9 @@ I18n.translations = {
 		login_enter_password_again: "請再次輸入您的密碼",
 		login_username_format_wong: "請輸入正確的公司帳號及密碼",
 		login_register_format_wong: "註冊資訊所有項目均為必填項目，並且請注意您輸入的密碼及確認密碼必須一致",
+
+		logout_panel_msssage: "確定要登出系統嗎？"
 	}
-}
+};
 
 module.exports = I18n;

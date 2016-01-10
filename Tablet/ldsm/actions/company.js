@@ -2,8 +2,7 @@
 "use strict";
 
 import validator from "validator";
-import Promise from "bluebird";
-import React, { AsyncStorage } from "react-native";
+import { AsyncStorage } from "react-native";
 import { createAction } from "redux-actions";
 import Constant from "../constants/";
 import database from "../databases";
@@ -17,8 +16,8 @@ exports.register = (title, username, password) => {
 		}).catch((err) => {
 			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("company_register_fail") + ": " + err));
 		});
-	}
-}
+	};
+};
 
 exports.login = (username, password) => {
 	// TODO: must store id in keychain by react-native-keychain
@@ -35,8 +34,8 @@ exports.login = (username, password) => {
 		}).catch((err) => {
 			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("company_login_fail") + ": " + err));
 		});
-	}
-}
+	};
+};
 
 exports.checkLogin = () => {
 	return (dispatch) => {
@@ -51,8 +50,8 @@ exports.checkLogin = () => {
 		}).catch((err) => {
 			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("company_login_status_read_fail") + ": " + err));
 		});
-	}
-}
+	};
+};
 
 exports.logout = () => {
 	return (dispatch) => {
@@ -62,8 +61,8 @@ exports.logout = () => {
 		}).catch((err) => {
 			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("company_logout_fail") + ": " + err));
 		});
-	}
-}
+	};
+};
 
 exports.initDatabase = (daName) => {
 	return (dispatch) => {
@@ -71,8 +70,7 @@ exports.initDatabase = (daName) => {
 		database.initDatabase(daName).then(() => {
 			dispatch(createAction(Constant.INIT_DATABASE_FINISH)());
 		}).catch((err) => {
-			console.log(err);
-			dispatch(createAction(Constant.INIT_DATABASE_FAIL)());
+			dispatch(createAction(Constant.INIT_DATABASE_FAIL)(I18n.t("database_init_fail") + ": " + err));
 		});
-	}
-}
+	};
+};

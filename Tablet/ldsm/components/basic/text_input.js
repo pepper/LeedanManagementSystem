@@ -1,7 +1,7 @@
 /* @flow */
 "use strict";
 
-import React, { Component, StyleSheet, TextInput } from "react-native";
+import React, { Component, PropTypes, StyleSheet, TextInput } from "react-native";
 
 import { Color } from "../../definitions";
 var style = StyleSheet.create({
@@ -10,17 +10,24 @@ var style = StyleSheet.create({
 		backgroundColor: Color.white,
 		marginBottom: 10,
 		paddingLeft: 10,
-		borderRadius: 10,
+		borderRadius: 10
 	}
 });
 
 export default class CustomTextInput extends Component{
+	static propTypes = {
+		children: PropTypes.node,
+		style: PropTypes.object
+	};
+	static defaultProps = {
+		style: {}
+	};
 	render(){
-		var renderProp = Object.assign({}, this.props);
-		delete renderProp.style;
-
 		return (
-			<TextInput style={[style.textInput, this.props.style || {} ]} {...renderProp} />
+			<TextInput
+				{...this.props}
+				style={[style.textInput, this.props.style]}
+			/>
 		);
 	}
 }

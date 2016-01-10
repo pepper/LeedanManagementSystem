@@ -1,44 +1,60 @@
-import React, { Component, StyleSheet, Modal, View, Text, TouchableOpacity } from "react-native";
-import Button from "./button";
-import { Color } from "../../definitions";
+/* @flow */
+"use strict";
 
+import React, { Component, PropTypes, StyleSheet, Modal, View, Text } from "react-native";
+import Button from "../basic/button";
+import { Color } from "../../definitions";
 
 let style = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: "center",
-		alignItems: "center",
+		alignItems: "center"
 	},
 	innerContainer:{
 		backgroundColor: Color.white,
 		borderRadius: 10,
 		padding: 20,
-		paddingBottom: 0,
+		paddingBottom: 0
 	},
 	content: {
-		backgroundColor: Color.transparent,
+		backgroundColor: Color.transparent
 	},
 	message: {
-		fontSize: 18,
+		fontSize: 18
 	},
 	buttonContainer: {
 		flexDirection: "row",
-		marginTop: 20,
+		marginTop: 20
 	},
 	cancelButton: {
 		backgroundColor: Color.gray,
-		marginRight: 10,
+		marginRight: 10
 	},
 	confirmButton: {
-		backgroundColor: Color.light_blue,
+		backgroundColor: Color.light_blue
 	},
 	buttonText: {
 		fontSize: 14,
-		color: Color.white,
+		color: Color.white
 	}
 });
 
 export default class ConfirmPanel extends Component{
+	static propTypes = {
+		cancelButtonText: PropTypes.string,
+		confirmButtonText: PropTypes.string,
+		message: PropTypes.string,
+		onCancel: PropTypes.func,
+		onConfirm: PropTypes.func
+	};
+	static defaultProps = {
+		cancelButtonText: "cancel",
+		confirmButtonText: "confirm",
+		message: "Not set the message yet.",
+		onCancel: () => {},
+		onConfirm: () => {}
+	};
 	render(){
 		return (
 			<Modal
@@ -52,10 +68,16 @@ export default class ConfirmPanel extends Component{
 							<Text style={style.message}>{this.props.message}</Text>
 						</View>
 						<View style={[style.content, style.buttonContainer]}>
-							<Button style={style.cancelButton} onPress={this.props.onCancel}>
+							<Button
+								style={style.cancelButton}
+								onPress={this.props.onCancel}
+							>
 								<Text style={style.buttonText}>{this.props.cancelButtonText}</Text>
 							</Button>
-							<Button style={style.confirmButton} onPress={this.props.onConfirm}>
+							<Button
+								style={style.confirmButton}
+								onPress={this.props.onConfirm}
+							>
 								<Text style={style.buttonText}>{this.props.confirmButtonText}</Text>
 							</Button>
 						</View>

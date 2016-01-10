@@ -1,11 +1,11 @@
 /* @flow */
 "use strict";
 
-import React, { Component, View, Text, StyleSheet, LayoutAnimation } from "react-native";
+import React, { Component, PropTypes, View, Text, StyleSheet } from "react-native";
 import { connect } from "react-redux/native";
 import { Color } from "../definitions";
 
-import ActionCreators, { Message } from "../actions";
+import { Message } from "../actions";
 
 var style = StyleSheet.create({
 	container: {
@@ -15,7 +15,7 @@ var style = StyleSheet.create({
 		width: 1024,
 		flexDirection: "column",
 		paddingTop: 10,
-		backgroundColor: Color.transparent,
+		backgroundColor: Color.transparent
 	},
 	messageBox: {
 		flex: 1,
@@ -25,55 +25,62 @@ var style = StyleSheet.create({
 		padding: 5,
 		marginLeft: 10,
 		marginRight: 10,
-		marginTop: 5,
+		marginTop: 5
 	},
 	infoMessage: {
-		backgroundColor: Color.yellow,
+		backgroundColor: Color.yellow
 	},
 	errorMessage: {
-		backgroundColor: Color.orange,
+		backgroundColor: Color.orange
 	},
 	messageText: {
 		fontSize: 12,
-		fontWeight: "bold",
+		fontWeight: "bold"
 	},
 	infoText: {
-		color: Color.dark,
+		color: Color.dark
 	},
 	errorText: {
-		color: Color.white,
-	},
+		color: Color.white
+	}
 });
 
 class MessageContainer extends Component{
+	static propTypes = {
+		dispatch: PropTypes.func,
+		message: PropTypes.object
+	};
 	constructor(props){
 		super(props);
 		this.state = {
-			hide_message_interval_list: [],
-		}
-	}
-	hideOneMessage(){
-		this.props.dispatch(Message.alreadyShowMessage());
+			hide_message_interval_list: []
+		};
 	}
 	componentWillReceiveProps(props){
 		while(this.state.hide_message_interval_list.length < props.message.message_list.length){
-			this.state.hide_message_interval_list.push(setTimeout(this.hideOneMessage.bind(this), 5000));
+			this.state.hide_message_interval_list.push(setTimeout(this.hideOneMessage, 5000));
 		}
 	}
+	hideOneMessage = () => {
+		this.props.dispatch(Message.alreadyShowMessage());
+	};
 	render(){
 		return (
 			<View style={style.container}>
 				{
 					this.props.message.message_list.slice(this.props.message.current_index).map((message) => {
 						return (
-							<View style={[style.messageBox, {info: style.infoMessage, error: style.errorMessage}[message.type]]} key={"Message" + message.index}>
-								<Text style={[style.messageText, {info: style.infoText, error: style.errorText}[message.type]]}>{ message.message }</Text>
+							<View
+								key={"Message" + message.index}
+								style={[style.messageBox, {info: style.infoMessage, error: style.errorMessage}[message.type]]}
+							>
+								<Text style={[style.messageText, {info: style.infoText, error: style.errorText}[message.type]]}>{message.message}</Text>
 							</View>
 						);
 					})
 				}
 			</View>
-		)
+		);
 	}
 }
 

@@ -9,7 +9,7 @@ var createCustomError = function(name, code, defaultMessage, BaseError){
 	newError.prototype.code = code;
 	newError.prototype.message = defaultMessage;
 	return newError;
-}
+};
 
 var createError = function(name, code, message){
 	if(!error[name]){
@@ -18,7 +18,7 @@ var createError = function(name, code, message){
 	else{
 		throw new Error("Error redefined.");
 	}
-}
+};
 
 var errorDefinition = [
 	["NotExistError", -103, "Target not exist"],
@@ -27,7 +27,7 @@ var errorDefinition = [
 	["UserNotLogin", -109, "User currently not login"],
 	["BackendOperationFail", -111, "Backend operation fail"],
 	["CompanyNotLoginError", -201, "Company currently not login"],
-	["EmployeeNotLoginError", -203, "There is no employee login"],
+	["EmployeeNotLoginError", -203, "There is no employee login"]
 ];
 
 errorDefinition.forEach(function(input){

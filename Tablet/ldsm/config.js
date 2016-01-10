@@ -19,6 +19,6 @@
 
 // var config = new Config();
 var config = {
-	platform: "ios",
+	platform: "ios"
 };
 module.exports = config;

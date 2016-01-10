@@ -18,7 +18,7 @@ class Tablet extends Component{
 	render(){
 		return (
 			<Provider store={store}>
-				{ () => <App /> }
+				{() => <App />}
 			</Provider>
 		);
 	}

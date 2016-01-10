@@ -4,7 +4,7 @@
 var React = require("react-native");
 
 var {
-	LayoutAnimation,
+	LayoutAnimation
 } = React;
 
 var animations = {
@@ -14,25 +14,25 @@ var animations = {
 			create: {
 				duration: 300,
 				type: LayoutAnimation.Types.easeInEaseOut,
-				property: LayoutAnimation.Properties.opacity,
+				property: LayoutAnimation.Properties.opacity
 			},
 			update: {
 				type: LayoutAnimation.Types.spring,
-				springDamping: 0.4,
-			},
+				springDamping: 0.4
+			}
 		},
 		easeInEaseOut: {
 			duration: 300,
 			create: {
 				type: LayoutAnimation.Types.easeInEaseOut,
-				property: LayoutAnimation.Properties.scaleXY,
+				property: LayoutAnimation.Properties.scaleXY
 			},
 			update: {
 				delay: 100,
-				type: LayoutAnimation.Types.easeInEaseOut,
-			},
-		},
-	},
+				type: LayoutAnimation.Types.easeInEaseOut
+			}
+		}
+	}
 };
 
 exports.spring = animations.layout.spring;
