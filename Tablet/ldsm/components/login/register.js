@@ -40,7 +40,7 @@ export default class Register extends Component{
 	};
 	handleTitleChange = (text) => {
 		this.setState({
-			username: text
+			title: text
 		});
 	};
 	handleUsernameChange = (text) => {
@@ -67,6 +67,7 @@ export default class Register extends Component{
 			&& this.state.password_again == this.state.password
 		){
 			this.props.dispatch(Company.register(this.state.title ,this.state.username, this.state.password));
+			this.props.onChangeMode();
 		}
 		else{
 			this.props.dispatch(Message.showErrorMessage(I18n.t("login_register_format_wong")));
@@ -76,19 +77,27 @@ export default class Register extends Component{
 		return (
 			<View style={[style.container, this.props.style || {} ]}>
 				<TextInput
+					autoCapitalize={"none"}
+					autoCorrect={false}
 					onChangeText={this.handleTitleChange}
 					placeholder={I18n.t("login_enter_title")}
 				/>
 				<TextInput
+					autoCapitalize={"none"}
+					autoCorrect={false}
 					onChangeText={this.handleUsernameChange}
 					placeholder={I18n.t("login_enter_username")}
 				/>
 				<TextInput
+					autoCapitalize={"none"}
+					autoCorrect={false}
 					onChangeText={this.handlePasswordChange}
 					placeholder={I18n.t("login_enter_password")}
 					password={true}
 				/>
 				<TextInput
+					autoCapitalize={"none"}
+					autoCorrect={false}
 					onChangeText={this.handlePasswordAgainChange}
 					placeholder={I18n.t("login_enter_password_again")}
 					password={true}

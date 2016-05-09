@@ -9,6 +9,7 @@ exports.showInfoMessage = (message) => {
 };
 
 exports.showErrorMessage = (message) => {
+	console.log(message);
 	return createAction(Constant.ERROR_MESSAGE)(message);
 };
 

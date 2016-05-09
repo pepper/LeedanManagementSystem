@@ -58,10 +58,14 @@ export default class Login extends Component{
 		return (
 			<View style={[style.container, this.props.style || {} ]}>
 				<TextInput
+					autoCapitalize={"none"}
+					autoCorrect={false}
 					onChangeText={this.handleUsernameChange}
 					placeholder={I18n.t("login_enter_username")}
 				/>
 				<TextInput
+					autoCapitalize={"none"}
+					autoCorrect={false}
 					onChangeText={this.handlePasswordChange}
 					placeholder={I18n.t("login_enter_password")}
 					password={true}

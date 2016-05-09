@@ -1,4 +1,1 @@
-/* @flow */
-"use strict";
-
-import {} from "./ldsm/containers";
+import "./index.common";

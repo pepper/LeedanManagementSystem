@@ -5,6 +5,8 @@ I18n.translations = {
 	en: {
 		cancel: "Cancel",
 		submit: "Submit",
+		confirm: "Confirm",
+		content_not_set_yet: "Not set the content yet.",
 
 		logout: "Logout",
 
@@ -35,11 +37,26 @@ I18n.translations = {
 		login_username_format_wong: "Please input your company username and password.",
 		login_register_format_wong: "All the field are required, and password and check password must same.",
 
-		logout_panel_msssage: "Are you sure you want to logout system?"
+		logout_panel_msssage: "Are you sure you want to logout system?",
+
+		company_create_employee: "Create employee",
+		company_create_employee_start: "Start create create employee",
+		company_create_employee_success: "Create employee success",
+		company_create_employee_fail: "Fail to create employee",
+		company_create_employee_panel_input_name: "Please input name",
+		company_create_employee_panel_input_id_number: "Please input ID number", 
+		company_create_employee_panel_input_passcode: "Please input passcode",
+		company_create_employee_panel_reinput_passcode: "Please input passcode again",
+
+		load_success: "Resource load success",
+		load_fail: "Fail to load resource",
+		load_stock_start: "Start to load stock",
 	},
 	zh: {
 		cancel: "取消",
 		submit: "送出",
+		confirm: "確認",
+		content_not_set_yet: "尚未設定內容",
 
 		logout: "登出",
 
@@ -70,7 +87,20 @@ I18n.translations = {
 		login_username_format_wong: "請輸入正確的公司帳號及密碼",
 		login_register_format_wong: "註冊資訊所有項目均為必填項目，並且請注意您輸入的密碼及確認密碼必須一致",
 
-		logout_panel_msssage: "確定要登出系統嗎？"
+		logout_panel_msssage: "確定要登出系統嗎？",
+
+		company_create_employee: "新增員工",
+		company_create_employee_start: "開始建立員工",
+		company_create_employee_success: "成功建立員工資料",
+		company_create_employee_fail: "建立員工資料失敗",
+		company_create_employee_panel_input_name: "請輸入姓名",
+		company_create_employee_panel_input_id_number: "請輸入員工編號", 
+		company_create_employee_panel_input_passcode: "請輸入登入密碼",
+		company_create_employee_panel_reinput_passcode: "再次輸入登入密碼",
+
+		load_success: "資料下載成功",
+		load_fail: "資料下載失敗",
+		load_stock_start: "開始下載產品資料",
 	}
 };
 

@@ -5,29 +5,26 @@ import validator from "validator";
 import md5 from "md5";
 import uuid from "uuid";
 import Promise from "bluebird";
-import { NativeModules } from "react-native";
+import {manager, ReactCBLite} from "react-native-couchbase-lite";
 
-var CouchbaseLite = NativeModules.CouchbaseLite;
+import { ErrorDinifition } from "../definitions";
+let error = ErrorDinifition;
 
-// Delegate functions
-if(!CouchbaseLite.connectToCouchbaseLite ||
-	!CouchbaseLite.createDatabase ||
-	!CouchbaseLite.createView ||
-	!CouchbaseLite.createDocument ||
-	!CouchbaseLite.query){
-	throw new Error("CouchbaseLite delegate functions not loaded.");
-}
+// ESLint hack
+let emit;
+
+const port = 5984;
+const username = "react-native-sync-model";
+const password = "ledom-cnys-evitan-tcaer";
+
+ReactCBLite.init(port, username, password, (err) => {
+	if(err){
+		console.error(err);
+	}
+});
 
 // TOOD: This key must fetch from https link with time base ramdom url  
 let privateKey = "leedanKey";
-
-let viewList = [{
-	name: "login",
-	key: "username"
-}, {
-	name: "search_company",
-	key: "title"
-}];
 
 class Company {
 	constructor(){
@@ -42,54 +39,75 @@ class Company {
 		});
 	}
 }
+Company.views = {
+	lists:{
+		map: function(doc){
+			emit(doc.username, doc);
+		}.toString()
+	}
+};
 
-exports.initDatabase = (dbName) => {
+class Employee {
+	constructor(){
+		Object.assign(this, {
+			name:			"",
+			id_number:		"",
+			serial_number:	"",
+			passcode:		"",
+			avatar:			"",
+			permission:		"",
+			group:			""
+		});
+	}
+}
+
+let database = null;
+
+let checkRequire = (property, name, type = "string") => {
 	return new Promise(async (resolve, reject) => {
-		try{
-			await CouchbaseLite.connectToCouchbaseLite();
-			var dbPath = await CouchbaseLite.createDatabase(dbName);
-			let promiseList = viewList.map(({name, key}) =>  CouchbaseLite.createView(name, key));
-			await Promise.all(promiseList);
-			return resolve(dbPath);
-		}
-		catch(err){
-			console.error(err);
-			return reject(err);
+		switch(type){
+			case "string":
+				if(validator.toString(property[name]) == ""){
+					return reject(new error.InputPropertyNotAcceptError("Property: " + name + " is required."));
+				}
+				return resolve();
 		}
 	});
+}
+
+exports.initDatabase = async (dbName) => {
+	database = new manager(`http://${username}:${password}@localhost:${port}/`, dbName);
+	await database.createDatabase();
+	await database.createDesignDocument("company", Company.views);
 };
 
 exports.register = (title, username, password) => {
 	return new Promise(async (resolve, reject) => {
 		if(validator.toString(title) == ""){
-			return reject("Property: title is required.");
+			return reject(new Error("Property: title is required."));
 		}
 		if(validator.toString(username) == ""){
-			return reject("Property: username is required.");
+			return reject(new Error("Property: username is required."));
 		}
 		// TODO: Must check passsword weak
 		if(validator.toString(password) == ""){
-			return reject("Property: password is required.");
+			return reject(new Error("Property: password is required."));
 		}
 
-		var queryObject = {
-			name: "login",
-			startKey: username,
-			endKey: username,
-			limit: 1
-		};
-
 		try{
-			let results = await CouchbaseLite.query(queryObject);
-			if(results && results.length > 0){
-				return reject("Property: username already exist.");
+			let results = await database.queryView("company", "lists", {
+				keys: [username],
+				limit: 1
+			});
+			if(results && results.rows && results.rows.length > 0){
+				return reject(new Error("Property: username already exist."));
 			}
 			let company = new Company();
 			company.title = title;
 			company.username = username;
 			company.password = md5(password + privateKey);
 			company.uuid = uuid.v4();
-			let newCompany = await CouchbaseLite.createDocument(company);
+			let newCompany = await database.createDocument(company);
 			return resolve(newCompany);
 		}
 		catch(err){
@@ -102,25 +120,21 @@ exports.register = (title, username, password) => {
 exports.login = (username, password) => {
 	return new Promise(async (resolve, reject) => {
 		if(validator.toString(username) == ""){
-			return reject("Property: username is required.");
+			return reject(new Error("Property: username is required."));
 		}
 		if(validator.toString(password) == ""){
-			return reject("Property: password is required.");
+			return reject(new Error("Property: password is required."));
 		}
-		var queryObject = {
-			name: "login",
-			startKey: username,
-			endKey: username,
-			limit: 1
-		};
-
 		try{
-			let results = await CouchbaseLite.query(queryObject);
-			if(results && results.length > 0 && results[0].password == md5(password + privateKey)){
-				return resolve(results[0]._id);
+			let result = await database.queryView("company", "lists", {
+				keys: [username],
+				limit: 1
+			});
+			if(result && result.rows && result.rows.length > 0 && result.rows[0].value.password == md5(password + privateKey)){
+				return resolve(result.rows[0].id);
 			}
 			else{
-				return reject("Username or password wrong.");
+				return reject(new Error("Username or password wrong."));
 			}
 		}
 		catch(err){
@@ -128,4 +142,32 @@ exports.login = (username, password) => {
 			return reject(err);
 		}
 	});
+};
+
+exports.loadCompany = async (companyId) => {
+	return await database.getDocument(companyId);
+};
+
+exports.createEmployee = async (company, property) => {
+	await checkRequire(property, "name");
+	await checkRequire(property, "id_number");
+	await checkRequire(property, "passcode");
+	let number = Math.floor(Math.random() * 1000000000);
+	let serialNumber = ("1" + (new Array(10 - number.toString().length)).join("0") + number);
+	
+	if(company.employee_list.every((employee) => {
+		return employee.id_number != property.id_number && employee.passcode != property.passcode;
+	})){
+		let newEmployee = new Employee();
+		newEmployee.name = property.name;
+		newEmployee.id_number = property.id_number;
+		newEmployee.passcode = property.passcode;
+		newEmployee.permission = [].concat(property.permission);
+		newEmployee.serial_number = serialNumber;
+		company.employee_list.push(newEmployee);
+		return await database.updateDocument(company);
+	}
+	else{
+		throw new error.EmployeeAlreadyExistError();
+	}
 };

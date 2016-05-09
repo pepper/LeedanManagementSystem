@@ -10,8 +10,17 @@ exports.company = handleActions({
 	[Constant.LOGOUT_FINISH]: () => Object.assign({}, {
 		company_id: "",
 		login: false
+	}),
+	[Constant.COMPANY_NEED_RELOAD]: (state) => Object.assign({}, state, {
+		need_reload: true
+	}),
+	[Constant.COMPANY_LOAD_FINISH]: (state, action) => Object.assign({}, state, {
+		company: action.payload,
+		need_reload: false
 	})
 }, {
 	company_id: "",
-	login: false
+	login: false,
+	need_reload: false,
+	company: {},
 });

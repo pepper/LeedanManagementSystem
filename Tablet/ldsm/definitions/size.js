@@ -1,10 +1,20 @@
 /* @flow */
 "use strict";
 
+import { Dimensions } from "react-native";
+
 module.exports = {
+	app_width: Dimensions.get("window").width,
+	app_height: Dimensions.get("window").height,
+
 	first_row_height: 64,
 	first_row_padding_top: 35,
-	row_height: 70.5,
+	row_height: 70,
+	row_border_width: 0.5,
+
+	title_padding_top: 35,
+	title_font_size: 20,
+	title_padding_left: 13,
 
 	ios:{
 		full_width: 1024,

@@ -8,6 +8,7 @@ var rgb = function(r, g, b){
 exports.rgb = rgb;
 
 exports.white = "#FFFFFF";
+exports.white_overlay = "#4B4B4B";
 
 exports.transparent = "rgba(0,0,0,0)";
 
@@ -22,6 +23,7 @@ exports.light_yellow = "#F9BC1A";
 exports.yellow = "#FAA61A";
 
 exports.light_blue = "#00BABE";
+exports.light_blue_overlay = "#003739";
 exports.dark_blue = "#002C2B";
 
 exports.light_red = "#DA2128";

@@ -2,7 +2,7 @@
 "use strict";
 
 import React, { Component, PropTypes, View, Text, StyleSheet } from "react-native";
-import { connect } from "react-redux/native";
+import { connect } from "react-redux";
 import { Color } from "../definitions";
 
 import { Message } from "../actions";

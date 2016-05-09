@@ -1,7 +1,7 @@
 /* @flow */
 "use strict";
 
-import React, { Component, PropTypes, StyleSheet, TextInput } from "react-native";
+import React, { Component, PropTypes, StyleSheet, TextInput, View } from "react-native";
 
 import { Color } from "../../definitions";
 var style = StyleSheet.create({
@@ -17,7 +17,7 @@ var style = StyleSheet.create({
 export default class CustomTextInput extends Component{
 	static propTypes = {
 		children: PropTypes.node,
-		style: PropTypes.object
+		style: View.propTypes.style
 	};
 	static defaultProps = {
 		style: {}

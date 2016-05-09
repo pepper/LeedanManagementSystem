@@ -3,30 +3,36 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "react-native start",
+    "start": "node node_modules/react-native/local-cli/cli.js start",
     "hack-react-native": "./tool/hack_react_native.sh",
     "remove-all-babelrc": "./tool/remove_all_babelrc.sh",
-    "lint": "eslint ldsm/**"
+    "lint": "eslint ldsm/**",
+    "postinstall": "rnpm link && remotedev-debugger --port 5678 --injectserver"
   },
   "dependencies": {
-    "bluebird": "^3.1.1",
+    "bluebird": "^3.3.5",
     "clone": "^1.0.2",
     "custom-error": "^0.2.1",
-    "md5": "^2.0.0",
-    "react-native": "^0.17.0",
-    "react-native-i18n-complete": "^0.1.2",
-    "react-native-vector-icons": "^1.0.3",
-    "react-redux": "^3.1.0",
-    "redux": "^3.0.4",
-    "redux-actions": "^0.9.0",
-    "redux-thunk": "^1.0.0",
+    "md5": "^2.1.0",
+    "react": "^0.14.0",
+    "react-native": "^0.23.1",
+    "react-native-camera": "^0.3.8",
+    "react-native-couchbase-lite": "^0.2.4",
+    "react-native-i18n-complete": "^0.1.8",
+    "react-native-vector-icons": "^1.3.4",
+    "react-redux": "^4.4.5",
+    "redux": "^3.4.0",
+    "redux-actions": "^0.9.1",
+    "redux-thunk": "^2.0.1",
     "underscore": "^1.8.3",
-    "uuid": "^2.0.1",
-    "validator": "^4.4.0"
+    "uuid": "^2.0.2",
+    "validator": "^5.2.0"
   },
   "devDependencies": {
-    "babel-eslint": "^5.0.0-beta6",
-    "eslint": "^1.10.3",
-    "eslint-plugin-react": "^3.14.0"
+    "babel-eslint": "^5.0.0",
+    "eslint": "^2.4.0",
+    "eslint-plugin-react": "^4.2.3",
+    "remote-redux-devtools": "^0.1.5",
+    "remote-redux-devtools-on-debugger": "^0.4.0"
   }
 }

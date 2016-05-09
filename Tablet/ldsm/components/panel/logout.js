@@ -12,21 +12,20 @@ export default class LogoutPanel extends Component{
 		dispatch: PropTypes.func,
 		panel: PropTypes.object
 	};
-	handleCancel = () => {
-		this.props.dispatch(Panel.hidePanel());
-	};
 	handleConfirm = () => {
-		this.props.dispatch(Panel.hidePanel());
-		this.props.dispatch(Company.logout());
+		if(this.props.onLogout){
+			this.props.onLogout();
+		}
+	};
+	show = () => {
+		this.confirm.show();
 	};
 	render(){
 		return (
 			<ConfirmPanel
-				visible={true}
-				message={I18n.t("logout_panel_msssage")}
-				cancelButtonText={I18n.t("cancel")}
+				ref={(ref) => this.confirm = ref}
+				title={I18n.t("logout_panel_msssage")}
 				confirmButtonText={I18n.t("logout")}
-				onCancel={this.handleCancel}
 				onConfirm={this.handleConfirm}
 			/>
 		);

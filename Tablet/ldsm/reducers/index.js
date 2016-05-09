@@ -1,6 +1,15 @@
-var messageReducer = require("./message");
-var moduleReducer = require("./module");
-var companyReducer = require("./company");
-var panelReducer = require("./panel");
+import { combineReducers } from "redux";
 
-module.exports = { ...messageReducer, ...moduleReducer, ...companyReducer, ...panelReducer };
+import messageReducer from "./message";
+import moduleReducer from "./module";
+import companyReducer from "./company";
+import panelReducer from "./panel";
+import stockReducer from "./stock";
+
+export default combineReducers({
+	...messageReducer,
+	...moduleReducer,
+	...companyReducer,
+	...panelReducer,
+	...stockReducer,
+});

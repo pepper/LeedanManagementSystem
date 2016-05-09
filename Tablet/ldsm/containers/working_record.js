@@ -2,7 +2,7 @@
 "use strict";
 
 import React, { Component, View, Text } from "react-native";
-import { connect } from "react-redux/native";
+import { connect } from "react-redux";
 
 class WorkingRecordContainer extends Component {
 	render(){

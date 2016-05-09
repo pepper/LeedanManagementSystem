@@ -21,35 +21,39 @@ exports.register = (title, username, password) => {
 
 exports.login = (username, password) => {
 	// TODO: must store id in keychain by react-native-keychain
-	return (dispatch) => {
+	return async (dispatch) => {
 		var companyId;
-		dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_start")));
-		database.login(username, password).then((result) => {
-			companyId = result;
+		try{
+			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_start")));
+			let companyId = await database.login(username, password);
 			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_success")));
-			return AsyncStorage.setItem(Constant.LOGIN_COMPANY_ID, companyId);
-		}).then(() => {
+			await AsyncStorage.setItem(Constant.LOGIN_COMPANY_ID, companyId);
 			dispatch(createAction(Constant.LOGIN_FINISH)(companyId));
 			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_status_save_success")));
-		}).catch((err) => {
+			dispatch(createAction(Constant.COMPANY_NEED_RELOAD)());
+		}
+		catch(err){
 			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("company_login_fail") + ": " + err));
-		});
+		}
 	};
 };
 
 exports.checkLogin = () => {
-	return (dispatch) => {
-		AsyncStorage.getItem(Constant.LOGIN_COMPANY_ID).then((companyId) => {
+	return async (dispatch) => {
+		try{
+			let companyId = await AsyncStorage.getItem(Constant.LOGIN_COMPANY_ID);
 			if(validator.toString(companyId) != ""){
 				dispatch(createAction(Constant.LOGIN_FINISH)(companyId));
 				dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_success")));
+				dispatch(createAction(Constant.COMPANY_NEED_RELOAD)());
 			}
 			else{
 				dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_status_no_record")));
 			}
-		}).catch((err) => {
+		}
+		catch(err){
 			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("company_login_status_read_fail") + ": " + err));
-		});
+		}
 	};
 };
 
@@ -64,13 +68,12 @@ exports.logout = () => {
 	};
 };
 
-exports.initDatabase = (daName) => {
-	return (dispatch) => {
-		dispatch(createAction(Constant.INIT_DATABASE_START)());
-		database.initDatabase(daName).then(() => {
-			dispatch(createAction(Constant.INIT_DATABASE_FINISH)());
-		}).catch((err) => {
-			dispatch(createAction(Constant.INIT_DATABASE_FAIL)(I18n.t("database_init_fail") + ": " + err));
-		});
+exports.load = () =>{
+	return async (dispatch, getState) => {
+		const companyId = getState().company.company_id || "";
+		if(companyId != ""){
+			let company = await database.loadCompany(companyId);
+			dispatch(createAction(Constant.COMPANY_LOAD_FINISH)(company));
+		}
 	};
 };

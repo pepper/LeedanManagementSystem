@@ -1,3 +1,1 @@
-"use strict";
-
-import LDSM from "./ldsm/containers";
+import "./index.common";

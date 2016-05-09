@@ -27,7 +27,8 @@ var errorDefinition = [
 	["UserNotLogin", -109, "User currently not login"],
 	["BackendOperationFail", -111, "Backend operation fail"],
 	["CompanyNotLoginError", -201, "Company currently not login"],
-	["EmployeeNotLoginError", -203, "There is no employee login"]
+	["EmployeeNotLoginError", -203, "There is no employee login"],
+	["EmployeeAlreadyExistError", -205, "Employee passcode or id number already token."]
 ];
 
 errorDefinition.forEach(function(input){
