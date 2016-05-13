@@ -1,7 +1,8 @@
 /* @flow */
 "use strict";
 
-import React, { Component, PropTypes, View, StyleSheet, TouchableOpacity } from "react-native";
+import React, {Component, PropTypes} from "react";
+import {View, StyleSheet, TouchableOpacity} from "react-native";
 import { Color } from "../../definitions";
 
 var style = StyleSheet.create({

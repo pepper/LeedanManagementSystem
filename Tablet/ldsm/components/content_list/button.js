@@ -1,7 +1,8 @@
 /* @flow */
 "use strict";
 
-import React, { Component, PropTypes, StyleSheet, View, Text, TouchableWithoutFeedback } from "react-native";
+import React, {Component, PropTypes} from "react";
+import {StyleSheet, View, Text, TouchableWithoutFeedback} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 import { Color, Size } from "../../definitions";

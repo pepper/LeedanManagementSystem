@@ -1,7 +1,8 @@
 /* @flow */
 "use strict";
 
-import React, { Component, PropTypes, StyleSheet, View, Text, ScrollView } from "react-native";
+import React, {Component, PropTypes} from "react";
+import {StyleSheet, View, Text, ScrollView} from "react-native";
 import Panel from "./basic";
 import Button from "../basic/button";
 import { Color, I18n } from "../../definitions";

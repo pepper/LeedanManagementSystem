@@ -1,7 +1,7 @@
 /* @flow */
 "use strict";
 
-import React, { Component, PropTypes } from "react-native";
+import React, {Component, PropTypes} from "react";
 import ConfirmPanel from "./confirm";
 import { I18n } from "../../definitions";
 

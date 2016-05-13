@@ -1,7 +1,8 @@
 /* @flow */
 "use strict";
 
-import React, { Component, PropTypes, View, Text, StyleSheet } from "react-native";
+import React, {Component, PropTypes} from "react";
+import {View, Text, StyleSheet} from "react-native";
 import { connect } from "react-redux";
 import { Color } from "../definitions";
 

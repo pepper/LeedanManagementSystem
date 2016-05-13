@@ -17,29 +17,15 @@
 {
   NSURL *jsCodeLocation;
 
-  /**
-   * Loading JavaScript code - uncomment the one you want.
-   *
-   * OPTION 1
-   * Load from development server. Start the server from the repository root:
-   *
-   * $ npm start
-   *
-   * To run on device, change `localhost` to the IP address of your computer
-   * (you can get this by typing `ifconfig` into the terminal and selecting the
-   * `inet` value under `en0:`) and make sure your computer and iOS device are
-   * on the same Wi-Fi network.
-   */
-
 #ifdef DEBUG
-	NSString *serverIP = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"SERVER_IP"];
-	NSString *jsCodeUrlString = [NSString stringWithFormat:@"http://%@:8081/index.ios.bundle?platform=ios&dev=true", serverIP];
-	NSString *jsBundleUrlString = [jsCodeUrlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	jsCodeLocation = [NSURL URLWithString:jsBundleUrlString];
+  NSString *serverIP = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"SERVER_IP"];
+  NSString *jsCodeUrlString = [NSString stringWithFormat:@"http://%@:8081/index.ios.bundle?platform=ios&dev=true", serverIP];
+  NSString *jsBundleUrlString = [jsCodeUrlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+  jsCodeLocation = [NSURL URLWithString:jsBundleUrlString];
 #else
-	jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+  jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
-	
+
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Tablet"
                                                initialProperties:nil

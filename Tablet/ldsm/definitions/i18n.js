@@ -47,6 +47,11 @@ I18n.translations = {
 		company_create_employee_panel_input_id_number: "Please input ID number", 
 		company_create_employee_panel_input_passcode: "Please input passcode",
 		company_create_employee_panel_reinput_passcode: "Please input passcode again",
+		company_create_employee_panel_no_permission: "No permission",
+		company_create_employee_panel_pemission_manage_employee: "Manage employee",
+		company_create_employee_panel_pemission_manage_leave: "Sign off leave",
+		company_create_employee_panel_pemission_manage_working_record: "Working record",
+		company_create_employee_panel_pemission_manage_accounting: "Accounting",
 
 		load_success: "Resource load success",
 		load_fail: "Fail to load resource",
@@ -97,6 +102,11 @@ I18n.translations = {
 		company_create_employee_panel_input_id_number: "請輸入員工編號", 
 		company_create_employee_panel_input_passcode: "請輸入登入密碼",
 		company_create_employee_panel_reinput_passcode: "再次輸入登入密碼",
+		company_create_employee_panel_no_permission: "無此權限",
+		company_create_employee_panel_pemission_manage_employee: "管理公司員工名單e",
+		company_create_employee_panel_pemission_manage_leave: "簽核請假單",
+		company_create_employee_panel_pemission_manage_working_record: "管理員工工作記錄",
+		company_create_employee_panel_pemission_manage_accounting: "管理公司薪資帳務",
 
 		load_success: "資料下載成功",
 		load_fail: "資料下載失敗",

@@ -1,7 +1,8 @@
 /* @flow */
 "use strict";
 
-import React, { Component, StyleSheet, View, Text, ListView, PropTypes } from "react-native";
+import React, {Component, PropTypes} from "react";
+import {StyleSheet, View, Text, ListView} from "react-native";
 import { Color, Size } from "../../definitions";
 
 let style = StyleSheet.create({

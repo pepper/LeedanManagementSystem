@@ -1,13 +1,11 @@
 /* @flow */
 "use strict";
 
-// var Config = require("../config");
-var Animation = require("./animation");
-var Color = require("./color");
-// var Size = require("./size")[Config.platform];
-var Size = require("./size");
-var ErrorDinifition = require("./error");
-var I18n = require("./i18n");
+import Animation from "./animation";
+import Color from "./color";
+import Size from "./size";
+import ErrorDinifition from "./error";
+import I18n from "./i18n";
 
 module.exports = {
 	Animation: Animation,

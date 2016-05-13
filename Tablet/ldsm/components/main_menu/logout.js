@@ -1,7 +1,8 @@
 /* @flow */
 "use strict";
 
-import React, { Component, View } from "react-native";
+import React, {Component} from "react";
+import {View} from "react-native";
 import IconMenuItem from "./icon_menu_item";
 
 export default class Logout extends Component {

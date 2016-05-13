@@ -1,7 +1,8 @@
 /* @flow */
 "use strict";
 
-import React, { Component, PropTypes, StyleSheet, View, Image, ListView } from "react-native";
+import React, {Component, PropTypes} from "react";
+import {StyleSheet, View, Image, ListView} from "react-native";
 import { Color, Size } from "../../definitions";
 import EmptyMenuItem from "./empty_menu_item";
 

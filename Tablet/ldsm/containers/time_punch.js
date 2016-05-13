@@ -1,7 +1,8 @@
 /* @flow */
 "use strict";
 
-import React, { Component, StyleSheet, View, Text } from "react-native";
+import React, {Component} from "react";
+import {StyleSheet, View, Text} from "react-native";
 import { connect } from "react-redux";
 
 import { Company, Employee } from "../actions";

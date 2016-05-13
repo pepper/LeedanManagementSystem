@@ -1,7 +1,8 @@
 /* @flow */
 "use strict";
 
-import React, { Component, PropTypes, StyleSheet, View, Text, SegmentedControlIOS, TouchableWithoutFeedback, Image } from "react-native";
+import React, {Component, PropTypes} from "react";
+import {StyleSheet, View, Text, SegmentedControlIOS, TouchableWithoutFeedback, Image} from "react-native";
 import Camera from "react-native-camera";
 import Icon from "react-native-vector-icons/FontAwesome";
 
@@ -85,19 +86,15 @@ export default class CreateEmployeePanel extends Component{
 		passcode: "",
 		confirmPasscode: "",
 		permission:[{
-			title: "管理公司員工名單",
 			value: "manage_employee",
 			select: false,
 		},{
-			title: "簽核請假單",
 			value: "manage_leave",
 			select: false,
 		},{
-			title: "管理員工工作記錄",
 			value: "manage_working_record",
 			select: false,
 		},{
-			title: "管理公司薪資帳務",
 			value: "manage_accounting",
 			select: false,
 		}],
@@ -133,7 +130,12 @@ export default class CreateEmployeePanel extends Component{
 				<View style={style.container}>
 					<View style={style.informationContainer}>
 						<View style={style.textInputContainer}>
-							<TextInput style={style.fullWidthTextInput} placeholder={I18n.t("company_create_employee_panel_input_name")} onChangeText={(text) => this.setState({name: text}) } />
+							<TextInput style={style.fullWidthTextInput}
+								autoCapitalize={"none"}
+								autoCorrect={false}
+								placeholder={I18n.t("company_create_employee_panel_input_name")}
+								onChangeText={(text) => this.setState({name: text}) }
+							/>
 							<TextInput style={style.fullWidthTextInput} placeholder={I18n.t("company_create_employee_panel_input_id_number")} onChangeText={(text) => this.setState({idNumber: text})} />
 							<TextInput style={style.fullWidthTextInput} placeholder={I18n.t("company_create_employee_panel_input_passcode")} password={true} keyboardType={"numeric"} onChangeText={(text) => this.setState({passcode: text})} />
 							<TextInput style={style.fullWidthTextInput} placeholder={I18n.t("company_create_employee_panel_reinput_passcode")} password={true} keyboardType={"numeric"} onChangeText={(text) => ((this.state.passcode == text)?this.setState({confirmPasscode: text}):false)} />
@@ -143,7 +145,7 @@ export default class CreateEmployeePanel extends Component{
 								this.state.permission.map(function(permission, index){
 									return (
 										<SegmentedControlIOS
-											key={permission.title}
+											key={permission.value}
 											style={style.fullWidthSegmented}
 											onValueChange={function(value){
 												if(value == "無此權限"){
@@ -157,7 +159,7 @@ export default class CreateEmployeePanel extends Component{
 												});
 											}.bind(this)}
 											tintColor={Color.orange}
-											values={[permission.title, "無此權限"]}
+											values={[I18n.t("company_create_employee_panel_pemission_" + permission.value), I18n.t("company_create_employee_panel_no_permission")]}
 											selectedIndex={1}
 										/>
 									);

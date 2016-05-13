@@ -1,10 +1,10 @@
 package com.tablet;
 
 import com.facebook.react.ReactActivity;
-import com.lwansbrough.ReactCamera.ReactCamera;
 import com.oblador.vectoricons.VectorIconsPackage;
 import rni18n.mobile.laplanete.ca.rni18n.RNI18nPackage;
 import me.fraserxu.rncouchbaselite.ReactCBLiteManager;
+import com.lwansbrough.ReactCamera.ReactCamera;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 
@@ -39,10 +39,10 @@ public class MainActivity extends ReactActivity {
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
-            new ReactCamera(),
             new VectorIconsPackage(),
             new RNI18nPackage(),
-            new ReactCBLiteManager()
+            new ReactCBLiteManager(),
+            new ReactCamera()
         );
     }
 }

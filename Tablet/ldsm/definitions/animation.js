@@ -1,11 +1,8 @@
 /* @flow */
 "use strict";
 
-var React = require("react-native");
-
-var {
-	LayoutAnimation
-} = React;
+import React from "react";
+import {LayoutAnimation} from "react-native";
 
 var animations = {
 	layout: {

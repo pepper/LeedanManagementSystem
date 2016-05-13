@@ -1,7 +1,7 @@
 /* @flow */
 "use strict";
 
-import React, { Component } from "react-native";
+import React, {Component} from "react";
 
 import IconMenuItem from "./icon_menu_item";
 

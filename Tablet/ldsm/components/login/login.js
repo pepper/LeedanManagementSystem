@@ -2,7 +2,8 @@
 "use strict";
 
 import validator from "validator";
-import React, { Component, PropTypes, StyleSheet, View, Text } from "react-native";
+import React, {Component, PropTypes} from "react";
+import {StyleSheet, View, Text} from "react-native";
 import TextInput from "../basic/text_input";
 import Button from "../basic/button";
 import { I18n } from "../../definitions";

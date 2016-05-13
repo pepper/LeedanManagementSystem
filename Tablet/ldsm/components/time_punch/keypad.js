@@ -1,7 +1,8 @@
 /* @flow */
 "use strict";
 
-import React, { Component, StyleSheet, View } from "react-native";
+import React, {Component} from "react";
+import {StyleSheet, View} from "react-native";
 import RoundButton from "../basic/round_button";
 
 const style = StyleSheet.create({

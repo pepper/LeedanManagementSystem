@@ -1,25 +1,16 @@
 "use strict";
 
-var React = require("react-native");
-var Icon = require("react-native-vector-icons/FontAwesome");
+import React, {Component, PropTypes} from "react";
+import {Text, View, TouchableWithoutFeedback, StyleSheet} from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
 
-var Color = require("../../definitions/color");
+import { Color, Size } from "../../definitions";
 
-var {
-	Text,
-	View,
-	TouchableWithoutFeedback,
-	PropTypes,
-	StyleSheet,
-} = React;
-
-var RoundButton = React.createClass({
-	getInitialState: function(){
-		return {
-			pressing: false,
-		}
-	},
-	propTypes:{
+export default class RoundButton extends Component {
+	state = {
+		pressing: false,
+	};
+	static propTypes = {
 		onPress: PropTypes.func.isRequired,
 		icon: PropTypes.string,
 		text: PropTypes.string,
@@ -27,39 +18,37 @@ var RoundButton = React.createClass({
 		smallFont: PropTypes.bool,
 		active: PropTypes.bool,
 		borderWidth: PropTypes.number,
-	},
-	getDefaultProps: function() {
-		return {
-			onPress: function(){
-				console.log("Round button onPress function not defined.");
-			},
-			text: "Not Defined",
-			colorType: "blue",
-			smallFont: false,
-			active: false,
-			borderWidth: 1,
-		};
-	},
-	onPressInHandler: function(){
+	};
+	static defaultProps = {
+		onPress: function(){
+			console.log("Round button onPress function not defined.");
+		},
+		text: "Not Defined",
+		colorType: "blue",
+		smallFont: false,
+		active: false,
+		borderWidth: 1,
+	};
+	onPressInHandler = () => {
 		if(this.props.active){
 			this.setState({
 				pressing: true,
 			});
 		}
-	},
-	onPressOutHandler: function(){
+	};
+	onPressOutHandler = () => {
 		if(this.props.active){
 			this.setState({
 				pressing: false,
 			});
 		}
-	},
-	onPressHandler: function(){
+	};
+	onPressHandler = () => {
 		if(this.props.active){
 			this.props.onPress(this.props.text);
 		}
-	},
-	render: function(){
+	};
+	render(){
 		var iconSize = this.props.size * 0.6;
 		var textSize = this.props.size * 0.7;
 		var smallTextSize = this.props.size * 0.3;
@@ -188,6 +177,4 @@ var RoundButton = React.createClass({
 			</TouchableWithoutFeedback>
 		);
 	}
-});
-
-module.exports = RoundButton;
+}

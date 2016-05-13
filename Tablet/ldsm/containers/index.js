@@ -3,7 +3,8 @@
 
 import _ from "underscore";
 import validator from "validator";
-import React, { Component, PropTypes, StyleSheet, View } from "react-native";
+import React, {Component, PropTypes} from "react";
+import {StyleSheet, View} from "react-native";
 import { connect } from "react-redux";
 import { Company, Database, Module, Panel } from "../actions";
 import { Color } from "../definitions";

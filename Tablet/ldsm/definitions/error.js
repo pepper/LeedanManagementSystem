@@ -1,6 +1,6 @@
 /* @flow */
 "use strict";
-var customError = require("custom-error");
+import customError from "custom-error";
 
 var error = {};
 
