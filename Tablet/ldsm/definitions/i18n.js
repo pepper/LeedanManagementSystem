@@ -53,6 +53,9 @@ I18n.translations = {
 		company_create_employee_panel_pemission_manage_working_record: "Working record",
 		company_create_employee_panel_pemission_manage_accounting: "Accounting",
 
+		employee_not_found: "Employee not found",
+		employee_login_success: "Employee login success",
+
 		load_success: "Resource load success",
 		load_fail: "Fail to load resource",
 		load_stock_start: "Start to load stock",
@@ -107,6 +110,9 @@ I18n.translations = {
 		company_create_employee_panel_pemission_manage_leave: "簽核請假單",
 		company_create_employee_panel_pemission_manage_working_record: "管理員工工作記錄",
 		company_create_employee_panel_pemission_manage_accounting: "管理公司薪資帳務",
+
+		employee_not_found: "找不到此員工紀錄",
+		employee_login_success: "員工登入成功",
 
 		load_success: "資料下載成功",
 		load_fail: "資料下載失敗",

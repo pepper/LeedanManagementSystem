@@ -136,9 +136,27 @@ export default class CreateEmployeePanel extends Component{
 								placeholder={I18n.t("company_create_employee_panel_input_name")}
 								onChangeText={(text) => this.setState({name: text}) }
 							/>
-							<TextInput style={style.fullWidthTextInput} placeholder={I18n.t("company_create_employee_panel_input_id_number")} onChangeText={(text) => this.setState({idNumber: text})} />
-							<TextInput style={style.fullWidthTextInput} placeholder={I18n.t("company_create_employee_panel_input_passcode")} password={true} keyboardType={"numeric"} onChangeText={(text) => this.setState({passcode: text})} />
-							<TextInput style={style.fullWidthTextInput} placeholder={I18n.t("company_create_employee_panel_reinput_passcode")} password={true} keyboardType={"numeric"} onChangeText={(text) => ((this.state.passcode == text)?this.setState({confirmPasscode: text}):false)} />
+							<TextInput style={style.fullWidthTextInput}
+								autoCapitalize={"none"}
+								autoCorrect={false}
+								placeholder={I18n.t("company_create_employee_panel_input_id_number")}
+								onChangeText={(text) => this.setState({idNumber: text})}
+							/>
+							<TextInput style={style.fullWidthTextInput}
+								autoCapitalize={"none"}
+								autoCorrect={false}
+								placeholder={I18n.t("company_create_employee_panel_input_passcode")}
+								password={true}
+								keyboardType={"numeric"}
+								onChangeText={(text) => this.setState({passcode: text})}
+							/>
+							<TextInput style={style.fullWidthTextInput}
+								autoCapitalize={"none"}
+								autoCorrect={false}
+								placeholder={I18n.t("company_create_employee_panel_reinput_passcode")}
+								password={true} keyboardType={"numeric"}
+								onChangeText={(text) => ((this.state.passcode == text)?this.setState({confirmPasscode: text}):false)}
+							/>
 						</View>
 						<View style={style.segmentedContainer}>
 							{
@@ -148,7 +166,7 @@ export default class CreateEmployeePanel extends Component{
 											key={permission.value}
 											style={style.fullWidthSegmented}
 											onValueChange={function(value){
-												if(value == "無此權限"){
+												if(value == I18n.t("company_create_employee_panel_no_permission")){
 													this.state.permission[index].select = false;
 												}
 												else{

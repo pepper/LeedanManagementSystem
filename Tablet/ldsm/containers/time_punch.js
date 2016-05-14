@@ -4,6 +4,7 @@
 import React, {Component} from "react";
 import {StyleSheet, View, Text} from "react-native";
 import { connect } from "react-redux";
+import { get } from "nested-property";
 
 import { Company, Employee } from "../actions";
 import { Color, Size, I18n } from "../definitions";
@@ -115,6 +116,9 @@ class TimePunchContainer extends Component {
 	handleCreateEmployeeSubmit = (property) => {
 		this.props.dispatch(Employee.create(property));
 	};
+	handleAddPunchRecord = (type) => {
+
+	};
 	rebuildState = (props) => {
 		let employee = props.loginEmployee;
 		if(employee){
@@ -164,7 +168,7 @@ class TimePunchContainer extends Component {
 					/>
 				}>
 					<Button icon="plus-circle" text={I18n.t("company_create_employee")} onPress={this.handleCreateEmployee}/>
-					<List itemList={this.props.company.company.employee_list || []}
+					<List itemList={get(this.props.company, "company.employee_list") || []}
 						minimalRowCount={9}
 						renderRow={(rowData, sectionID, rowID, highlightRow) => {
 							return (

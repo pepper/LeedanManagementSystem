@@ -38,6 +38,19 @@ class Company {
 			avtive_module:	[]
 		});
 	}
+	createEmployee = async (property) => {
+		if(this.employee_list.every((employee) => {
+			return employee.id_number != property.id_number && employee.passcode != property.passcode;
+		})){
+			let newEmployee = new Employee();
+			await newEmployee.create(company, property);
+			this.employee_list.push(newEmployee);
+			return await database.updateDocument(this);
+		}
+		else{
+			throw new error.EmployeeAlreadyExistError();
+		}
+	};
 }
 Company.views = {
 	lists:{
@@ -59,6 +72,29 @@ class Employee {
 			group:			""
 		});
 	}
+	create = async (company, property) => {
+		await checkRequire(property, "name");
+		await checkRequire(property, "id_number");
+		await checkRequire(property, "passcode");
+		let number = Math.floor(Math.random() * 1000000000);
+		let serialNumber = ("1" + (new Array(10 - number.toString().length)).join("0") + number);
+		
+		this._id = uuid.v4();
+		this.name = property.name;
+		this.id_number = property.id_number;
+		this.passcode = property.passcode;
+		this.permission = [].concat(property.permission);
+		this.serial_number = serialNumber;
+	};
+	addPunchRecord = (type) => {
+		if(!this.punch_record){
+			this.punch_record = [];
+		}
+		this.punch_record.push({
+			create_datetime: new Date(),
+			type: type
+		});
+	};
 }
 
 let database = null;
@@ -149,25 +185,47 @@ exports.loadCompany = async (companyId) => {
 };
 
 exports.createEmployee = async (company, property) => {
-	await checkRequire(property, "name");
-	await checkRequire(property, "id_number");
-	await checkRequire(property, "passcode");
-	let number = Math.floor(Math.random() * 1000000000);
-	let serialNumber = ("1" + (new Array(10 - number.toString().length)).join("0") + number);
-	
 	if(company.employee_list.every((employee) => {
 		return employee.id_number != property.id_number && employee.passcode != property.passcode;
 	})){
 		let newEmployee = new Employee();
-		newEmployee.name = property.name;
-		newEmployee.id_number = property.id_number;
-		newEmployee.passcode = property.passcode;
-		newEmployee.permission = [].concat(property.permission);
-		newEmployee.serial_number = serialNumber;
+		await newEmployee.create(company, property);
 		company.employee_list.push(newEmployee);
 		return await database.updateDocument(company);
 	}
 	else{
 		throw new error.EmployeeAlreadyExistError();
 	}
-};
+}
+
+
+
+
+// exports.createEmployee = async (company, property) => {
+// 	await checkRequire(property, "name");
+// 	await checkRequire(property, "id_number");
+// 	await checkRequire(property, "passcode");
+// 	let number = Math.floor(Math.random() * 1000000000);
+// 	let serialNumber = ("1" + (new Array(10 - number.toString().length)).join("0") + number);
+	
+// 	if(company.employee_list.every((employee) => {
+// 		return employee.id_number != property.id_number && employee.passcode != property.passcode;
+// 	})){
+// 		let newEmployee = new Employee();
+// 		newEmployee._id = uuid.v4();
+// 		newEmployee.name = property.name;
+// 		newEmployee.id_number = property.id_number;
+// 		newEmployee.passcode = property.passcode;
+// 		newEmployee.permission = [].concat(property.permission);
+// 		newEmployee.serial_number = serialNumber;
+// 		company.employee_list.push(newEmployee);
+// 		return await database.updateDocument(company);
+// 	}
+// 	else{
+// 		throw new error.EmployeeAlreadyExistError();
+// 	}
+// };
+
+exports.addEmployeePunchRecord = async (company, employee) => {
+
+}
