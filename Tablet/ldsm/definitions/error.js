@@ -7,7 +7,9 @@ var error = {};
 var createCustomError = function(name, code, defaultMessage, BaseError){
 	var newError = customError(name, BaseError);
 	newError.prototype.code = code;
-	newError.prototype.message = defaultMessage;
+	if(defaultMessage && defaultMessage != ""){
+		newError.prototype.message = defaultMessage;
+	}
 	return newError;
 };
 
@@ -26,9 +28,9 @@ var errorDefinition = [
 	["InputPropertyNotAcceptError", -107, "Input property not accept"],
 	["UserNotLogin", -109, "User currently not login"],
 	["BackendOperationFail", -111, "Backend operation fail"],
+	["AlreadyExistError", -113, "Document already exist"],
 	["CompanyNotLoginError", -201, "Company currently not login"],
 	["EmployeeNotLoginError", -203, "There is no employee login"],
-	["EmployeeAlreadyExistError", -205, "Employee passcode or id number already token."]
 ];
 
 errorDefinition.forEach(function(input){

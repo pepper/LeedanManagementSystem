@@ -49,7 +49,10 @@ export default class Login extends Component{
 	};
 	handleLogin = () => {
 		if(validator.toString(this.state.username) != "" && validator.toString(this.state.password) != ""){
-			this.props.dispatch(Company.login(this.state.username, this.state.password));
+			this.props.dispatch(Company.login({
+				username: this.state.username,
+				password: this.state.password
+			}));
 		}
 		else{
 			this.props.dispatch(Message.showErrorMessage(I18n.t("login_username_format_wong")));

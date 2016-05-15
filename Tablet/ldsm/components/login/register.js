@@ -67,7 +67,11 @@ export default class Register extends Component{
 			&& validator.toString(this.state.password_again) != ""
 			&& this.state.password_again == this.state.password
 		){
-			this.props.dispatch(Company.register(this.state.title ,this.state.username, this.state.password));
+			this.props.dispatch(Company.register({
+				title: this.state.title,
+				username: this.state.username,
+				password: this.state.password
+			}));
 			this.props.onChangeMode();
 		}
 		else{

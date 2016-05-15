@@ -5,13 +5,15 @@ import validator from "validator";
 import { AsyncStorage } from "react-native";
 import { createAction } from "redux-actions";
 import Constant from "../constants/";
-import database from "../databases";
+import databases, { Company } from "../databases";
 import { I18n } from "../definitions";
 
-exports.register = (title, username, password) => {
+console.log(databases);
+
+exports.register = (property) => {
 	return (dispatch) => {
 		dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_register_start")));
-		database.register(title, username, password).then(() => {
+		Company.register(property).then(() => {
 			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_register_success")));
 		}).catch((err) => {
 			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("company_register_fail") + ": " + err));
@@ -19,13 +21,13 @@ exports.register = (title, username, password) => {
 	};
 };
 
-exports.login = (username, password) => {
+exports.login = (property) => {
 	// TODO: must store id in keychain by react-native-keychain
 	return async (dispatch) => {
 		var companyId;
 		try{
 			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_start")));
-			let companyId = await database.login(username, password);
+			let companyId = await Company.login(property);
 			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_success")));
 			await AsyncStorage.setItem(Constant.LOGIN_COMPANY_ID, companyId);
 			dispatch(createAction(Constant.LOGIN_FINISH)(companyId));
@@ -72,7 +74,7 @@ exports.load = () =>{
 	return async (dispatch, getState) => {
 		const companyId = getState().company.company_id || "";
 		if(companyId != ""){
-			let company = await database.loadCompany(companyId);
+			let company = await Company.load(companyId);
 			dispatch(createAction(Constant.COMPANY_LOAD_FINISH)(company));
 		}
 	};
