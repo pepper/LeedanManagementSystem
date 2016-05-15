@@ -5,7 +5,7 @@ import validator from "validator";
 import { AsyncStorage } from "react-native";
 import { createAction } from "redux-actions";
 import Constant from "../constants/";
-import databases, { Company } from "../databases";
+import databases, { Company, Employee } from "../databases";
 import { I18n } from "../definitions";
 
 exports.register = (property) => {
@@ -24,7 +24,7 @@ exports.login = (property) => {
 	return async (dispatch) => {
 		try{
 			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_start")));
-			let companyId = await Company.login(property);
+			const companyId = await Company.login(property);
 			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_success")));
 			await AsyncStorage.setItem(Constant.LOGIN_COMPANY_ID, companyId);
 			dispatch(createAction(Constant.LOGIN_FINISH)(companyId));
@@ -40,7 +40,7 @@ exports.login = (property) => {
 exports.checkLogin = () => {
 	return async (dispatch) => {
 		try{
-			let companyId = await AsyncStorage.getItem(Constant.LOGIN_COMPANY_ID);
+			const companyId = await AsyncStorage.getItem(Constant.LOGIN_COMPANY_ID);
 			if(validator.toString(companyId) != ""){
 				dispatch(createAction(Constant.LOGIN_FINISH)(companyId));
 				dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_success")));
@@ -71,8 +71,10 @@ exports.load = () =>{
 	return async (dispatch, getState) => {
 		const companyId = getState().company.company_id || "";
 		if(companyId != ""){
-			let company = await Company.load(companyId);
+			const company = await Company.load(companyId);
 			dispatch(createAction(Constant.COMPANY_LOAD_FINISH)(company));
+			const employeeList = await company.loadEmployeeList();
+			dispatch(createAction(Constant.EMPLOYEE_LIST_LOAD_FINISH)(employeeList));
 		}
 	};
 };

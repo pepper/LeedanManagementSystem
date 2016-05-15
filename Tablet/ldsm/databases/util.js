@@ -56,5 +56,15 @@ exports.checkoutDocuments = async (designDocumentName, viewName, option = {}) =>
 };
 
 exports.createDocument = async (document) => {
-	return await database.createDocument(document);
+	const result = await database.createDocument(document);
+	if(result.ok){
+		return await database.getDocument(result.id);
+	}
+	else{
+		throw new ErrorDinifition.CreateDocumentFail(result.stringify());
+	}
+};
+
+exports.updateDocument = async (document) => {
+	return await database.updateDocument(document);
 };

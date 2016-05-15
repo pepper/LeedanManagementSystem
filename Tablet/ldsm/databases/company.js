@@ -4,8 +4,8 @@ import { get } from "nested-property";
 
 import { privateKey } from "../config";
 import { I18n, ErrorDinifition } from "../definitions";
-
-import { checkPropertyRequire, checkDocumentNotExist, checkoutDocuments, getDocument, createDocument } from "./util";
+import { checkPropertyRequire, checkDocumentNotExist, checkoutDocuments, getDocument, createDocument, updateDocument } from "./util";
+import Employee from "./employee";
 
 export default class Company {
 	constructor(property){
@@ -20,18 +20,16 @@ export default class Company {
 		}, property);
 	}
 	createEmployee = async (property) => {
-		if(this.employee_list.every((employee) => {
-			return employee.id_number != property.id_number && employee.passcode != property.passcode;
-		})){
-			let newEmployee = new Employee();
-			await newEmployee.create(this, property);
-			this.employee_list.push(newEmployee);
-			return await database.updateDocument(this);
-		}
-		else{
-			throw new ErrorDinifition.AlreadyExistError(I18n.t("employee_passcode_or_id_number_already_token"));
-		}
+		let employee = await Employee.create(this, property);
+		this.employee_list.push(employee._id);
+		return await updateDocument(this);
 	};
+	loadEmployeeList = async () => {
+		let promiseList = this.employee_list.map(async (employeeId) => {
+			return await Employee.load(employeeId);
+		});
+		return await Promise.all(promiseList);
+	}
 }
 Company.views = {
 	lists:{
@@ -65,10 +63,6 @@ Company.login = async (property) => {
 		keys: [property.username],
 		limit: 1
 	}), "rows.0");
-	console.log(company);
-	console.log(get(company, "value.password"));
-	console.log(privateKey);
-	console.log(md5(property.password + privateKey));
 	if(get(company, "value.password") == md5(property.password + privateKey)){
 		return company.id;
 	}

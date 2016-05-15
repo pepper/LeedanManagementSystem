@@ -168,7 +168,7 @@ class TimePunchContainer extends Component {
 					/>
 				}>
 					<Button icon="plus-circle" text={I18n.t("company_create_employee")} onPress={this.handleCreateEmployee}/>
-					<List itemList={get(this.props.company, "company.employee_list") || []}
+					<List itemList={get(this.props.employee, "employee_list") || []}
 						minimalRowCount={9}
 						renderRow={(rowData, sectionID, rowID, highlightRow) => {
 							return (
@@ -207,6 +207,7 @@ class TimePunchContainer extends Component {
 
 export default connect((state) => {
 	return {
-		company: state.company
+		company: state.company,
+		employee: state.employee
 	};
 })(TimePunchContainer);

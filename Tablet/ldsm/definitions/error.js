@@ -29,6 +29,7 @@ var errorDefinition = [
 	["UserNotLogin", -109, "User currently not login"],
 	["BackendOperationFail", -111, "Backend operation fail"],
 	["AlreadyExistError", -113, "Document already exist"],
+	["CreateDocumentFail", -115, "Create document fail"],
 	["CompanyNotLoginError", -201, "Company currently not login"],
 	["EmployeeNotLoginError", -203, "There is no employee login"],
 ];
