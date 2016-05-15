@@ -4,10 +4,10 @@
 import _ from "underscore";
 import validator from "validator";
 import React, {Component, PropTypes} from "react";
-import {StyleSheet, View} from "react-native";
+import {StyleSheet, View, Text} from "react-native";
 import { connect } from "react-redux";
 import { Company, Database, Module, Panel } from "../actions";
-import { Color } from "../definitions";
+import { Color, I18n } from "../definitions";
 
 // Container
 import Login from "./login";
@@ -44,11 +44,16 @@ var style = StyleSheet.create({
 	moduleContainer: {
 		flex: 1,
 		backgroundColor: Color.dark
+	},
+	systemPreparing: {
+		fontSize: 16,
+		color: Color.white
 	}
 });
 
 class App extends Component{
 	static propTypes = {
+		system: PropTypes.object,
 		company: PropTypes.object,
 		dispatch: PropTypes.func,
 		module: PropTypes.any
@@ -64,9 +69,6 @@ class App extends Component{
 		showLogoutPanel: false
 	};
 	componentWillReceiveProps(nextProps){
-		// if(!this.props.company.login && nextProps.company.login == true){
-		// 	nextProps.dispatch(Company.load());
-		// }
 		if(nextProps.company.need_reload){
 			nextProps.dispatch(Company.load());
 		}
@@ -90,27 +92,35 @@ class App extends Component{
 		return (
 			<View style={style.container}>
 				{
-					(company.login)?
+					(!!this.props.system.system_ready)?
 					(
-						<View style={style.app}>
-							<MainMenu
-								style={style.mainMenu}
-								moduleListDatasource={module.module_list_datasource}
-								onChangeModule={this.handlerChangeModule}
-							/>
-							<View style={style.moduleContainer}>
-								<ModuleContainer />
+						(company.login)?
+						(
+							<View style={style.app}>
+								<MainMenu
+									style={style.mainMenu}
+									moduleListDatasource={module.module_list_datasource}
+									onChangeModule={this.handlerChangeModule}
+								/>
+								<View style={style.moduleContainer}>
+									<ModuleContainer />
+								</View>
 							</View>
-						</View>
+						)
+						:
+						(
+							<View style={style.loginContainer}>
+								<Login style={style.login}/>
+							</View>
+						)
 					)
 					:
 					(
 						<View style={style.loginContainer}>
-							<Login style={style.login}/>
+							<Text style={style.systemPreparing}>{I18n.t("system_preparing")}</Text>
 						</View>
 					)
 				}
-
 				<LogoutPanel
 					ref={(ref) => this.logoutPanel = ref}
 					onLogout={this.handleLogout}
@@ -124,6 +134,7 @@ class App extends Component{
 
 export default connect((state) => {
 	return {
+		system: state.system,
 		company: state.company,
 		module: state.module
 	};

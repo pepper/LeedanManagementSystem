@@ -8,8 +8,6 @@ import Constant from "../constants/";
 import databases, { Company } from "../databases";
 import { I18n } from "../definitions";
 
-console.log(databases);
-
 exports.register = (property) => {
 	return (dispatch) => {
 		dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_register_start")));
@@ -24,7 +22,6 @@ exports.register = (property) => {
 exports.login = (property) => {
 	// TODO: must store id in keychain by react-native-keychain
 	return async (dispatch) => {
-		var companyId;
 		try{
 			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_start")));
 			let companyId = await Company.login(property);

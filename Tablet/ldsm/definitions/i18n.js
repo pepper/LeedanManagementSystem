@@ -8,6 +8,10 @@ I18n.translations = {
 		confirm: "Confirm",
 		content_not_set_yet: "Not set the content yet.",
 
+		system_preparing: "Preparing system please wait...",
+
+		username_already_token: "Company username already token",
+		username_or_password_wrong: "Username or password wrong",
 		logout: "Logout",
 
 		database_init_fail: "Database initialize fail",
@@ -55,6 +59,7 @@ I18n.translations = {
 
 		employee_not_found: "Employee not found",
 		employee_login_success: "Employee login success",
+		employee_passcode_or_id_number_already_token: "Employee passcode or id number already token",
 
 		load_success: "Resource load success",
 		load_fail: "Fail to load resource",
@@ -66,6 +71,10 @@ I18n.translations = {
 		confirm: "確認",
 		content_not_set_yet: "尚未設定內容",
 
+		system_preparing: "系統準備中，請稍候...",
+
+		username_already_token: "帳號已經被使用",
+		username_or_password_wrong: "帳號或密碼錯誤",
 		logout: "登出",
 
 		database_init_fail: "資料庫初始化錯誤",
@@ -113,6 +122,7 @@ I18n.translations = {
 
 		employee_not_found: "找不到此員工紀錄",
 		employee_login_success: "員工登入成功",
+		employee_passcode_or_id_number_already_token: "登入密碼或員工編號已經有人使用",
 
 		load_success: "資料下載成功",
 		load_fail: "資料下載失敗",

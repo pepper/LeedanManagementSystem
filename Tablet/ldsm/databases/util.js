@@ -6,7 +6,7 @@ let error = ErrorDinifition;
 
 let database = null;
 
-initReactCBLite = (username, password, port) => {
+const initReactCBLite = (username, password, port) => {
 	return new Promise(async (resolve, reject) => {
 		ReactCBLite.init(port, username, password, (err) => {
 			if(err){
@@ -16,14 +16,12 @@ initReactCBLite = (username, password, port) => {
 			resolve();
 		});
 	});
-}
+};
 
 exports.initDatabase = async (username, password, port, dbName) => {
 	await initReactCBLite(username, password, port);
 	database = new manager(`http://${username}:${password}@localhost:${port}/`, dbName);
 	await database.createDatabase();
-	console.log(database);
-	
 };
 
 exports.createDesignDocument = async (designDocumentName, views) => {
@@ -32,10 +30,11 @@ exports.createDesignDocument = async (designDocumentName, views) => {
 
 exports.checkPropertyRequire = (property, name, type = "string") => {
 	switch(type){
-		case "string":
-			if(validator.toString(property[name]) == ""){
-				throw new error.InputPropertyNotAcceptError("Property: " + name + " is required.");
-			}
+	case "string":
+		if(validator.toString(property[name]) == ""){
+			throw new error.InputPropertyNotAcceptError("Property: " + name + " is required.");
+		}
+		break;
 	}
 	return true;
 };
@@ -50,11 +49,11 @@ exports.checkDocumentNotExist = async (designDocumentName, viewName, option = {}
 
 exports.getDocument = async (id) => {
 	return await database.getDocument(id);
-}
+};
 
 exports.checkoutDocuments = async (designDocumentName, viewName, option = {}) => {
 	return await database.queryView(designDocumentName, viewName, option);
-}
+};
 
 exports.createDocument = async (document) => {
 	return await database.createDocument(document);

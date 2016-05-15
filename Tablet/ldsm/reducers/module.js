@@ -52,7 +52,6 @@ exports.module = handleActions({
 				menu: Logout,
 				selected: true
 			});
-			console.log(menuItemList);
 			return menuItemList;
 		})())
 	})

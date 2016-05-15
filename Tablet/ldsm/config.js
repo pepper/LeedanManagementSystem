@@ -1,24 +1,12 @@
 /* @flow */
 "use strict";
 
-// var platform = "ios";
-
-// class Config{
-// 	constructor(){
-// 		Object.assign(this, {
-// 			platform: "ios",
-// 		});
-// 	}
-// 	set platform(value) {
-// 		this.platform = value;
-// 	}
-// 	get platform(){
-// 		return this.platform;
-// 	}
-// }
-
-// var config = new Config();
-var config = {
-	platform: "ios"
+const config = {
+	platform: "ios",
+	privateKey: "leedanKey",
+	databasePort: 5984,
+	databaseUsername: "react-native-sync-model",
+	databasePassword: "ledom-cnys-evitan-tcaer"
 };
+
 module.exports = config;

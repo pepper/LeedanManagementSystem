@@ -8,7 +8,7 @@ exports.message = handleActions({
 		current_index: (state.current_index + 1 < state.message_list.length)?state.current_index + 1:state.message_list.length
 	}),
 	[Constant.ERROR_MESSAGE]: (state, action) => {
-		console.error(action.payload);
+		console.log(action.payload);
 		return Object.assign({}, state, {
 			message_list: _.chain(state.message_list).push({
 				index: state.message_list.length,

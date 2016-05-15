@@ -6,6 +6,7 @@ import companyReducer from "./company";
 import panelReducer from "./panel";
 import stockReducer from "./stock";
 import employeeReducer from "./employee";
+import systemReducer from "./system";
 
 export default combineReducers({
 	...messageReducer,
@@ -14,4 +15,5 @@ export default combineReducers({
 	...panelReducer,
 	...stockReducer,
 	...employeeReducer,
+	...systemReducer
 });
