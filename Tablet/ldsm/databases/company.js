@@ -83,6 +83,13 @@ export default class Company {
 		}
 	};
 
+	// Product
+	createProduct = async (property) => {
+		let product = await Product.create(this, product);
+		this.product_id_list.push(product._id);
+		return await updateDocument(this);
+	};
+
 	// Stock
 	createStock = async (property) => {
 		let stock = await Stock.create(this, property);

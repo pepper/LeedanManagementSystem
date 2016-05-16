@@ -51,9 +51,10 @@ export default class Stock {
 		return this;
 	};
 	addSupplier = async (supplierIdList) => {
-		const promiseList = supplierIdList.map((supplierId) => {
+		const promiseList = supplierIdList.map(async (supplierId) => {
 			return await getDocument(supplierId);
 		});
+		await getDocument(supplierIdList);
 		const supplierList = await Promise.all(promiseList);
 		this.supplier_id_list = this.supplier_id_list.concat(supplierList.filter((supplier) => {
 			return this.supplier_id_list.indexOf(supplier._id) < 0;

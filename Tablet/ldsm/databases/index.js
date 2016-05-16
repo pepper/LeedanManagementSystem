@@ -1,6 +1,8 @@
 import { initDatabase, createDesignDocument } from "./util";
 import Company from "./company";
 import Employee from "./employee";
+import Stock from "./stock";
+import Product from "./product";
 import { databasePort, databaseUsername, databasePassword } from "../config";
 
 exports.init = async (dbName) => {
@@ -13,3 +15,4 @@ exports.init = async (dbName) => {
 exports.Company = Company;
 exports.Employee = Employee;
 exports.Stock = Stock;
+exports.Product = Product;
