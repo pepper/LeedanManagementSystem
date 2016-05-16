@@ -40,7 +40,6 @@ exports.checkPropertyRequire = (property, name, type = "string") => {
 };
 
 exports.checkDocumentNotExist = async (designDocumentName, viewName, option = {}, errorMessage = "") => {
-	console.log(database);
 	let results = await database.queryView(designDocumentName, viewName, option);
 	if(results && results.rows && results.rows.length > 0){
 		throw new error.AlreadyExistError(errorMessage);

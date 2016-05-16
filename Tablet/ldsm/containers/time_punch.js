@@ -168,14 +168,17 @@ class TimePunchContainer extends Component {
 					/>
 				}>
 					<Button icon="plus-circle" text={I18n.t("company_create_employee")} onPress={this.handleCreateEmployee}/>
-					<List itemList={get(this.props.employee, "employee_list") || []}
+					<List itemList={(get(this.props.employee, "employee_list") || []).map((employee) => {
+						return (employee._id == get(this.props.employee, "current_employee_id"))?Object.assign({}, employee, {selected: true}):Object.assign({}, employee)
+					})}
+						currentItem={get(this.props.employee, "current_employee_id")}
 						minimalRowCount={9}
 						renderRow={(rowData, sectionID, rowID, highlightRow) => {
 							return (
 								<People
 									name={rowData.name}
 									idNumber={rowData.id_number}
-									selected={false}
+									selected={rowData.selected}
 									totalScore={0}
 								/>
 							);

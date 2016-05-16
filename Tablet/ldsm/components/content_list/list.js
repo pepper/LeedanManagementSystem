@@ -36,7 +36,6 @@ export default class List extends Component{
 		});
 	}
 	buildItemList(props){
-
 		let itemList = Object.assign([], (props.itemList || []));
 		while(itemList.length < this.props.minimalRowCount){
 			itemList.push(null);

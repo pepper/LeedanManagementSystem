@@ -7,8 +7,8 @@ exports.employee = handleActions({
 		employee_list: action.payload
 	}),
 	[Constant.EMPLOYEE_LOGIN]: (state, action) => Object.assign({}, state, {
-		employee_id: action.payload._id,
-		employee: action.payload,
+		current_employee_id: action.payload._id,
+		current_employee: action.payload,
 		login: true
 	})
 	// [Constant.LOGOUT_FINISH]: () => Object.assign({}, {
@@ -25,7 +25,8 @@ exports.employee = handleActions({
 	// })
 }, {
 	employee_list: [],
-	employee_id: "",
+	current_employee_id: "",
+	current_employee: null,
 	login: false,
 	need_reload: false
 });

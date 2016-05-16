@@ -25,16 +25,13 @@ exports.create = (props) => {
 
 exports.login = (passcode) => {
 	return (dispatch, getState) => {
-		const company = getState().company;
-		let employeeList = get(company, "company.employee_list");
-		if(employeeList){
-			let employee = employeeList.find((employeeToCheck) => {
-				return employeeToCheck.passcode == passcode;
-			});
-			if(employee){
-				dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("employee_login_success")));
-				return dispatch(createAction(Constant.EMPLOYEE_LOGIN)(employee));
-			}
+		const employeeList = get(getState().employee, "employee_list") || [];
+		let employee = employeeList.find((employeeToCheck) => {
+			return employeeToCheck.passcode == passcode;
+		});
+		if(employee){
+			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("employee_login_success")));
+			return dispatch(createAction(Constant.EMPLOYEE_LOGIN)(employee));
 		}
 		dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("employee_not_found")));
 
