@@ -116,6 +116,9 @@ class TimePunchContainer extends Component {
 	handleCreateEmployeeSubmit = (property) => {
 		this.props.dispatch(Employee.create(property));
 	};
+	onLogoutPressHandler = () => {
+		this.props.dispatch(Employee.logout());
+	};
 	handleAddPunchRecord = (type) => {
 
 	};

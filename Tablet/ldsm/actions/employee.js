@@ -34,12 +34,9 @@ exports.login = (passcode) => {
 			return dispatch(createAction(Constant.EMPLOYEE_LOGIN)(employee));
 		}
 		dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("employee_not_found")));
-
-		// dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_register_start")));
-		// database.register(title, username, password).then(() => {
-		// 	dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_register_success")));
-		// }).catch((err) => {
-		// 	dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("company_register_fail") + ": " + err));
-		// });
 	};
 };
+
+exports.logout = () => {
+	return createAction(Constant.EMPLOYEE_LOGOUT)();
+}

@@ -1,6 +1,7 @@
 import md5 from "md5";
 import uuid from "uuid";
 import { get } from "nested-property";
+import validator from "validator";
 
 import { privateKey } from "../config";
 import { I18n, ErrorDinifition } from "../definitions";
@@ -10,26 +11,87 @@ import Employee from "./employee";
 export default class Company {
 	constructor(property){
 		Object.assign(this, {
-			title:			"",
-			description:	"",
-			uuid:			"",
-			username:		"",
-			password:		"",
-			employee_list:	[],
-			avtive_module:	[]
+			title:					"",
+			description:			"",
+			uuid:					"",
+			username:				"",
+			password:				"",
+			employee_id_list:		[],		// Employee
+			avtive_module:			[],
+
+			tax_id:					"",
+			post_address:			"",
+			phone:					"",
+			fax:					"",
+
+			contact:{
+				name:				"",
+				cellphone:			"",
+				phone:				"",
+				email:				""
+			},
+
+			product_id_list:		[],		// Product
+			stock_id_list:			[],		// Stock
+			order_id_list:			[],		// Order
+			supply_id_list:			[],		// Company
 		}, property);
 	}
+
+	// Basic
 	createEmployee = async (property) => {
 		let employee = await Employee.create(this, property);
-		this.employee_list.push(employee._id);
+		this.employee_id_list.push(employee._id);
 		return await updateDocument(this);
 	};
 	loadEmployeeList = async () => {
-		let promiseList = this.employee_list.map(async (employeeId) => {
+		let promiseList = this.employee_id_list.map(async (employeeId) => {
 			return await Employee.load(employeeId);
 		});
 		return await Promise.all(promiseList);
-	}
+	};
+	updateProperty = async (property, notSave) => {
+		if(get(property, "name")){
+			this.name = property.name;
+		}
+		if(get(property, "tax_id")){
+			this.tax_id = property.tax_id;
+		}
+		if(get(property, "post_address")){
+			this.post_address = property.post_address;
+		}
+		if(get(property, "phone")){
+			this.phone = property.phone;
+		}
+		if(get(property, "fax")){
+			this.fax = property.fax;
+		}
+		if(get(property, "contact.name")){
+			this.contact.name = property.contact.name;
+		}
+		if(get(property, "contact.cellphone")){
+			this.contact.cellphone = property.contact.cellphone;
+		}
+		if(get(property, "contact.phone")){
+			this.contact.phone = property.contact.phone;
+		}
+		if(get(property, "contact.email")){
+			this.contact.email = property.contact.email;
+		}
+		if(!notSave){
+			await updateDocument(this);
+		}
+	};
+
+	// Stock
+	createStock = async (property) => {
+		let stock = await Stock.create(this, property);
+		this.stock_id_list.push(stock._id);
+		return await updateDocument(this);
+	};
+
+	// Supplier
+
 }
 Company.views = {
 	lists:{
@@ -73,4 +135,14 @@ Company.login = async (property) => {
 
 Company.load = async (companyId) => {
 	return new Company(await getDocument(companyId));
+};
+
+Company.createSupplier = async (property) => {
+	checkPropertyRequire(property, "title");
+	let company = new Company();
+	company.updateSupplierInformation();
+	company.uuid = uuid.v4();
+	company.title = property.title;
+	await company.updateProperty(property);
+	return await createDocument(company);
 };

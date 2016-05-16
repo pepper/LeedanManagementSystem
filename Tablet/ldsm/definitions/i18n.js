@@ -61,6 +61,8 @@ I18n.translations = {
 		employee_login_success: "Employee login success",
 		employee_passcode_or_id_number_already_token: "Employee passcode or id number already token",
 
+		stock_sku_number_already_token: "Stock SKU number must be unique",
+
 		load_success: "Resource load success",
 		load_fail: "Fail to load resource",
 		load_stock_start: "Start to load stock",
@@ -123,6 +125,8 @@ I18n.translations = {
 		employee_not_found: "找不到此員工紀錄",
 		employee_login_success: "員工登入成功",
 		employee_passcode_or_id_number_already_token: "登入密碼或員工編號已經有人使用",
+
+		stock_sku_number_already_token: "庫存料號必須要獨一無二",
 
 		load_success: "資料下載成功",
 		load_fail: "資料下載失敗",
