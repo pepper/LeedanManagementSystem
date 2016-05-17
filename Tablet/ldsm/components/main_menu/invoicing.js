@@ -5,11 +5,11 @@ import React, {Component} from "react";
 
 import IconMenuItem from "./icon_menu_item";
 
-export default class StockManagerMenu extends Component {
+export default class InvoicingMenu extends Component {
 	render(){
 		return (
 			<IconMenuItem
-				text={"Stock Manager"}
+				text={"Invoicing"}
 				icon={"cube"}
 				{...this.props}
 			/>

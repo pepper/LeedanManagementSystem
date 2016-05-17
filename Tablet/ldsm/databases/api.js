@@ -22,11 +22,13 @@ requestAPI = async (method, url, data) => {
 };
 
 exports.loadStock = async () => {
-	let stockList = await requestAPI("GET", "http://leedan.fu-good.tw/api/company/557a9e588982f49c0750eb70/stock");
-	return stockList;
+	return await requestAPI("GET", "http://leedan.fu-good.tw/api/company/557a9e588982f49c0750eb70/stock");
 }
 
 exports.loadSupplier = async () => {
-	let stockList = await requestAPI("GET", "http://leedan.fu-good.tw/api/company/557a9e588982f49c0750eb70/supplier");
-	return stockList;
+	return await requestAPI("GET", "http://leedan.fu-good.tw/api/company/557a9e588982f49c0750eb70/supplier");
+}
+
+exports.loadProduct = async () => {
+	return await requestAPI("GET", "http://leedan.fu-good.tw/api/company/557a9e588982f49c0750eb70/product");
 }

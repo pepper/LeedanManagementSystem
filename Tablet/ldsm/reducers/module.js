@@ -7,8 +7,8 @@ import TimePunchContainer from "../containers/time_punch";
 import TimePunchMenu from "../components/main_menu/time_punch";
 import WorkingRecordContainer from "../containers/working_record";
 import WorkingRecordMenu from "../components/main_menu/working_record";
-import StockManagerContainer from "../containers/stock_manager";
-import StockManagerMenu from "../components/main_menu/stock_manager";
+import InvoicingContainer from "../containers/invoicing";
+import InvoicingMenu from "../components/main_menu/invoicing";
 import Logout from "../components/main_menu/logout";
 
 var Constant = require("../constants/index");
@@ -22,9 +22,9 @@ let moduleList = [{
 	menu: WorkingRecordMenu,
 	container: WorkingRecordContainer
 }, {
-	key: "stock_manager",
-	menu: StockManagerMenu,
-	container: StockManagerContainer
+	key: "invoicing",
+	menu: InvoicingMenu,
+	container: InvoicingContainer
 }];
 
 exports.module = handleActions({
@@ -59,6 +59,6 @@ exports.module = handleActions({
 }, {
 	current_mudule: "",
 	module_list: moduleList,
-	active_module_list: ["time_punch", "working_record", "stock_manager"],
+	active_module_list: ["time_punch", "working_record", "invoicing"],
 	module_list_datasource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
 });

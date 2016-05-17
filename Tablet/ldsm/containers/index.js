@@ -63,7 +63,7 @@ class App extends Component{
 
 		// Allocate the local database
 		props.dispatch(Database.initDatabase("ldsm"));
-		props.dispatch(Module.changeModule("time_punch"));
+		props.dispatch(Module.changeModule("invoicing"));
 	}
 	state = {
 		showLogoutPanel: false

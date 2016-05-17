@@ -6,7 +6,8 @@ import DatabaseAction from "./database";
 import CompanyAction from "./company";
 import ModuleAction from "./module";
 import PanelAction from "./panel";
-import StockAction from "./stock";
+// import StockAction from "./stock";
+import InvoicingAction from "./invoicing";
 import EmployeeAction from "./employee";
 
 module.exports = {
@@ -15,6 +16,7 @@ module.exports = {
 	Company: CompanyAction,
 	Module: ModuleAction,
 	Panel: PanelAction,
-	Stock: StockAction,
+	// Stock: StockAction,
+	Invoicing: InvoicingAction,
 	Employee: EmployeeAction,
 };

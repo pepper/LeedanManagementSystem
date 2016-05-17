@@ -66,6 +66,8 @@ I18n.translations = {
 		load_success: "Resource load success",
 		load_fail: "Fail to load resource",
 		load_stock_start: "Start to load stock",
+		load_supplier_start: "Start to load supplier",
+		load_product_start: "Start to load product",
 	},
 	zh: {
 		cancel: "取消",
@@ -130,7 +132,9 @@ I18n.translations = {
 
 		load_success: "資料下載成功",
 		load_fail: "資料下載失敗",
-		load_stock_start: "開始下載產品資料",
+		load_stock_start: "開始下載庫存資料",
+		load_supplier_start: "開始下載供應商資料",
+		load_product_start: "開始下載產品資料",
 	}
 };
 

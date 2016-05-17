@@ -33,9 +33,10 @@ const style = StyleSheet.create({
 
 export default class Button extends Component {
 	static propTypes = {
-		onPress: PropTypes.func.isRequired,
+		onPress: PropTypes.func,
+		onLongPress: PropTypes.func,
 		icon: PropTypes.string,
-		text: PropTypes.string.isRequired,
+		text: PropTypes.string,
 		mode: PropTypes.string,
 		color: PropTypes.string,
 	};
@@ -47,7 +48,7 @@ export default class Button extends Component {
 		let order = this.props.mode.split("-");
 		return (
 			<Item style={this.props.style}>
-				<TouchableWithoutFeedback onPress={this.props.onPress}>
+				<TouchableWithoutFeedback onPress={this.props.onPress} onLongPress={this.props.onLongPress}>
 					<View style={style.container}>
 						{
 							(order[0] && order[0] == "icon")?
