@@ -11,6 +11,7 @@ import Employee from "./employee";
 export default class Company {
 	constructor(property){
 		Object.assign(this, {
+			type:					"company",
 			title:					"",
 			description:			"",
 			uuid:					"",
@@ -103,7 +104,12 @@ export default class Company {
 Company.views = {
 	lists:{
 		map: function(doc){
-			emit(doc.username, doc);
+			if(doc["type"] == "company"){
+				emit("company" + doc.username, doc);
+			}
+			if(doc["type"] == "employee"){
+				emit("employee" + doc.company_id + doc.id_number, doc.title);
+			}
 		}.toString()
 	}
 };
@@ -114,7 +120,7 @@ Company.register = async (property) => {
 	checkPropertyRequire(property, "password");
 	// TODO: Must check passsword weak
 	await checkDocumentNotExist("company", "lists", {
-		keys: [property.username],
+		keys: ["company" + property.username],
 		limit: 1
 	}, I18n.t("username_already_token"));
 	let company = new Company();
@@ -129,7 +135,7 @@ Company.login = async (property) => {
 	checkPropertyRequire(property, "username");
 	checkPropertyRequire(property, "password");
 	let company = get(await checkoutDocuments("company", "lists", {
-		keys: [property.username],
+		keys: ["company" + property.username],
 		limit: 1
 	}), "rows.0");
 	if(get(company, "value.password") == md5(property.password + privateKey)){
