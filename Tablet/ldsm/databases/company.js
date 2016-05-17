@@ -7,11 +7,13 @@ import { privateKey } from "../config";
 import { I18n, ErrorDinifition } from "../definitions";
 import { checkPropertyRequire, checkDocumentNotExist, checkoutDocuments, getDocument, createDocument, updateDocument } from "./util";
 import Employee from "./employee";
+import Stock from "./stock";
+import Product from "./product";
 
 export default class Company {
 	constructor(property){
 		Object.assign(this, {
-			type:					"company",
+			data_type:				"company",
 			title:					"",
 			description:			"",
 			uuid:					"",
@@ -97,6 +99,14 @@ export default class Company {
 		this.stock_id_list.push(stock._id);
 		return await updateDocument(this);
 	};
+	createMultipleStock = async (propertyList) => {
+		let stockList = await Stock.createMultiple(this, propertyList);
+		if(stockList.length > 0){
+			this.stock_id_list = this.stock_id_list.concat(stockList.map((stock) => (stock.id)));
+			return await updateDocument(this);
+		}
+		return this;
+	};
 
 	// Supplier
 
@@ -104,11 +114,14 @@ export default class Company {
 Company.views = {
 	lists:{
 		map: function(doc){
-			if(doc["type"] == "company"){
+			if(doc["data_type"] == "company"){
 				emit("company" + doc.username, doc);
 			}
-			if(doc["type"] == "employee"){
-				emit("employee" + doc.company_id + doc.id_number, doc.title);
+			if(doc["data_type"] == "employee"){
+				emit("employee" + doc.company_id + doc.id_number, doc);
+			}
+			if(doc["data_type"] == "stock"){
+				emit("stock" + doc.company_id + doc.sku_number, doc);
 			}
 		}.toString()
 	}

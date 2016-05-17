@@ -1,8 +1,13 @@
+import uuid from "uuid";
+import { get } from "nested-property";
+
+import { I18n, ErrorDinifition } from "../definitions";
 import { checkPropertyRequire, checkDocumentNotExist, getDocument, createDocument, updateDocument } from "./util";
 
 export default class Product {
 	constructor(property){
 		Object.assign(this, {
+			data_type:				"product",
 			ompany_id:				"",
 			title:					"",
 			sku_number:				"",

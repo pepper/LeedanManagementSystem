@@ -1,8 +1,13 @@
-import { checkPropertyRequire, checkDocumentNotExist, getDocument, createDocument, updateDocument } from "./util";
+import uuid from "uuid";
+import { get } from "nested-property";
+
+import { I18n, ErrorDinifition } from "../definitions";
+import { checkPropertyRequire, checkDocumentNotExist, getDocument, createDocument, updateDocument, modifyDocuments } from "./util";
 
 export default class Stock {
 	constructor(property){
 		Object.assign(this, {
+			data_type:				"stock",
 			company_id:				"",
 			title:					"",
 			sku_number:				"",
@@ -74,17 +79,18 @@ Stock.views = {
 	}
 };
 
-Stock.create = async (company, property) => {
+Stock.create = async (company, property, createMultipleUse) => {
 	await checkPropertyRequire(property, "title");
 	await checkPropertyRequire(property, "sku_number");
 	let number = Math.floor(Math.random() * 1000000000);
 	let serialNumber = ("2" + (new Array(10 - number.toString().length)).join("0") + number);
 	
-	await checkDocumentNotExist("stock", "lists", {
-		keys: [company._id + property.sku_number],
-		limit: 1
-	}, I18n.t("stock_sku_number_already_token"));
-
+	if(!createMultipleUse){
+		await checkDocumentNotExist("company", "lists", {
+			keys: ["stock" + company._id + property.sku_number],
+			limit: 1
+		}, I18n.t("stock_sku_number_already_token"));
+	}
 	let stock = new Stock({
 		company_id: company._id,
 		title: property.title,
@@ -92,6 +98,35 @@ Stock.create = async (company, property) => {
 		uuid: uuid.v4(),
 		serial_number: serialNumber
 	});
-	await stock.updateProperty(property);
-	return await createDocument(stock);
+	await stock.updateProperty(property, true);
+	if(!createMultipleUse){
+		stock = await createDocument(stock);
+	}
+	return stock;
 };
+
+Stock.createMultiple = async (company, propertyList) => {
+	// TODO:Must filter out duplicate sku-number in propertyList
+	const result = await checkDocumentNotExist("company", "lists", {
+		keys: propertyList.map((property) => {
+			return "stock" + company._id + property.sku_number
+		})
+	}, I18n.t("stock_sku_number_already_token"), true);
+	console.log(result);
+
+	if(get(result, "rows.length") > 0){
+		let currentSkuNumberList = result.rows.map((stock) => {
+			return stock.value.sku_number;
+		});
+		propertyList = propertyList.filter((property) => ( currentSkuNumberList.indexOf(property.sku_number) < 0));
+	}
+	const promiseList = propertyList.map(async (property) => {
+		return await Stock.create(company, property, true);
+	});
+	
+	// const stockList = await Promise.all(promiseList);
+	// let modifyResult = await modifyDocuments(stockList);
+	// console.log(modifyResult);
+	// return modifyResult;
+	return [];
+}

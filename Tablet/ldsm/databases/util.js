@@ -1,3 +1,5 @@
+import _ from "underscore";
+import { get } from "nested-property";
 import validator from "validator";
 import {manager, ReactCBLite} from "react-native-couchbase-lite";
 
@@ -39,11 +41,56 @@ exports.checkPropertyRequire = (property, name, type = "string") => {
 	return true;
 };
 
-exports.checkDocumentNotExist = async (designDocumentName, viewName, option = {}, errorMessage = "") => {
-	let results = await database.queryView(designDocumentName, viewName, option);
-	if(results && results.rows && results.rows.length > 0){
-		throw new error.AlreadyExistError(errorMessage);
+exports.checkDocumentNotExist = async (designDocumentName, viewName, option = {}, errorMessage = "", notThrowError) => {
+	let optionList = [];
+	if(option.keys && option.keys.length > 0){
+		let keysList = [];
+		let keys = [];
+		let currentSize = 0;
+		for(let i in option.keys){
+			keys.push(option.keys[i]);
+			currentSize = currentSize + option.keys[i].length;
+			if(currentSize > 6000){
+				keysList.push(keys);
+				keys = [];
+				currentSize = 0;
+			}
+		}
+		if(keys.length > 0){
+			keysList.push(keys);
+		}
+		optionList = keysList.map((keysInput) => {
+			return Object.assign({}, option, {
+				keys: keysInput
+			})
+		});
 	}
+	else{
+		optionList = [option];
+	}
+	let resultList = [];
+	for(let i in optionList){
+		// TODO: must find why return so much key!
+		let result = await database.queryView(designDocumentName, viewName, optionList[i]);
+		resultList.push(result);
+		if(get(result, "rows.length") > 0){
+			if(!notThrowError){
+				throw new error.AlreadyExistError(errorMessage);
+			}
+		}
+	}
+
+	let result = resultList.reduce((lastValue, resultInput) => {
+		return lastValue = Object.assign({}, lastValue, {
+			rows: lastValue.rows.concat(resultInput.rows)
+		});
+	}, Object.assign({}, resultList[0], {
+		rows: []
+	}));
+	result.rows = _.uniq(result.rows, false, (row) => {
+		return row.id;
+	});
+	return result;
 };
 
 exports.getDocument = async (id) => {
@@ -67,3 +114,7 @@ exports.createDocument = async (document) => {
 exports.updateDocument = async (document) => {
 	return await database.updateDocument(document);
 };
+
+exports.modifyDocuments = async (documentList) => {
+	return await database.modifyDocuments(documentList);
+}

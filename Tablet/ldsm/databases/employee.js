@@ -6,7 +6,7 @@ import { checkPropertyRequire, checkDocumentNotExist, createDocument, getDocumen
 export default class Employee {
 	constructor(property){
 		Object.assign(this, {
-			type:			"employee",
+			data_type:		"employee",
 			company_id:		"",
 			name:			"",
 			id_number:		"",
