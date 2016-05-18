@@ -62,6 +62,7 @@ I18n.translations = {
 		employee_passcode_or_id_number_already_token: "Employee passcode or id number already token",
 
 		stock_sku_number_already_token: "Stock SKU number must be unique",
+		product_sku_number_already_token: "Product SKU number must be unique",
 
 		load_success: "Resource load success",
 		load_fail: "Fail to load resource",
@@ -119,7 +120,7 @@ I18n.translations = {
 		company_create_employee_panel_input_passcode: "請輸入登入密碼",
 		company_create_employee_panel_reinput_passcode: "再次輸入登入密碼",
 		company_create_employee_panel_no_permission: "無此權限",
-		company_create_employee_panel_pemission_manage_employee: "管理公司員工名單e",
+		company_create_employee_panel_pemission_manage_employee: "管理公司員工名單",
 		company_create_employee_panel_pemission_manage_leave: "簽核請假單",
 		company_create_employee_panel_pemission_manage_working_record: "管理員工工作記錄",
 		company_create_employee_panel_pemission_manage_accounting: "管理公司薪資帳務",
@@ -129,6 +130,7 @@ I18n.translations = {
 		employee_passcode_or_id_number_already_token: "登入密碼或員工編號已經有人使用",
 
 		stock_sku_number_already_token: "庫存料號必須要獨一無二",
+		product_sku_number_already_token: "產品料號必須要獨一無二",
 
 		load_success: "資料下載成功",
 		load_fail: "資料下載失敗",

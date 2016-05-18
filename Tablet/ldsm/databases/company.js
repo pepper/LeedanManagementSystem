@@ -5,7 +5,7 @@ import validator from "validator";
 
 import { privateKey } from "../config";
 import { I18n, ErrorDinifition } from "../definitions";
-import { checkPropertyRequire, checkDocumentNotExist, checkoutDocuments, getDocument, createDocument, updateDocument } from "./util";
+import { checkPropertyRequire, checkDocumentNotExist, checkoutDocuments, getDocument, createDocument, updateDocument, modifyDocuments, getDocumentList } from "./util";
 import Employee from "./employee";
 import Stock from "./stock";
 import Product from "./product";
@@ -37,7 +37,7 @@ export default class Company {
 			product_id_list:		[],		// Product
 			stock_id_list:			[],		// Stock
 			order_id_list:			[],		// Order
-			supply_id_list:			[],		// Company
+			supplier_id_list:		[]		// Company
 		}, property);
 	}
 
@@ -45,7 +45,7 @@ export default class Company {
 	createEmployee = async (property) => {
 		let employee = await Employee.create(this, property);
 		this.employee_id_list.push(employee._id);
-		return await updateDocument(this);
+		return new Company(await updateDocument(this));
 	};
 	loadEmployeeList = async () => {
 		let promiseList = this.employee_id_list.map(async (employeeId) => {
@@ -88,9 +88,20 @@ export default class Company {
 
 	// Product
 	createProduct = async (property) => {
-		let product = await Product.create(this, product);
+		let product = await Product.create(this, property);
 		this.product_id_list.push(product._id);
 		return await updateDocument(this);
+	};
+	createMultipleProduct = async (propertyList) => {
+		let productList = await Product.createMultiple(this, propertyList);
+		if(productList.length > 0){
+			this.product_id_list = this.product_id_list.concat(productList.map((product) => (product.id)));
+			return new Company(await updateDocument(this));
+		}
+		return this;
+	};
+	loadProductList = async () => {
+		return await Product.loadList(this.product_id_list);
 	};
 
 	// Stock
@@ -103,17 +114,36 @@ export default class Company {
 		let stockList = await Stock.createMultiple(this, propertyList);
 		if(stockList.length > 0){
 			this.stock_id_list = this.stock_id_list.concat(stockList.map((stock) => (stock.id)));
-			return await updateDocument(this);
+			return new Company(await updateDocument(this));
 		}
 		return this;
 	};
+	loadStockList = async () => {
+		return await Stock.loadList(this.stock_id_list);
+	};
 
 	// Supplier
-
+	createSupplier = async (property) => {
+		let supplier = await Company.createSupplier(property);
+		this.supplier_id_list.push(supplier._id);
+		return await updateDocument(this);
+	};
+	createMultipleSupplier = async (propertyList) => {
+		let supplierList = await Company.creeateMultipleSupplier(propertyList);
+		if(supplierList.length > 0){
+			this.supplier_id_list = this.supplier_id_list.concat(supplierList.map((supplier) => (supplier.id)));
+			return new Company(await updateDocument(this));
+		}
+		return this;
+	};
+	loadSupplierList = async () => {
+		return await Company.loadList(this.supplier_id_list);
+	};
 }
 Company.views = {
 	lists:{
 		map: function(doc){
+			emit(doc._id, doc);
 			if(doc["data_type"] == "company"){
 				emit("company" + doc.username, doc);
 			}
@@ -122,6 +152,9 @@ Company.views = {
 			}
 			if(doc["data_type"] == "stock"){
 				emit("stock" + doc.company_id + doc.sku_number, doc);
+			}
+			if(doc["data_type"] == "product"){
+				emit("product" + doc.company_id + doc.sku_number, doc);
 			}
 		}.toString()
 	}
@@ -163,12 +196,32 @@ Company.load = async (companyId) => {
 	return new Company(await getDocument(companyId));
 };
 
-Company.createSupplier = async (property) => {
+Company.createSupplier = async (property, notSave) => {
 	checkPropertyRequire(property, "title");
 	let company = new Company();
-	company.updateSupplierInformation();
 	company.uuid = uuid.v4();
 	company.title = property.title;
-	await company.updateProperty(property);
-	return await createDocument(company);
+	await company.updateProperty(property, true);
+	if(!notSave){
+		company = await createDocument(company);
+	}
+	return company;
+};
+
+Company.creeateMultipleSupplier = async (propertyList) => {
+	const promiseList = propertyList.map(async (property) => {
+		return await Company.createSupplier(property, true);
+	});
+	
+	const supplierList = await Promise.all(promiseList);
+	let modifyResult = await modifyDocuments(supplierList);
+	return modifyResult;
+};
+
+Company.loadList = async (companyIdList) => {
+	return (await getDocumentList("company", "lists", {
+		keys: companyIdList
+	})).rows.map((companyObject) => {
+		return new Company(companyObject.value);
+	});
 };

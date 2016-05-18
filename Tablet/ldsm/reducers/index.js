@@ -4,7 +4,8 @@ import messageReducer from "./message";
 import moduleReducer from "./module";
 import companyReducer from "./company";
 import panelReducer from "./panel";
-import stockReducer from "./stock";
+// import stockReducer from "./stock";
+import invoicingReducer from "./invoicing";
 import employeeReducer from "./employee";
 import systemReducer from "./system";
 
@@ -13,7 +14,8 @@ export default combineReducers({
 	...moduleReducer,
 	...companyReducer,
 	...panelReducer,
-	...stockReducer,
+	// ...stockReducer,
+	...invoicingReducer,
 	...employeeReducer,
-	...systemReducer
+	...systemReducer,
 });

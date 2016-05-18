@@ -2,7 +2,7 @@ import uuid from "uuid";
 import { get } from "nested-property";
 
 import { I18n, ErrorDinifition } from "../definitions";
-import { checkPropertyRequire, checkDocumentNotExist, getDocument, createDocument, updateDocument, modifyDocuments } from "./util";
+import { checkPropertyRequire, checkDocumentNotExist, getDocument, createDocument, updateDocument, modifyDocuments, getDocumentList } from "./util";
 
 export default class Stock {
 	constructor(property){
@@ -71,14 +71,6 @@ export default class Stock {
 	};
 }
 
-Stock.views = {
-	lists:{
-		map: function(doc){
-			emit(doc.company_id + doc.sku_number, doc);
-		}.toString()
-	}
-};
-
 Stock.create = async (company, property, createMultipleUse) => {
 	await checkPropertyRequire(property, "title");
 	await checkPropertyRequire(property, "sku_number");
@@ -109,11 +101,10 @@ Stock.createMultiple = async (company, propertyList) => {
 	// TODO:Must filter out duplicate sku-number in propertyList
 	const result = await checkDocumentNotExist("company", "lists", {
 		keys: propertyList.map((property) => {
-			return "stock" + company._id + property.sku_number
+			return "stock" + company._id + property.sku_number;
 		})
 	}, I18n.t("stock_sku_number_already_token"), true);
-	console.log(result);
-
+	
 	if(get(result, "rows.length") > 0){
 		let currentSkuNumberList = result.rows.map((stock) => {
 			return stock.value.sku_number;
@@ -124,9 +115,14 @@ Stock.createMultiple = async (company, propertyList) => {
 		return await Stock.create(company, property, true);
 	});
 	
-	// const stockList = await Promise.all(promiseList);
-	// let modifyResult = await modifyDocuments(stockList);
-	// console.log(modifyResult);
-	// return modifyResult;
-	return [];
-}
+	const stockList = await Promise.all(promiseList);
+	let modifyResult = await modifyDocuments(stockList);
+	return modifyResult;
+};
+Stock.loadList = async (stockIdList) => {
+	return (await getDocumentList("company", "lists", {
+		keys: stockIdList
+	})).rows.map((stockObject) => {
+		return new Stock(stockObject.value);
+	});
+};

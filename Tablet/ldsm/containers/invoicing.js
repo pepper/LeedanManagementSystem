@@ -4,10 +4,12 @@
 import React, {Component} from "react";
 import {StyleSheet, View, Text} from "react-native";
 import { connect } from "react-redux";
+import { get } from "nested-property";
+
 import { Invoicing } from "../actions";
 import { Color, Size } from "../definitions";
-
 import ContentList, { Container, Title, Item, List, Button } from "../components/content_list";
+import { Dashboard, Supplier, Stock } from "../components/invoicing";
 import SearchBar from "../components/search/container";
 
 const style = StyleSheet.create({
@@ -42,6 +44,9 @@ const style = StyleSheet.create({
 	},
 	shoppingCartTitle:{
 		height: Size.first_row_height
+	},
+	shoppingCartItem:{
+		height: Size.row_height
 	}
 });
 
@@ -49,32 +54,115 @@ class InvoicingContainer extends Component {
 	constructor(props){
 		super(props);
 	}
-	handleLoadDataFromServer = () => {
-		this.props.dispatch(Invoicing.loadDataFromServer());
+	handleLoadStockFromServer = () => {
+		this.props.dispatch(Invoicing.loadStockFromServer());
 	};
+	handleLoadSupplierFromServer = () => {
+		this.props.dispatch(Invoicing.loadSupplierFromServer());
+	};
+	handleLoadProductFromServer = () => {
+		this.props.dispatch(Invoicing.loadProductFromServer());
+	};
+	handleDashboardItemPress = (type, id) => {
+		this.props.dispatch(Invoicing.selectItem(type, id));
+	};
+	handleChangeCurrentSupplier = (id) => {
+		this.props.dispatch(Invoicing.changeCurrentSupplier(id));
+	};
+
 	render(){
+		let searchList = (get(this.props.invoicing, "stock_list") || []).map((stock) => {
+			return Object.assign({}, stock, { item_type: "stock" });
+		});
+		searchList = searchList.concat((get(this.props.invoicing, "product_list") || []).map((product) => {
+			return Object.assign({}, product, { item_type: "product" });
+		}));
+		searchList = searchList.concat((get(this.props.invoicing, "customer_list") || []).map((customer) => {
+			return Object.assign({}, customer, { item_type: "customer" });
+		}));
+		searchList = searchList.concat((get(this.props.invoicing, "supplier_list") || []).map((supplier) => {
+			return Object.assign({}, supplier, { item_type: "supplier" });
+		}));
 		return (
 			<View style={style.container}>
 				<View style={style.innerContainer}>
 					<SearchBar 
-						listToSearch={(this.props.stock.stock_list || []).map((stock) => {
+						listToSearch={searchList.map((item) => {
 							return {
-								key: stock._id,
-								name: "● " + stock.title + " ● " + stock.specification,
-								search_text: JSON.stringify(stock)
+								item_type: item.item_type,
+								key: item._id,
+								name: "● " + item.title + " ● " + (item.specification || ""),
+								search_text: JSON.stringify(item)
 							};
 						})}
-						selectSearchResult={this.handleSelectSearchResult}
+						selectSearchResult={this.handleDashboardItemPress}
 					/>
+					{
+						(this.props.invoicing.mode == "dashboard")?
+						(
+							<Dashboard
+								stockList={get(this.props.invoicing, "stock_list") || []}
+								productList={get(this.props.invoicing, "product_list") || []}
+								customerList={get(this.props.invoicing, "customer_list") || []}
+								supplierList={get(this.props.invoicing, "supplier_list") || []}
+								onChangeItem={this.handleDashboardItemPress}
+							/>
+						):(null)
+					}
+					{
+						(this.props.invoicing.mode == "supplier")?
+						(
+							<Supplier 
+								stockList={get(this.props.invoicing, "selected_stock_list") || []}
+								productList={get(this.props.invoicing, "product_list") || []}
+								customerList={get(this.props.invoicing, "customer_list") || []}
+								supplierList={get(this.props.invoicing, "supplier_list") || []}
+								onChangeItem={this.handleDashboardItemPress}
+							/>
+						):(null)
+					}
+					{
+						(this.props.invoicing.mode == "stock")?
+						(
+							<Stock 
+								supplierList={get(this.props.invoicing, "selected_supplier_list") || []}
+								currentStock={get(this.props.invoicing, "current_stock") || {}}
+								currentSupplier={get(this.props.invoicing, "current_supplier") || {}}
+								onChangeItem={this.handleDashboardItemPress}
+								onChangeCurrentSupplier={this.handleChangeCurrentSupplier}
+							/>
+						):(null)
+					}
 				</View>
 				<View style={style.shoppingCartContainer}>
 					<Button
 						text={""}
-						onLongPress={this.handleLoadDataFromServer}
+						onLongPress={() => {}}
 						icon={"pencil"}
 						mode={"icon"}
 						color={Color.yellow}
 						style={style.shoppingCartTitle}
+					/>
+					<Button
+						onLongPress={this.handleLoadStockFromServer}
+						text={"1"}
+						mode={"text"}
+						color={Color.yellow}
+						style={style.shoppingCartItem}
+					/>
+					<Button
+						onLongPress={this.handleLoadSupplierFromServer}
+						text={"2"}
+						mode={"text"}
+						color={Color.yellow}
+						style={style.shoppingCartItem}
+					/>
+					<Button
+						onLongPress={this.handleLoadProductFromServer}
+						text={"3"}
+						mode={"text"}
+						color={Color.yellow}
+						style={style.shoppingCartItem}
 					/>
 				</View>
 			</View>
@@ -84,8 +172,7 @@ class InvoicingContainer extends Component {
 
 export default connect((state) => {
 	return {
-		product: state.product,
-		stock: state.stock,
+		invoicing: state.invoicing,
 		company: state.company,
 	};
 })(InvoicingContainer);

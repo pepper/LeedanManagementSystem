@@ -8,37 +8,19 @@ import { get } from "nested-property";
 
 import Constant from "../constants/";
 import API from "../databases/api";
-import databases, { Stock } from "../databases";
+// import databases, { Stock } from "../databases";
 import { I18n } from "../definitions";
 
-exports.loadDataFromServer = () => {
+exports.loadStockFromServer = () => {
 	return async (dispatch, getState) => {
 		try{
-			const company = get(getState(), "company.company");
+			let company = get(getState(), "company.company");
 			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("load_stock_start")));
 			let stockObjectList = await API.loadStock();
-			await company.createMultipleStock(stockObjectList);
-
-			// console.log(stockObjectList);
-			// let stockList = [];
-			// for(let index in stockObjectList){
-			// 	stockList.push(await company.createStock(stockObjectList[index]));
-			// }
-			// console.log(stockList);
-			// dispatch(createAction(Constant.STOCK_LOAD_FINISH)(stockList));
+			company = await company.createMultipleStock(stockObjectList);
+			console.log(company);
 			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("load_success")));
-
-			// dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("load_supplier_start")));
-			// let supplierList = await API.loadSupplier();
-			// console.log(supplierList);
-			// // dispatch(createAction(Constant.SUPPLIER_LOAD_FINISH)(supplierList));
-			// dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("load_success")));
-
-			// dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("load_product_start")));
-			// let productList = await API.loadProduct();
-			// console.log(productList);
-			// // dispatch(createAction(Constant.PRODUCT_LOAD_FINISH)(productList));
-			// dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("load_success")));
+			dispatch(createAction(Constant.COMPANY_NEED_RELOAD)());
 		}
 		catch(err){
 			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("load_fail") + ": " + err));
@@ -46,11 +28,85 @@ exports.loadDataFromServer = () => {
 	};
 };
 
+exports.loadSupplierFromServer = () => {
+	return async (dispatch, getState) => {
+		try{
+			let company = get(getState(), "company.company");
+			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("load_supplier_start")));
+			let supplierList = await API.loadSupplier();
+			company = await company.createMultipleSupplier(supplierList);
+			console.log(company);
+			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("load_success")));
+			dispatch(createAction(Constant.COMPANY_NEED_RELOAD)());
+		}
+		catch(err){
+			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("load_fail") + ": " + err));
+		}
+	};
+};
+
+exports.loadProductFromServer = () => {
+	return async (dispatch, getState) => {
+		try{
+			let company = get(getState(), "company.company");
+			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("load_product_start")));
+			let productObjectList = await API.loadProduct();
+			company = await company.createMultipleProduct(productObjectList.map((productObject) => {
+				return Object.assign({}, productObject, {
+					sku_number: productObject.serial_number
+				});
+			}));
+			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("load_success")));
+			dispatch(createAction(Constant.COMPANY_NEED_RELOAD)());
+		}
+		catch(err){
+			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("load_fail") + ": " + err));
+		}
+	};
+};
+
+
+exports.selectItem = (type, id) => {
+	return async (dispatch, getState) => {
+		const invoicing = get(getState(), "invoicing");
+		switch(type){
+		case "product":
+			const product = invoicing.product_list.find((productInput) => {
+				return productInput._id == id;
+			});
+			dispatch(createAction(Constant.INVOICING_SELECT_PRODUCT)(product));
+			break;
+		case "supplier":
+			const supplier = invoicing.supplier_list.find((supplierInput) => {
+				return supplierInput._id == id;
+			});
+			dispatch(createAction(Constant.INVOICING_SELECT_SUPPLIER)(supplier));
+			break;
+		case "stock":
+			const stock = invoicing.stock_list.find((stockInput) => {
+				return stockInput._id == id;
+			});
+			dispatch(createAction(Constant.INVOICING_SELECT_STOCK)(stock));
+			break;
+		}
+	};
+};
+
+exports.changeCurrentSupplier = (id) => {
+	return async (dispatch, getState) => {
+		const invoicing = get(getState(), "invoicing");
+		const supplier = invoicing.supplier_list.find((supplierInput) => {
+			return supplierInput._id == id;
+		});
+		dispatch(createAction(Constant.INVOICING_CHANGE_CURRENT_SUPPLIER)(supplier));
+	};
+};
+
 exports.getStock = (id) => {
 	return async (dispatch) => {
 		dispatch(createAction(Constant.STOCK_CHECKOUT)(id));
 	};
-}
+};
 
 exports.loadSupplier = () => {
 	return async (dispatch) => {

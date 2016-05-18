@@ -41,7 +41,7 @@ exports.checkPropertyRequire = (property, name, type = "string") => {
 	return true;
 };
 
-exports.checkDocumentNotExist = async (designDocumentName, viewName, option = {}, errorMessage = "", notThrowError) => {
+const optionKeySeperator = (option) => {
 	let optionList = [];
 	if(option.keys && option.keys.length > 0){
 		let keysList = [];
@@ -50,7 +50,7 @@ exports.checkDocumentNotExist = async (designDocumentName, viewName, option = {}
 		for(let i in option.keys){
 			keys.push(option.keys[i]);
 			currentSize = currentSize + option.keys[i].length;
-			if(currentSize > 6000){
+			if(currentSize > 3000){
 				keysList.push(keys);
 				keys = [];
 				currentSize = 0;
@@ -62,12 +62,17 @@ exports.checkDocumentNotExist = async (designDocumentName, viewName, option = {}
 		optionList = keysList.map((keysInput) => {
 			return Object.assign({}, option, {
 				keys: keysInput
-			})
+			});
 		});
 	}
 	else{
 		optionList = [option];
 	}
+	return optionList;
+};
+
+exports.checkDocumentNotExist = async (designDocumentName, viewName, option = {}, errorMessage = "", notThrowError) => {
+	const optionList = optionKeySeperator(option);
 	let resultList = [];
 	for(let i in optionList){
 		// TODO: must find why return so much key!
@@ -90,6 +95,31 @@ exports.checkDocumentNotExist = async (designDocumentName, viewName, option = {}
 	result.rows = _.uniq(result.rows, false, (row) => {
 		return row.id;
 	});
+	return result;
+};
+
+exports.getDocumentList = async  (designDocumentName, viewName, option = {}) => {
+	const optionList = optionKeySeperator(option);
+	console.log(optionList);
+	let resultList = [];
+	for(let i in optionList){
+		// TODO: must find why return so much key!
+		console.log(optionList[i]);
+		let result = await database.queryView(designDocumentName, viewName, optionList[i]);
+		resultList.push(result);
+	}
+
+	let result = resultList.reduce((lastValue, resultInput) => {
+		return lastValue = Object.assign({}, lastValue, {
+			rows: lastValue.rows.concat(resultInput.rows)
+		});
+	}, Object.assign({}, resultList[0], {
+		rows: []
+	}));
+	result.rows = _.uniq(result.rows, false, (row) => {
+		return row.id;
+	});
+	console.log(result);
 	return result;
 };
 

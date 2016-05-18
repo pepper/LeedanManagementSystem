@@ -116,7 +116,7 @@ export default class SearchBar extends Component {
 												searchText: "",
 												searchResult: []
 											});
-											this.props.selectSearchResult(item.key);
+											this.props.selectSearchResult(item.item_type, item.key);
 										}}>
 											<View style={style.resultItem}>
 												<Text style={style.resultItemText}>{item.name}</Text>
