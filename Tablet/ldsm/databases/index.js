@@ -3,6 +3,7 @@ import Company from "./company";
 import Employee from "./employee";
 import Stock from "./stock";
 import Product from "./product";
+import DayBook from "./day_book";
 import { databasePort, databaseUsername, databasePassword } from "../config";
 
 exports.init = async (dbName) => {
@@ -16,3 +17,4 @@ exports.Company = Company;
 exports.Employee = Employee;
 exports.Stock = Stock;
 exports.Product = Product;
+exports.DayBook = DayBook;

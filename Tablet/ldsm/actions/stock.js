@@ -26,7 +26,7 @@ exports.getStock = (id) => {
 	return async (dispatch) => {
 		dispatch(createAction(Constant.STOCK_CHECKOUT)(id));
 	};
-}
+};
 
 exports.loadSupplier = () => {
 	return async (dispatch) => {
@@ -46,4 +46,4 @@ exports.getSupplier = (id) => {
 	return async (dispatch) => {
 		dispatch(createAction(Constant.SUPPLIER_CHECKOUT)(id));
 	};
-}
+};

@@ -5,7 +5,6 @@ import { createAction } from "redux-actions";
 import { get } from "nested-property";
 
 import Constant from "../constants/";
-import databases, { Company } from "../databases";
 import { I18n } from "../definitions";
 
 exports.create = (props) => {
@@ -39,4 +38,4 @@ exports.login = (passcode) => {
 
 exports.logout = () => {
 	return createAction(Constant.EMPLOYEE_LOGOUT)();
-}
+};

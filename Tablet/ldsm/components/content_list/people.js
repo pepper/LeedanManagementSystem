@@ -73,17 +73,21 @@ const style = StyleSheet.create({
 
 export default class People extends Component {
 	static propTypes = {
+		avatar: PropTypes.string,
 		onPress: PropTypes.func,
 		name: PropTypes.string,
 		idNumber: PropTypes.string,
 		selected: PropTypes.bool,
-		totalScore: PropTypes.number
+		totalScore: PropTypes.number,
+		subTitle: PropTypes.string
 	};
 	static defaultProps = {
+		avatar: "",
 		name: "",
 		idNumber: "",
 		selected: false,
-		totalScore: 0
+		totalScore: 0,
+		subTitle: "Total Score"
 	};
 
 	toNumberString = (input) => {
@@ -120,7 +124,7 @@ export default class People extends Component {
 							<Text style={[style.idText, !this.props.active && style.notActiveText]}>{this.props.idNumber}</Text>
 						</View>
 						<View style={style.scoreColumn}>
-							<Text style={[style.scoreTitleText, !this.props.active && style.notActiveBlueText]}>{"Total Score"}</Text>
+							<Text style={[style.scoreTitleText, !this.props.active && style.notActiveBlueText]}>{this.props.subTitle}</Text>
 							<Text style={[style.scoreText, !this.props.active && style.notActiveBlueText]} numberOfLines={1}>{this.toNumberString(this.props.totalScore)}</Text>
 						</View>
 						{

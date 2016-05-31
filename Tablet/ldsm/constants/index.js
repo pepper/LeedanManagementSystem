@@ -36,6 +36,10 @@ let apiActionConstant = [
 
 	"SUPPLIER_LOAD_FINISH",
 	"SUPPLIER_CHECKOUT",
+
+	"DAYBOOK_LOAD_FINISH",
+	"DAYBOOK_CHANGE",
+	"DAYBOOK_RELOAD",
 ];
 
 let viewActionConstant = [

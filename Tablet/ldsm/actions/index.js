@@ -9,6 +9,7 @@ import PanelAction from "./panel";
 // import StockAction from "./stock";
 import InvoicingAction from "./invoicing";
 import EmployeeAction from "./employee";
+import DayBookAction from "./day_book";
 
 module.exports = {
 	Message: MessageAction,
@@ -19,4 +20,5 @@ module.exports = {
 	// Stock: StockAction,
 	Invoicing: InvoicingAction,
 	Employee: EmployeeAction,
+	DayBook: DayBookAction,
 };

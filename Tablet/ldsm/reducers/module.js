@@ -9,6 +9,8 @@ import WorkingRecordContainer from "../containers/working_record";
 import WorkingRecordMenu from "../components/main_menu/working_record";
 import InvoicingContainer from "../containers/invoicing";
 import InvoicingMenu from "../components/main_menu/invoicing";
+import DayBookContainer from "../containers/day_book";
+import DayBookMenu from "../components/main_menu/day_book";
 import Logout from "../components/main_menu/logout";
 
 var Constant = require("../constants/index");
@@ -25,6 +27,10 @@ let moduleList = [{
 	key: "invoicing",
 	menu: InvoicingMenu,
 	container: InvoicingContainer
+}, {
+	key: "day_book",
+	menu: DayBookMenu,
+	container: DayBookContainer
 }];
 
 exports.module = handleActions({
@@ -59,6 +65,6 @@ exports.module = handleActions({
 }, {
 	current_mudule: "",
 	module_list: moduleList,
-	active_module_list: ["time_punch", "working_record", "invoicing"],
+	active_module_list: ["day_book"],
 	module_list_datasource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
 });

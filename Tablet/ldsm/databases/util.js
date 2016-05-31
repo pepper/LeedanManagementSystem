@@ -37,6 +37,11 @@ exports.checkPropertyRequire = (property, name, type = "string") => {
 			throw new error.InputPropertyNotAcceptError("Property: " + name + " is required.");
 		}
 		break;
+	case "number":
+		if(isNaN(property[name])){
+			throw new error.InputPropertyNotAcceptError("Property: " + name + " is required.");
+		}
+		break;
 	}
 	return true;
 };

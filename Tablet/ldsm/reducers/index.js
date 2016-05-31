@@ -8,6 +8,7 @@ import panelReducer from "./panel";
 import invoicingReducer from "./invoicing";
 import employeeReducer from "./employee";
 import systemReducer from "./system";
+import dayBookReducer from "./day_book";
 
 export default combineReducers({
 	...messageReducer,
@@ -18,4 +19,5 @@ export default combineReducers({
 	...invoicingReducer,
 	...employeeReducer,
 	...systemReducer,
+	...dayBookReducer
 });

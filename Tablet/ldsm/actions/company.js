@@ -73,14 +73,16 @@ exports.load = () =>{
 		if(companyId != ""){
 			const company = await Company.load(companyId);
 			dispatch(createAction(Constant.COMPANY_LOAD_FINISH)(company));
-			const employeeList = await company.loadEmployeeList();
-			dispatch(createAction(Constant.EMPLOYEE_LIST_LOAD_FINISH)(employeeList));
-			const stockList = await company.loadStockList();
-			dispatch(createAction(Constant.INVOICING_STOCK_LOAD_FINISH)(stockList));
-			const productList = await company.loadProductList();
-			dispatch(createAction(Constant.INVOICING_PRODUCT_LOAD_FINISH)(productList));
-			const supplierList = await company.loadSupplierList();
-			dispatch(createAction(Constant.INVOICING_SUPPLIER_LOAD_FINISH)(supplierList));
+			// const employeeList = await company.loadEmployeeList();
+			// dispatch(createAction(Constant.EMPLOYEE_LIST_LOAD_FINISH)(employeeList));
+			// const stockList = await company.loadStockList();
+			// dispatch(createAction(Constant.INVOICING_STOCK_LOAD_FINISH)(stockList));
+			// const productList = await company.loadProductList();
+			// dispatch(createAction(Constant.INVOICING_PRODUCT_LOAD_FINISH)(productList));
+			// const supplierList = await company.loadSupplierList();
+			// dispatch(createAction(Constant.INVOICING_SUPPLIER_LOAD_FINISH)(supplierList));
+			const dayBookList = await company.loadDayBookList();
+			dispatch(createAction(Constant.DAYBOOK_LOAD_FINISH)(dayBookList));
 		}
 	};
 };

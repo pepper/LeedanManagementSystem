@@ -9,6 +9,7 @@ import { checkPropertyRequire, checkDocumentNotExist, checkoutDocuments, getDocu
 import Employee from "./employee";
 import Stock from "./stock";
 import Product from "./product";
+import DayBook from "./day_book";
 
 export default class Company {
 	constructor(property){
@@ -37,7 +38,8 @@ export default class Company {
 			product_id_list:		[],		// Product
 			stock_id_list:			[],		// Stock
 			order_id_list:			[],		// Order
-			supplier_id_list:		[]		// Company
+			supplier_id_list:		[],		// Company
+			day_book_id_list:		[],		// DayBook
 		}, property);
 	}
 
@@ -139,6 +141,19 @@ export default class Company {
 	loadSupplierList = async () => {
 		return await Company.loadList(this.supplier_id_list);
 	};
+
+	// Day Book
+	createDayBook = async (property) => {
+		let dayBook = await DayBook.create(this, property);
+		this.day_book_id_list.push(dayBook._id);
+		return await updateDocument(this);
+	};
+	removeDayBook = async () => {
+
+	};
+	loadDayBookList = async () => {
+		return await DayBook.loadList(this.day_book_id_list);
+	};
 }
 Company.views = {
 	lists:{
@@ -155,6 +170,9 @@ Company.views = {
 			}
 			if(doc["data_type"] == "product"){
 				emit("product" + doc.company_id + doc.sku_number, doc);
+			}
+			if(doc["data_type"] == "day_book"){
+				emit("daybook" + doc.company_id + doc.title, doc);
 			}
 		}.toString()
 	}
