@@ -10,6 +10,8 @@ import { I18n } from "../../definitions";
 
 import { Company, Message } from "../../actions";
 
+import Firebase, { App as FIRApp, Auth as FIRAuth} from "react-native-google-firebase";
+
 let style = StyleSheet.create({
 	container:{
 		flex: 1,
@@ -47,16 +49,23 @@ export default class Login extends Component{
 			password: text
 		});
 	};
-	handleLogin = () => {
-		if(validator.toString(this.state.username) != "" && validator.toString(this.state.password) != ""){
-			this.props.dispatch(Company.login({
-				username: this.state.username,
-				password: this.state.password
-			}));
+	handleLogin = async () => {
+		try{
+			let user = await FIRAuth.createUserWithEmail("pepper.yen@gmail.com", "60606060");
+			console.log(user);
 		}
-		else{
-			this.props.dispatch(Message.showErrorMessage(I18n.t("login_username_format_wong")));
+		catch(err){
+			console.error(err.message);
 		}
+		// if(validator.toString(this.state.username) != "" && validator.toString(this.state.password) != ""){
+		// 	this.props.dispatch(Company.login({
+		// 		username: this.state.username,
+		// 		password: this.state.password
+		// 	}));
+		// }
+		// else{
+		// 	this.props.dispatch(Message.showErrorMessage(I18n.t("login_username_format_wong")));
+		// }
 	};
 	render(){
 		return (
