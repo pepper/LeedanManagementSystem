@@ -10,7 +10,7 @@ import { I18n } from "../../definitions";
 
 import { Company, Message } from "../../actions";
 
-import Firebase, { App as FIRApp, Auth as FIRAuth} from "react-native-google-firebase";
+import { FIRAuth } from "react-native-google-firebase";
 
 let style = StyleSheet.create({
 	container:{
@@ -51,7 +51,10 @@ export default class Login extends Component{
 	};
 	handleLogin = async () => {
 		try{
-			let user = await FIRAuth.createUserWithEmail("pepper.yen@gmail.com", "60606060");
+			console.log(FIRAuth.auth);
+			const auth = await FIRAuth.auth();
+			console.log(auth);
+			let user = await auth.createUserWithEmail("pepper.yen@gmail.com", "60606060");
 			console.log(user);
 		}
 		catch(err){

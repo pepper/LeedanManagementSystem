@@ -6,7 +6,7 @@ import Product from "./product";
 import DayBook from "./day_book";
 import { databasePort, databaseUsername, databasePassword } from "../config";
 
-import Firebase, { App as FIRApp } from "react-native-google-firebase";
+import { FIRApp } from "react-native-google-firebase";
 
 exports.init = async (dbName) => {
 	await initDatabase(databaseUsername, databasePassword, databasePort, dbName);
