@@ -61,17 +61,35 @@ export default class Login extends Component{
 		// 	console.error(err.message);
 		// }
 
+		// try{
+		// 	const database = await FIRDatabase.database();
+		// 	const ref = await database.rootReference.child("leedan/hello/world");
+		// 	await ref.setValue({
+		// 		first_name: "Pepper",
+		// 		last_name: "Yen"
+		// 	});
+		// }
+		// catch(err){
+		// 	console.log(err.message);
+		// }
+
+
 		try{
 			const database = await FIRDatabase.database();
 			const ref = await database.rootReference.child("leedan/hello/world");
-			await ref.setValue({
-				first_name: "Pepper",
-				last_name: "Yen"
+			ref.observeEventType(FIRDatabase.FIRDataEventType.FIRDataEventTypeValue, (value) => {
+				console.log("On value");
+				console.log(value);
+			});
+			ref.observeEventType(FIRDatabase.FIRDataEventType.FIRDataEventTypeChildAdded, (value) => {
+				console.log("On child add");
+				console.log(value);
 			});
 		}
 		catch(err){
 			console.log(err.message);
 		}
+		
 
 		// if(validator.toString(this.state.username) != "" && validator.toString(this.state.password) != ""){
 		// 	this.props.dispatch(Company.login({

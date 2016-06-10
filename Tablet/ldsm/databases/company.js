@@ -2,6 +2,7 @@ import md5 from "md5";
 import uuid from "uuid";
 import { get } from "nested-property";
 import validator from "validator";
+import { FIRAuth, FIRDatabase } from "react-native-google-firebase";
 
 import { privateKey } from "../config";
 import { I18n, ErrorDinifition } from "../definitions";
@@ -18,8 +19,6 @@ export default class Company {
 			title:					"",
 			description:			"",
 			uuid:					"",
-			username:				"",
-			password:				"",
 			employee_id_list:		[],		// Employee
 			avtive_module:			[],
 
@@ -155,63 +154,62 @@ export default class Company {
 		return await DayBook.loadList(this.day_book_id_list);
 	};
 }
-Company.views = {
-	lists:{
-		map: function(doc){
-			emit(doc._id, doc);
-			if(doc["data_type"] == "company"){
-				emit("company" + doc.username, doc);
-			}
-			if(doc["data_type"] == "employee"){
-				emit("employee" + doc.company_id + doc.id_number, doc);
-			}
-			if(doc["data_type"] == "stock"){
-				emit("stock" + doc.company_id + doc.sku_number, doc);
-			}
-			if(doc["data_type"] == "product"){
-				emit("product" + doc.company_id + doc.sku_number, doc);
-			}
-			if(doc["data_type"] == "day_book"){
-				emit("daybook" + doc.company_id + doc.title, doc);
-			}
-		}.toString()
-	}
-};
+// Company.views = {
+// 	lists:{
+// 		map: function(doc){
+// 			emit(doc._id, doc);
+// 			if(doc["data_type"] == "company"){
+// 				emit("company" + doc.username, doc);
+// 			}
+// 			if(doc["data_type"] == "employee"){
+// 				emit("employee" + doc.company_id + doc.id_number, doc);
+// 			}
+// 			if(doc["data_type"] == "stock"){
+// 				emit("stock" + doc.company_id + doc.sku_number, doc);
+// 			}
+// 			if(doc["data_type"] == "product"){
+// 				emit("product" + doc.company_id + doc.sku_number, doc);
+// 			}
+// 			if(doc["data_type"] == "day_book"){
+// 				emit("daybook" + doc.company_id + doc.title, doc);
+// 			}
+// 		}.toString()
+// 	}
+// };
 
 Company.register = async (property) => {
 	checkPropertyRequire(property, "title");
 	checkPropertyRequire(property, "username");
 	checkPropertyRequire(property, "password");
-	// TODO: Must check passsword weak
-	await checkDocumentNotExist("company", "lists", {
-		keys: ["company" + property.username],
-		limit: 1
-	}, I18n.t("username_already_token"));
+
+	const auth = await FIRAuth.auth();
+	const database = await FIRDatabase.database();
+
+	let user = await auth.createUserWithEmail(property.username, property.password);
+	const ref = await database.rootReference.child("company/" + user.uid + "/basic");
 	let company = new Company();
 	company.title = property.title;
-	company.username = property.username;
-	company.password = md5(property.password + privateKey);
+	company.username = user.uid;
+	company.contact.email = property.username;
 	company.uuid = uuid.v4();
-	return await createDocument(company);
+	return await ref.setValue(company);
 };
 
 Company.login = async (property) => {
 	checkPropertyRequire(property, "username");
 	checkPropertyRequire(property, "password");
-	let company = get(await checkoutDocuments("company", "lists", {
-		keys: ["company" + property.username],
-		limit: 1
-	}), "rows.0");
-	if(get(company, "value.password") == md5(property.password + privateKey)){
-		return company.id;
-	}
-	else{
-		throw new Error(I18n.t("username_or_password_wrong"));
-	}
+
+	const auth = await FIRAuth.auth();
+	let user = await auth.signInWithEmail(property.username, property.password);
+	return user.uid;
 };
 
-Company.load = async (companyId) => {
-	return new Company(await getDocument(companyId));
+Company.observe = async (companyId, eventHandler) => {
+	const database = await FIRDatabase.database();
+	const ref = await database.rootReference.child("leedan/" + companyId);
+	ref.observeEventType(FIRDatabase.FIRDataEventType.FIRDataEventTypeValue, (value) => {
+		eventHandler(new Company(value));
+	});
 };
 
 Company.createSupplier = async (property, notSave) => {
