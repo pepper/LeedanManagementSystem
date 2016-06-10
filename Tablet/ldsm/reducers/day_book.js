@@ -4,7 +4,8 @@ var Constant = require("../constants/index");
 
 exports.dayBook = handleActions({
 	[Constant.DAYBOOK_LOAD_FINISH]: (state, action) => Object.assign({}, state, {
-		day_book_list: action.payload,
+		day_book_collect: action.payload,
+		day_book_list: Object.entries(action.payload.children).map((entries) => (entries[1])),
 		loaded: true
 	}),
 	[Constant.DAYBOOK_CHANGE]: (state, action) => Object.assign({}, state, {

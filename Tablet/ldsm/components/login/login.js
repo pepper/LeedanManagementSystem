@@ -50,56 +50,15 @@ export default class Login extends Component{
 		});
 	};
 	handleLogin = async () => {
-		// try{
-		// 	console.log(FIRAuth.auth);
-		// 	const auth = await FIRAuth.auth();
-		// 	console.log(auth);
-		// 	let user = await auth.createUserWithEmail("pepper.yen@gmail.com", "60606060");
-		// 	console.log(user);
-		// }
-		// catch(err){
-		// 	console.error(err.message);
-		// }
-
-		// try{
-		// 	const database = await FIRDatabase.database();
-		// 	const ref = await database.rootReference.child("leedan/hello/world");
-		// 	await ref.setValue({
-		// 		first_name: "Pepper",
-		// 		last_name: "Yen"
-		// 	});
-		// }
-		// catch(err){
-		// 	console.log(err.message);
-		// }
-
-
-		try{
-			const database = await FIRDatabase.database();
-			const ref = await database.rootReference.child("leedan/hello/world");
-			ref.observeEventType(FIRDatabase.FIRDataEventType.FIRDataEventTypeValue, (value) => {
-				console.log("On value");
-				console.log(value);
-			});
-			ref.observeEventType(FIRDatabase.FIRDataEventType.FIRDataEventTypeChildAdded, (value) => {
-				console.log("On child add");
-				console.log(value);
-			});
+		if(validator.toString(this.state.username) != "" && validator.toString(this.state.password) != ""){
+			this.props.dispatch(Company.login({
+				username: this.state.username,
+				password: this.state.password
+			}));
 		}
-		catch(err){
-			console.log(err.message);
+		else{
+			this.props.dispatch(Message.showErrorMessage(I18n.t("login_username_format_wong")));
 		}
-		
-
-		// if(validator.toString(this.state.username) != "" && validator.toString(this.state.password) != ""){
-		// 	this.props.dispatch(Company.login({
-		// 		username: this.state.username,
-		// 		password: this.state.password
-		// 	}));
-		// }
-		// else{
-		// 	this.props.dispatch(Message.showErrorMessage(I18n.t("login_username_format_wong")));
-		// }
 	};
 	render(){
 		return (

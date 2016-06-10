@@ -1,24 +1,43 @@
 /* @flow */
 "use strict";
 
+import validator from "validator";
 import { get } from "nested-property";
 import { createAction } from "redux-actions";
 import Constant from "../constants/";
 import { I18n } from "../definitions";
+import databases, { DayBookCollect } from "../databases";
 
 exports.create = (props) => {
 	return async (dispatch, getState) => {
 		try{
 			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_create_daybook_start")));
-			const company = get(getState(), "company.company");
-			await company.createDayBook(props);
+			const dayBookList = get(getState(), "dayBook.day_book_collect");
+			await dayBookList.add(props);
+			// await company.createDayBook(props);
 			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_create_daybook_success")));
-			dispatch(createAction(Constant.COMPANY_NEED_RELOAD)());
+			// dispatch(createAction(Constant.COMPANY_NEED_RELOAD)());
 		}
 		catch(err){
 			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("company_create_daybook_fail") + ": " + err));
 		}
 	};
+};
+
+exports.sync = () => {
+	return async (dispatch, getState) => {
+		try{
+			const companyId = get(getState(), "company.company_id");
+			if(validator.toString(companyId) != ""){
+				DayBookCollect.load(companyId, (newDayBookCollect) => {
+					dispatch(createAction(Constant.DAYBOOK_LOAD_FINISH)(newDayBookCollect));
+				});
+			}
+		}
+		catch(err){
+			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("company_create_daybook_fail") + ": " + err));
+		}
+	}
 };
 
 exports.changeDayBook = (dayBookId) => {

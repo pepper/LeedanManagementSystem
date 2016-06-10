@@ -69,9 +69,9 @@ class App extends Component{
 		showLogoutPanel: false
 	};
 	componentWillReceiveProps(nextProps){
-		if(nextProps.company.need_reload){
-			nextProps.dispatch(Company.load());
-		}
+		// if(nextProps.company.need_reload){
+		// 	nextProps.dispatch(Company.load());
+		// }
 	}
 	handlerChangeModule = (key) => {
 		if(validator.toString(key) == "logout"){

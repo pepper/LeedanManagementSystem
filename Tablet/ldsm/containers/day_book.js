@@ -71,6 +71,10 @@ class DayBookContainer extends Component {
 		],
 		record_to_remove: {}
 	};
+	constructor(props){
+		super(props);
+		this.props.dispatch(DayBook.sync());
+	}
 	handleCreateDayBook = () => {
 		this.createDayBookPanel.show();
 	};

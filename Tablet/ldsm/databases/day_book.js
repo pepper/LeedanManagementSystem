@@ -1,21 +1,38 @@
 import uuid from "uuid";
 
 import { I18n, ErrorDinifition } from "../definitions";
-import { checkPropertyRequire, checkDocumentNotExist, createDocument, getDocument, updateDocument, getDocumentList } from "./util";
+import { checkPropertyRequire } from "./util";
 
-export default class DayBook {
-	constructor(property){
-		Object.assign(this, {
-			data_type:			"day_book",
-			company_id:			"",
-			title:				"",
-			type_list:			[],
-			record_list:		[],
-			total_amount:		0,
-			last_index:			0,
-			modify_datetime:	""
-		}, property);
+import Model from "./model";
+import Collection from "./collection";
+
+class DayBookCollect extends Collection{
+	async init(refPath, eventHandler, modelClass, propsList){
+		await super.init(refPath, eventHandler, DayBook, propsList);
 	}
+}
+
+DayBookCollect.load = async (companyId, eventHandler) => {
+	let dayBookCollect = new DayBookCollect();
+	await dayBookCollect.init("company/" + companyId + "/day_books", eventHandler);
+	return dayBookCollect;
+};
+
+class DayBook extends Model{
+	async init(refPath, autoId, eventHandler, props){
+		if(props){
+			props = Object.assign({
+				title:				"",
+				type_list:			[],
+				record_list:		[],
+				total_amount:		0,
+				last_index:			0,
+				modify_datetime:	(new Date()).toString()
+			}, props);
+		}
+		await super.init(refPath, autoId, eventHandler, props);
+	}
+
 	addType = async (property) => {
 		await checkPropertyRequire(property, "type");
 		if(this.type_list.indexOf(property.type) < 0){
@@ -98,30 +115,34 @@ export default class DayBook {
 	};
 }
 
-DayBook.create = async (company, property) => {
+DayBook.create = async (refPath, property) => {
 	await checkPropertyRequire(property, "title");
-	
-	await checkDocumentNotExist("company", "lists", {
-		keys: ["daybook" + company._id + property.title],
-		limit: 1
-	}, I18n.t("day_book_title_already_token"));
-
-	let dayBook = new DayBook({
-		company_id: company._id,
+	let dayBook = new DayBook();
+	await dayBook.init(refPath, true, null, {
 		title: property.title,
 		modify_datetime: (new Date()).toString()
 	});
-	return await createDocument(dayBook);
 };
 
-DayBook.load = async (dayBookId) => {
-	return new DayBook(await getDocument(dayBookId));
+DayBook.load = async (companyId, eventHandler) => {
+	// Load all exist daybook
+	// Load last daybook when create
+
 };
 
-DayBook.loadList = async (dayBookIdList) => {
-	return (await getDocumentList("company", "lists", {
-		keys: dayBookIdList
-	})).rows.map((dayBookObject) => {
-		return new DayBook(dayBookObject.value);
-	});
+module.exports = {
+	DayBookCollect: DayBookCollect,
+	DayBook: DayBook
 };
+
+// DayBook.load = async (dayBookId) => {
+// 	return new DayBook(await getDocument(dayBookId));
+// };
+
+// DayBook.loadList = async (dayBookIdList) => {
+// 	return (await getDocumentList("company", "lists", {
+// 		keys: dayBookIdList
+// 	})).rows.map((dayBookObject) => {
+// 		return new DayBook(dayBookObject.value);
+// 	});
+// };

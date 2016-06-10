@@ -2,44 +2,75 @@ import md5 from "md5";
 import uuid from "uuid";
 import { get } from "nested-property";
 import validator from "validator";
-import { FIRAuth, FIRDatabase } from "react-native-google-firebase";
 
 import { privateKey } from "../config";
 import { I18n, ErrorDinifition } from "../definitions";
-import { checkPropertyRequire, checkDocumentNotExist, checkoutDocuments, getDocument, createDocument, updateDocument, modifyDocuments, getDocumentList } from "./util";
+// import { checkPropertyRequire, checkDocumentNotExist, checkoutDocuments, getDocument, createDocument, updateDocument, modifyDocuments, getDocumentList } from "./util";
+import { auth, database, checkPropertyRequire } from "./util";
+
+import Model from "./model";
+
+
 import Employee from "./employee";
 import Stock from "./stock";
 import Product from "./product";
 import DayBook from "./day_book";
 
-export default class Company {
-	constructor(property){
-		Object.assign(this, {
-			data_type:				"company",
-			title:					"",
-			description:			"",
-			uuid:					"",
-			employee_id_list:		[],		// Employee
-			avtive_module:			[],
+export default class Company extends Model{
+	constructor(props){
+		super();
+		// Object.assign(this, {
+		// 	data_type:				"company",
+		// 	title:					"",
+		// 	description:			"",
+		// 	uuid:					"",
+		// 	employee_id_list:		[],		// Employee
+		// 	avtive_module:			[],
 
-			tax_id:					"",
-			post_address:			"",
-			phone:					"",
-			fax:					"",
+		// 	tax_id:					"",
+		// 	post_address:			"",
+		// 	phone:					"",
+		// 	fax:					"",
 
-			contact:{
-				name:				"",
-				cellphone:			"",
-				phone:				"",
-				email:				""
-			},
+		// 	contact:{
+		// 		name:				"",
+		// 		cellphone:			"",
+		// 		phone:				"",
+		// 		email:				""
+		// 	},
 
-			product_id_list:		[],		// Product
-			stock_id_list:			[],		// Stock
-			order_id_list:			[],		// Order
-			supplier_id_list:		[],		// Company
-			day_book_id_list:		[],		// DayBook
-		}, property);
+		// 	product_id_list:		[],		// Product
+		// 	stock_id_list:			[],		// Stock
+		// 	order_id_list:			[],		// Order
+		// 	supplier_id_list:		[],		// Company
+		// 	day_book_id_list:		[],		// DayBook
+		// }, props);
+	}
+
+	// Init
+	async init(refPath, eventHandler, props){
+		if(props){
+			props = Object.assign({
+				data_type:				"company",
+				title:					"",
+				description:			"",
+				uuid:					"",
+				avtive_module:			[],
+
+				tax_id:					"",
+				post_address:			"",
+				phone:					"",
+				fax:					"",
+
+				contact:{
+					name:				"",
+					cellphone:			"",
+					phone:				"",
+					email:				""
+				},
+			}, props);
+		}
+		return await super.init(refPath, false, eventHandler, props);
 	}
 
 	// Basic
@@ -143,9 +174,7 @@ export default class Company {
 
 	// Day Book
 	createDayBook = async (property) => {
-		let dayBook = await DayBook.create(this, property);
-		this.day_book_id_list.push(dayBook._id);
-		return await updateDocument(this);
+		await DayBook.create("company/" + this.uid + "/day_books", property);
 	};
 	removeDayBook = async () => {
 
@@ -154,62 +183,36 @@ export default class Company {
 		return await DayBook.loadList(this.day_book_id_list);
 	};
 }
-// Company.views = {
-// 	lists:{
-// 		map: function(doc){
-// 			emit(doc._id, doc);
-// 			if(doc["data_type"] == "company"){
-// 				emit("company" + doc.username, doc);
-// 			}
-// 			if(doc["data_type"] == "employee"){
-// 				emit("employee" + doc.company_id + doc.id_number, doc);
-// 			}
-// 			if(doc["data_type"] == "stock"){
-// 				emit("stock" + doc.company_id + doc.sku_number, doc);
-// 			}
-// 			if(doc["data_type"] == "product"){
-// 				emit("product" + doc.company_id + doc.sku_number, doc);
-// 			}
-// 			if(doc["data_type"] == "day_book"){
-// 				emit("daybook" + doc.company_id + doc.title, doc);
-// 			}
-// 		}.toString()
-// 	}
-// };
 
 Company.register = async (property) => {
 	checkPropertyRequire(property, "title");
 	checkPropertyRequire(property, "username");
 	checkPropertyRequire(property, "password");
 
-	const auth = await FIRAuth.auth();
-	const database = await FIRDatabase.database();
-
-	let user = await auth.createUserWithEmail(property.username, property.password);
-	const ref = await database.rootReference.child("company/" + user.uid + "/basic");
+	let user = await auth().createUserWithEmail(property.username, property.password);
+	
 	let company = new Company();
-	company.title = property.title;
-	company.username = user.uid;
-	company.contact.email = property.username;
-	company.uuid = uuid.v4();
-	return await ref.setValue(company);
+	await company.init("company/" + user.uid + "/basic", null, {
+		title: property.title,
+		uid: user.uid,
+		contact: {
+			email: property.username,
+		},
+		uuid: uuid.v4()
+	});
 };
 
 Company.login = async (property) => {
 	checkPropertyRequire(property, "username");
 	checkPropertyRequire(property, "password");
 
-	const auth = await FIRAuth.auth();
-	let user = await auth.signInWithEmail(property.username, property.password);
+	let user = await auth().signInWithEmail(property.username, property.password);
 	return user.uid;
 };
 
-Company.observe = async (companyId, eventHandler) => {
-	const database = await FIRDatabase.database();
-	const ref = await database.rootReference.child("leedan/" + companyId);
-	ref.observeEventType(FIRDatabase.FIRDataEventType.FIRDataEventTypeValue, (value) => {
-		eventHandler(new Company(value));
-	});
+Company.load = async (companyId, eventHandler) => {
+	let company = new Company();
+	await company.init("company/" + companyId + "/basic", eventHandler);
 };
 
 Company.createSupplier = async (property, notSave) => {

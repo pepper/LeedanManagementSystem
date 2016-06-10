@@ -29,7 +29,7 @@ exports.login = (property) => {
 			await AsyncStorage.setItem(Constant.LOGIN_COMPANY_ID, companyId);
 			dispatch(createAction(Constant.LOGIN_FINISH)(companyId));
 			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_status_save_success")));
-			dispatch(createAction(Constant.COMPANY_NEED_RELOAD)());
+			// dispatch(createAction(Constant.COMPANY_NEED_RELOAD)());
 		}
 		catch(err){
 			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("company_login_fail") + ": " + err));
@@ -44,7 +44,11 @@ exports.checkLogin = () => {
 			if(validator.toString(companyId) != ""){
 				dispatch(createAction(Constant.LOGIN_FINISH)(companyId));
 				dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_success")));
-				dispatch(createAction(Constant.COMPANY_NEED_RELOAD)());
+				// dispatch(createAction(Constant.COMPANY_NEED_RELOAD)());
+				Company.load(companyId, (newCompany) => {
+					console.log("Get company update");
+					dispatch(createAction(Constant.COMPANY_LOAD_FINISH)(newCompany));
+				});
 			}
 			else{
 				dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("company_login_status_no_record")));
@@ -67,22 +71,27 @@ exports.logout = () => {
 	};
 };
 
-exports.load = () =>{
-	return async (dispatch, getState) => {
-		const companyId = getState().company.company_id || "";
-		if(companyId != ""){
-			const company = await Company.load(companyId);
-			dispatch(createAction(Constant.COMPANY_LOAD_FINISH)(company));
-			// const employeeList = await company.loadEmployeeList();
-			// dispatch(createAction(Constant.EMPLOYEE_LIST_LOAD_FINISH)(employeeList));
-			// const stockList = await company.loadStockList();
-			// dispatch(createAction(Constant.INVOICING_STOCK_LOAD_FINISH)(stockList));
-			// const productList = await company.loadProductList();
-			// dispatch(createAction(Constant.INVOICING_PRODUCT_LOAD_FINISH)(productList));
-			// const supplierList = await company.loadSupplierList();
-			// dispatch(createAction(Constant.INVOICING_SUPPLIER_LOAD_FINISH)(supplierList));
-			const dayBookList = await company.loadDayBookList();
-			dispatch(createAction(Constant.DAYBOOK_LOAD_FINISH)(dayBookList));
-		}
-	};
-};
+// exports.load = () =>{
+// 	return async (dispatch, getState) => {
+// 		const companyId = getState().company.company_id || "";
+// 		if(companyId != ""){
+
+// 			Company.load(companyId, (newCompany) => {
+// 				console.log("Get company update");
+// 				dispatch(createAction(Constant.COMPANY_LOAD_FINISH)(newCompany));
+// 			});
+// 			// const company = await Company.load(companyId);
+// 			// dispatch(createAction(Constant.COMPANY_LOAD_FINISH)(company));
+// 			// const employeeList = await company.loadEmployeeList();
+// 			// dispatch(createAction(Constant.EMPLOYEE_LIST_LOAD_FINISH)(employeeList));
+// 			// const stockList = await company.loadStockList();
+// 			// dispatch(createAction(Constant.INVOICING_STOCK_LOAD_FINISH)(stockList));
+// 			// const productList = await company.loadProductList();
+// 			// dispatch(createAction(Constant.INVOICING_PRODUCT_LOAD_FINISH)(productList));
+// 			// const supplierList = await company.loadSupplierList();
+// 			// dispatch(createAction(Constant.INVOICING_SUPPLIER_LOAD_FINISH)(supplierList));
+// 			// const dayBookList = await company.loadDayBookList();
+// 			// dispatch(createAction(Constant.DAYBOOK_LOAD_FINISH)(dayBookList));
+// 		}
+// 	};
+// };
