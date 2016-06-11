@@ -104,6 +104,7 @@ class DayBookContainer extends Component {
 		}
 	};
 	handleCreateRecordSubmit = (property) => {
+		console.log("In handleCreateRecordSubmit");
 		this.props.dispatch(DayBook.addRecord(property));
 	};
 	handleRemoveRecord = (index) => {
@@ -137,7 +138,7 @@ class DayBookContainer extends Component {
 					/>
 				}>
 					<List itemList={(get(this.props.dayBook, "day_book_list") || []).map((dayBook) => {
-						return (dayBook._id == get(this.props.dayBook, "current_day_book_id"))?Object.assign({}, dayBook, {selected: true}):Object.assign({}, dayBook)
+						return (dayBook.key == get(this.props.dayBook, "current_day_book_key"))?Object.assign({}, dayBook, {selected: true}):Object.assign({}, dayBook)
 					})}
 						currentItem={get(this.props.dayBook, "current_day_book_id")}
 						minimalRowCount={9}
@@ -150,14 +151,14 @@ class DayBookContainer extends Component {
 									totalScore={rowData.total_amount}
 									subTitle={"Total amount"}
 									onPress={() => {
-										this.handleChangeDayBook(rowData._id);
+										this.handleChangeDayBook(rowData.key);
 									}}
 								/>
 							);
 						}}
 					/>
 					{
-						(get(this.props.dayBook, "current_day_book_id"))?
+						(get(this.props.dayBook, "current_day_book_key"))?
 						<View>
 							<Button icon="tags" text={I18n.t("day_book_add_new_type")} onPress={this.handleCreateDayBookType}/>
 							<Button icon="plus" text={I18n.t("day_book_add_new_record")} onPress={this.handleCreateRecord}/>

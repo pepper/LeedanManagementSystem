@@ -69,9 +69,13 @@ export default class ConfirmPanel extends Component{
 		}
 	};
 	handleConfirm = () => {
-		this.panel.hide();
 		if(this.props.onConfirm){
-			this.props.onConfirm();
+			if(this.props.onConfirm()){
+				this.panel.hide();
+			}
+		}
+		else{
+			this.panel.hide();
 		}
 	};
 	show = () => {

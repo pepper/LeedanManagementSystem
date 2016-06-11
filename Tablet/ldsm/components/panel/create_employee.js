@@ -120,6 +120,7 @@ export default class CreateEmployeePanel extends Component{
 			}),
 			avatar: this.state.avatar
 		});
+		return true;
 	};
 	render(){
 		return (

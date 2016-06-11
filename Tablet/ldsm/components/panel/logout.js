@@ -16,6 +16,7 @@ export default class LogoutPanel extends Component{
 		if(this.props.onLogout){
 			this.props.onLogout();
 		}
+		return true;
 	};
 	show = () => {
 		this.confirm.show();

@@ -40,34 +40,34 @@ exports.sync = () => {
 	}
 };
 
-exports.changeDayBook = (dayBookId) => {
+exports.changeDayBook = (dayBookKey) => {
 	return async (dispatch, getState) => {
 		const dayBookList = get(getState().dayBook, "day_book_list") || [];
-		let dayBook = dayBookList.find((employeeToCheck) => {
-			return employeeToCheck._id == dayBookId;
+		let dayBook = dayBookList.find((dayBookToCheck) => {
+			return dayBookToCheck.key == dayBookKey;
 		});
 		dispatch(createAction(Constant.DAYBOOK_CHANGE)(dayBook));
 	};
 };
 
-exports.addType = (property) => {
-	return async (dispatch, getState) => {
-		const dayBook = get(getState().dayBook, "current_day_book") || [];
-		if(dayBook){
-			try{
-				const newDayBook = await dayBook.addType(property);
-				dispatch(createAction(Constant.DAYBOOK_RELOAD)(newDayBook));
-				dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("day_book_add_new_type_success")));
-			}
-			catch(err){
-				dispatch(createAction(Constant.ERROR_MESSAGE)(err));
-			}
-		}
-		else{
-			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("day_book_need_select_day_book_first")));
-		}
-	};
-};
+// exports.addType = (property) => {
+// 	return async (dispatch, getState) => {
+// 		const dayBook = get(getState().dayBook, "current_day_book") || [];
+// 		if(dayBook){
+// 			try{
+// 				const newDayBook = await dayBook.addType(property);
+// 				dispatch(createAction(Constant.DAYBOOK_RELOAD)(newDayBook));
+// 				dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("day_book_add_new_type_success")));
+// 			}
+// 			catch(err){
+// 				dispatch(createAction(Constant.ERROR_MESSAGE)(err));
+// 			}
+// 		}
+// 		else{
+// 			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("day_book_need_select_day_book_first")));
+// 		}
+// 	};
+// };
 
 exports.addRecord = (property) => {
 	return async (dispatch, getState) => {
@@ -75,7 +75,7 @@ exports.addRecord = (property) => {
 		if(dayBook){
 			try{
 				const newDayBook = await dayBook.addRecord(property);
-				dispatch(createAction(Constant.DAYBOOK_RELOAD)(newDayBook));
+				// dispatch(createAction(Constant.DAYBOOK_RELOAD)(newDayBook));
 				dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("day_book_add_new_recoed_success")));
 			}
 			catch(err){
@@ -94,7 +94,7 @@ exports.removeRecord = (index) => {
 		if(dayBook){
 			try{
 				const newDayBook = await dayBook.removeRecord(index);
-				dispatch(createAction(Constant.DAYBOOK_RELOAD)(newDayBook));
+				// dispatch(createAction(Constant.DAYBOOK_RELOAD)(newDayBook));
 				dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("day_book_remove_recoed_success")));
 			}
 			catch(err){

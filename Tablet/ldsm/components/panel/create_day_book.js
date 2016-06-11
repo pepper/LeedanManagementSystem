@@ -41,6 +41,7 @@ export default class CreateDayBookPanel extends Component{
 		this.props.onConfirm({
 			title: this.state.title
 		});
+		return true;
 	};
 	render(){
 		return (

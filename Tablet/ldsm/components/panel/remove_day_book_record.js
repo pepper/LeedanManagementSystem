@@ -37,6 +37,7 @@ export default class RemoveDayBooRecordPanel extends Component{
 	};
 	handleConfirm = () => {
 		this.props.onConfirm(this.props.record.index);
+		return true;
 	};
 	render(){
 		const recordDatetime = new Date(this.props.record.record_datetime);

@@ -19,7 +19,7 @@ DayBookCollect.load = async (companyId, eventHandler) => {
 };
 
 class DayBook extends Model{
-	async init(refPath, autoId, eventHandler, props){
+	async init(refPath, autoId, eventHandler, props, notInitUpdate){
 		if(props){
 			props = Object.assign({
 				title:				"",
@@ -30,31 +30,32 @@ class DayBook extends Model{
 				modify_datetime:	(new Date()).toString()
 			}, props);
 		}
-		await super.init(refPath, autoId, eventHandler, props);
+		await super.init(refPath, autoId, eventHandler, props, notInitUpdate);
 	}
 
-	addType = async (property) => {
-		await checkPropertyRequire(property, "type");
-		if(this.type_list.indexOf(property.type) < 0){
-			this.type_list.push(property.type);
-			return await updateDocument(this);
-		}
-		return this;
-	};
-	removeType = async (property) => {
-		await checkPropertyRequire(property, "type");
-		const newTypeList = this.type_list.filter((origin) => {
-			return origin != property.type;
-		});
-		if(newTypeList.length != this.type_list.length){
-			this.type_list = newTypeList;
-			return await updateDocument(this);
-		}
-		return this;
-	};
+	// addType = async (property) => {
+	// 	await checkPropertyRequire(property, "type");
+	// 	if(this.type_list.indexOf(property.type) < 0){
+	// 		this.type_list.push(property.type);
+	// 		return await updateDocument(this);
+	// 	}
+	// 	return this;
+	// };
+	// removeType = async (property) => {
+	// 	await checkPropertyRequire(property, "type");
+	// 	const newTypeList = this.type_list.filter((origin) => {
+	// 		return origin != property.type;
+	// 	});
+	// 	if(newTypeList.length != this.type_list.length){
+	// 		this.type_list = newTypeList;
+	// 		return await updateDocument(this);
+	// 	}
+	// 	return this;
+	// };
 	addRecord = async (property) => {
 		await checkPropertyRequire(property, "title");
 		await checkPropertyRequire(property, "amount", "number");
+		await checkPropertyRequire(property, "type");
 		if(property.amount < 0){
 			throw new ErrorDinifition.InputPropertyNotAcceptError(I18n.t("day_book_amount_must_grade_then_zero"));
 		}
@@ -80,7 +81,11 @@ class DayBook extends Model{
 		this.total_amount += property.amount;
 		this.last_index += 1;
 		this.modify_datetime = (new Date()).toString();
-		return await updateDocument(this);
+		if(this.type_list.indexOf(property.type) < 0){
+			this.type_list.push(property.type);
+		}
+
+		this.update(this);
 	};
 	removeRecord = async (recordIndex) => {
 		let amount = 0;
@@ -91,9 +96,6 @@ class DayBook extends Model{
 			}
 			return true;
 		});
-		console.log(recordIndex);
-		console.log(newRecordList);
-		console.log(this.record_list);
 		if(newRecordList.length != this.record_list.length){
 			this.record_list = newRecordList;
 			this.total_amount -= amount;
