@@ -53,7 +53,7 @@ export default class Button extends Component {
 						{
 							(order[0] && order[0] == "icon")?
 							<View style={style.iconColumn} key={order.shift()}>
-								<Icon name={this.props.icon} size={Size.row_height * 0.7} color={this.props.color} />
+								<Icon name={this.props.icon} size={Size.row_height * 0.6} color={this.props.color} />
 							</View>
 							:
 							null
@@ -67,7 +67,7 @@ export default class Button extends Component {
 						{
 							(order[0] && order[0] == "icon")?
 							<View style={style.iconColumn} key={order.shift()}>
-								<Icon name={this.props.icon} size={Size.row_height * 0.7} color={this.props.color} />
+								<Icon name={this.props.icon} size={Size.row_height * 0.6} color={this.props.color} />
 							</View>
 							:
 							null

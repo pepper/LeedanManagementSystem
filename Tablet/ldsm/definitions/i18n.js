@@ -7,6 +7,9 @@ I18n.translations = {
 		submit: "Submit",
 		confirm: "Confirm",
 		content_not_set_yet: "Not set the content yet.",
+		start_date: "Start date",
+		end_date: "End date",
+		clear_filter_rule: "Clear filter rule",
 
 		system_preparing: "Preparing system please wait...",
 
@@ -74,6 +77,8 @@ I18n.translations = {
 		day_book_total_amount_title: "Amount",
 		day_book_add_new_type: "Add new type",
 		day_book_change_day: "Change day range",
+		day_book_record_detail: "Detail",
+		day_book_summery: "Summery",
 		day_book_add_new_record: "Add new record",
 		day_book_title_already_token: "This title already token",
 		day_book_amount_must_grade_then_zero: "Amount must grade then 0",
@@ -90,6 +95,9 @@ I18n.translations = {
 		day_book_add_new_recoed_success: "Create new day book record success",
 		day_book_confirm_remove_record: "Do you sure to remove this record?",
 		day_book_remove_recoed_success: "Remove day book record success",
+		day_book_confirm_remove_day_book: "Do you sure to remove this day book?",
+		day_book_remove_day_book_success: "Remove day book success",
+		day_book_remove_start: "Start to remove day book",
 		
 		load_success: "Resource load success",
 		load_fail: "Fail to load resource",
@@ -102,6 +110,9 @@ I18n.translations = {
 		submit: "送出",
 		confirm: "確認",
 		content_not_set_yet: "尚未設定內容",
+		start_date: "開始日期",
+		end_date: "結束日期",
+		clear_filter_rule: "清除篩選條件",
 
 		system_preparing: "系統準備中，請稍候...",
 
@@ -169,6 +180,8 @@ I18n.translations = {
 		day_book_total_amount_title: "總金額",
 		day_book_add_new_type: "新增帳目分類標籤",
 		day_book_change_day: "更改日期區間",
+		day_book_record_detail: "交易明細",
+		day_book_summery: "帳簿統計",
 		day_book_add_new_record: "新增紀錄",
 		day_book_title_already_token: "此帳目名稱已經被使用，請更換一個",
 		day_book_amount_must_grade_then_zero: "金額必須大於零",
@@ -185,6 +198,9 @@ I18n.translations = {
 		day_book_add_new_recoed_success: "新增帳目成功",
 		day_book_confirm_remove_record: "確定要刪除這筆帳目嗎？",
 		day_book_remove_recoed_success: "帳目資料刪除成功",
+		day_book_confirm_remove_day_book: "確定要刪除這個帳目分類嗎？",
+		day_book_remove_day_book_success: "帳目分類刪除成功",
+		day_book_remove_start: "開始刪除帳目分類",
 		
 		load_success: "資料下載成功",
 		load_fail: "資料下載失敗",

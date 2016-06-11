@@ -1,5 +1,6 @@
+import { get } from "nested-property";
 import { FIRDatabase } from "react-native-google-firebase";
-import { auth, database, checkPropertyRequire } from "./util";
+import { database } from "./util";
 
 export default class Collection {
 	async init(refPath, eventHandler, modelClass){
@@ -22,21 +23,24 @@ export default class Collection {
 		this.ref.setValue(input);
 	}
 	add(props){
-		console.log("Collection", this);
 		const ModelClass = this.modelClass;
 		let child = new ModelClass();
 		child.init(this.ref.path, true, null, props);
 	}
-	remove(){
-
+	get(key){
+		return get(this, "children." + key);
+	}
+	remove(key){
+		const child = get(this, "children." + key);
+		if(child){
+			child.remove();
+		}
 	}
 	async observe(eventHandler){
-		console.log(this);
 		this.handle = await this.ref.observeEventType(FIRDatabase.FIRDataEventType.FIRDataEventTypeValue, async (valueList) => {
-			// console.log(valueList);
 			const ModelClass = this.modelClass;
 			this.children = {};
-			await Promise.all(Object.entries(valueList).map(async (entries) => {
+			await Promise.all(Object.entries(valueList || {}).map(async (entries) => {
 				let child = new ModelClass();
 				await child.init(this.ref.path + "/" + entries[0], false, null, entries[1], true);
 				this.children[entries[0]] = child;

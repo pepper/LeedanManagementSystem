@@ -29,7 +29,7 @@ exports.sync = () => {
 		try{
 			const companyId = get(getState(), "company.company_id");
 			if(validator.toString(companyId) != ""){
-				DayBookCollect.load(companyId, (newDayBookCollect) => {
+				await DayBookCollect.load(companyId, (newDayBookCollect) => {
 					dispatch(createAction(Constant.DAYBOOK_LOAD_FINISH)(newDayBookCollect));
 				});
 			}
@@ -37,7 +37,7 @@ exports.sync = () => {
 		catch(err){
 			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("company_create_daybook_fail") + ": " + err));
 		}
-	}
+	};
 };
 
 exports.changeDayBook = (dayBookKey) => {
@@ -47,6 +47,16 @@ exports.changeDayBook = (dayBookKey) => {
 			return dayBookToCheck.key == dayBookKey;
 		});
 		dispatch(createAction(Constant.DAYBOOK_CHANGE)(dayBook));
+	};
+};
+
+exports.removeDayBook = (dayBookKey) => {
+	return async (dispatch, getState) => {
+		const dayBookCollect = get(getState().dayBook, "day_book_collect");
+		if(dayBookCollect){
+			dayBookCollect.remove(dayBookKey);
+			dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("day_book_remove_start")));
+		}
 	};
 };
 
@@ -74,8 +84,7 @@ exports.addRecord = (property) => {
 		const dayBook = get(getState().dayBook, "current_day_book") || [];
 		if(dayBook){
 			try{
-				const newDayBook = await dayBook.addRecord(property);
-				// dispatch(createAction(Constant.DAYBOOK_RELOAD)(newDayBook));
+				await dayBook.addRecord(property);
 				dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("day_book_add_new_recoed_success")));
 			}
 			catch(err){
@@ -93,8 +102,7 @@ exports.removeRecord = (index) => {
 		const dayBook = get(getState().dayBook, "current_day_book") || [];
 		if(dayBook){
 			try{
-				const newDayBook = await dayBook.removeRecord(index);
-				// dispatch(createAction(Constant.DAYBOOK_RELOAD)(newDayBook));
+				await dayBook.removeRecord(index);
 				dispatch(createAction(Constant.INFO_MESSAGE)(I18n.t("day_book_remove_recoed_success")));
 			}
 			catch(err){
@@ -103,6 +111,21 @@ exports.removeRecord = (index) => {
 		}
 		else{
 			dispatch(createAction(Constant.ERROR_MESSAGE)(I18n.t("day_book_need_select_day_book_first")));
+		}
+	};
+};
+
+exports.setDateDuration = (start, end) => {
+	return async (dispatch, getState) => {
+		if(start && end){
+			dispatch(createAction(Constant.DAYBOOK_CHANGE_DATE_DURATION)({
+				start: start,
+				end: end
+			}));
+		}
+		else{
+			console.log("Set CLREA");
+			dispatch(createAction(Constant.DAYBOOK_CLEAR_DATE_DURATION)());
 		}
 	};
 };

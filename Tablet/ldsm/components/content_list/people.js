@@ -26,6 +26,9 @@ const style = StyleSheet.create({
 		justifyContent: "center", 
 		alignItems: "center" 
 	},
+	selectedAvatar:{
+		backgroundColor: Color.light_blue,
+	},
 	avatarText:{
 		textAlign: "center",
 		fontSize: 30,
@@ -68,6 +71,12 @@ const style = StyleSheet.create({
 	},
 	notActiveBlueText:{
 		color: Color.light_blue_overlay
+	},
+	selectedText:{
+		color: Color.white
+	},
+	selectedBlueText:{
+		color: Color.light_blue
 	}
 });
 
@@ -105,7 +114,7 @@ export default class People extends Component {
 	render(){
 		return (
 			<Item style={this.props.style}>
-				<TouchableWithoutFeedback onPress={this.props.onPress}>
+				<TouchableWithoutFeedback onPress={this.props.onPress} onLongPress={this.props.onLongPress}>
 					<View style={[style.container, (this.props.selected && style.selected)]}>
 						{
 							(this.props.avatar && this.props.avatar != "")?
@@ -114,18 +123,18 @@ export default class People extends Component {
 								source={{uri: "data:image/jpeg;base64," + this.props.avatar, isStatic: true}}
 							/>
 							:
-							<View style={style.avatar}>
+							<View style={[style.avatar, this.props.selected && style.selectedAvatar]}>
 								<Text style={style.avatarText}>{this.props.name[0]}</Text>
 							</View>
 						}
 						
 						<View style={[style.nameColumn]}>
-							<Text style={[style.nameText, !this.props.active && style.notActiveText]}>{this.props.name}</Text>
-							<Text style={[style.idText, !this.props.active && style.notActiveText]}>{this.props.idNumber}</Text>
+							<Text style={[style.nameText, !this.props.active && style.notActiveText, this.props.selected && style.selectedText]}>{this.props.name}</Text>
+							<Text style={[style.idText, !this.props.active && style.notActiveText, this.props.selected && style.selectedText]}>{this.props.idNumber}</Text>
 						</View>
 						<View style={style.scoreColumn}>
-							<Text style={[style.scoreTitleText, !this.props.active && style.notActiveBlueText]}>{this.props.subTitle}</Text>
-							<Text style={[style.scoreText, !this.props.active && style.notActiveBlueText]} numberOfLines={1}>{this.toNumberString(this.props.totalScore)}</Text>
+							<Text style={[style.scoreTitleText, !this.props.active && style.notActiveBlueText, this.props.selected && style.selectedBlueText]}>{this.props.subTitle}</Text>
+							<Text style={[style.scoreText, !this.props.active && style.notActiveBlueText, this.props.selected && style.selectedBlueText]} numberOfLines={1}>{this.toNumberString(this.props.totalScore)}</Text>
 						</View>
 						{
 							(!this.props.active)?

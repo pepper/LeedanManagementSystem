@@ -15,6 +15,8 @@ import CreateDayBookPanel from "../components/panel/create_day_book";
 import CreateDayBookTypePanel from "../components/panel/create_day_book_type";
 import CreateDayBookNewRecordPanel from "../components/panel/create_day_book_new_record";
 import RemoveDayBookRecordPanel from "../components/panel/remove_day_book_record";
+import RemoveDayBookPanel from "../components/panel/remove_day_book";
+import DateDurationPickerPanel from "../components/panel/date_duration_picker";
 
 const style = StyleSheet.create({
 	container: {
@@ -38,6 +40,10 @@ const style = StyleSheet.create({
 	headTextContainer:{
 		flex: 2,
 	},
+	changeDateTitle:{
+		flex: 4,
+		alignItems: "center",
+	},
 	headText:{
 		color: "#DDDDDD",
 		fontSize: Size.title_font_size,
@@ -52,6 +58,9 @@ const style = StyleSheet.create({
 		flexDirection: "row",
 		flexWrap: "wrap"
 	},
+	emptyItemStyle:{
+		borderBottomWidth: 0
+	}
 });
 
 class DayBookContainer extends Component {
@@ -69,7 +78,8 @@ class DayBookContainer extends Component {
 			"rgb(136,136,136)",
 			"rgb(192,65,67)",
 		],
-		record_to_remove: {}
+		record_to_remove: {},
+		day_book_to_remove: {}
 	};
 	constructor(props){
 		super(props);
@@ -104,7 +114,6 @@ class DayBookContainer extends Component {
 		}
 	};
 	handleCreateRecordSubmit = (property) => {
-		console.log("In handleCreateRecordSubmit");
 		this.props.dispatch(DayBook.addRecord(property));
 	};
 	handleRemoveRecord = (index) => {
@@ -122,9 +131,53 @@ class DayBookContainer extends Component {
 		this.setState({
 			record_to_remove: {}
 		});
-	}
+	};
+	handleRemoveDayBook = (key) => {
+		this.setState({
+			day_book_to_remove: get(this.props.dayBook, "day_book_list").find((dayBook) => {
+				return dayBook.key == key;
+			})
+		});
+		this.removeDayBookPanel.show();
+	};
+	handleRemoveDayBookSubmit = (key) => {
+		if(this.state.day_book_to_remove){
+			this.props.dispatch(DayBook.removeDayBook(key));
+		}
+		this.setState({
+			day_book_to_remove: {}
+		});
+	};
+	handleDateDurationPicker = () => {
+		this.dateDurationPickerPanel.show();
+	};
+	handleDateDurationPickerSubmit = (start, end) => {
+		this.props.dispatch(DayBook.setDateDuration(start, end));
+	};
 
+	toNumberString = (input) => {
+		input += "";
+		var x = input.split(".");
+		var x1 = x[0];
+		var x2 = x.length > 1 ? "." + x[1] : "";
+		var rgx = /(\d+)(\d{3})/;
+		while (rgx.test(x1)) {
+			x1 = x1.replace(rgx, "$1" + "," + "$2");
+		}
+		return x1 + x2;
+	};
 	render(){
+		let recordList = (get(this.props.dayBook, "current_day_book.record_list") || []);
+		let startDate = get(this.props.dayBook, "date_duration.start");
+		let endDate = get(this.props.dayBook, "date_duration.end");
+		let changeDateTitle = I18n.t("day_book_change_day");
+		if(startDate && endDate){
+			recordList = recordList.filter((record) => {
+				let recordDate = new Date(record.record_datetime);
+				return recordDate >= startDate && recordDate <= endDate;
+			});
+			changeDateTitle = startDate.getFullYear() + "." + (startDate.getMonth() + 1) + "." + startDate.getDate() + "~" + endDate.getFullYear() + "." + (endDate.getMonth() + 1) + "." + endDate.getDate();
+		}
 		return (
 			<View style={style.container}>
 				<Container style={style.peopleList} header={
@@ -153,6 +206,10 @@ class DayBookContainer extends Component {
 									onPress={() => {
 										this.handleChangeDayBook(rowData.key);
 									}}
+									onLongPress={() => {
+										console.log("onLongPress:", rowData.key);
+										this.handleRemoveDayBook(rowData.key);
+									}}
 								/>
 							);
 						}}
@@ -160,7 +217,6 @@ class DayBookContainer extends Component {
 					{
 						(get(this.props.dayBook, "current_day_book_key"))?
 						<View>
-							<Button icon="tags" text={I18n.t("day_book_add_new_type")} onPress={this.handleCreateDayBookType}/>
 							<Button icon="plus" text={I18n.t("day_book_add_new_record")} onPress={this.handleCreateRecord}/>
 						</View>
 						:
@@ -177,17 +233,13 @@ class DayBookContainer extends Component {
 							});
 						}}>
 							<View style={[style.headTextContainer]}>
-								<Text style={style.headText}>{"交易明細"}</Text>
+								<Text style={style.headText}>{I18n.t("day_book_record_detail")}</Text>
 							</View>
 						</TouchableWithoutFeedback>
 						<View style={style.headEmpty}></View>
-						<TouchableWithoutFeedback onPress={() => {
-							this.setState({
-								content_mode: "summery"
-							});
-						}}>
-							<View style={[style.headTextContainer]}>
-								<Text style={style.headText}>{I18n.t("day_book_change_day")}</Text>
+						<TouchableWithoutFeedback onPress={this.handleDateDurationPicker}>
+							<View style={[style.headTextContainer, style.changeDateTitle]}>
+								<Text style={style.headText}>{changeDateTitle}</Text>
 							</View>
 						</TouchableWithoutFeedback>
 						<View style={style.headEmpty}></View>
@@ -197,7 +249,7 @@ class DayBookContainer extends Component {
 							});
 						}}>
 							<View style={[style.headTextContainer, {alignItems: "flex-end"}]}>
-								<Text style={style.headText}>{"帳簿統計"}</Text>
+								<Text style={style.headText}>{I18n.t("day_book_summery")}</Text>
 							</View>
 						</TouchableWithoutFeedback>
 					</View>
@@ -206,7 +258,7 @@ class DayBookContainer extends Component {
 						<View style={style.summeryContainer}>
 							{
 								(get(this.props.dayBook, "current_day_book.type_list") || []).map((type, index) => {
-									const summery = (get(this.props.dayBook, "current_day_book.record_list") || []).reduce((result, record) => {
+									const summery = recordList.reduce((result, record) => {
 										if(record.type == type){
 											result.total_amount += parseInt(record.amount);
 											result.count += 1;
@@ -214,7 +266,7 @@ class DayBookContainer extends Component {
 										return result;
 									}, { total_amount: 0, count: 0});
 									return (
-										<SummeryItem key={"SummeryItem" + type} color={this.state.color_list[index]} title={type} description={"總計：" + summery.total_amount + " 筆數：" + summery.count}/>
+										<SummeryItem key={"SummeryItem" + type} color={this.state.color_list[index]} title={type} description={"總計：" + this.toNumberString(summery.total_amount) + " 筆數：" + summery.count}/>
 									);
 								})
 							}
@@ -226,8 +278,9 @@ class DayBookContainer extends Component {
 						(this.state.content_mode == "raw_date")?
 						<View>
 							<RecordTitle />
-							<List itemList={(get(this.props.dayBook, "current_day_book.record_list") || [])}
+							<List itemList={recordList}
 								minimalRowCount={9}
+								emptyItemStyle={style.emptyItemStyle}
 								renderRow={(rowData, sectionID, rowID, highlightRow) => {
 									return (
 										<RecordDetail onLongPress={() => {
@@ -245,8 +298,9 @@ class DayBookContainer extends Component {
 				<CreateDayBookPanel ref={(ref) => this.createDayBookPanel = ref} onConfirm={this.handleCreateDayBookSubmit} />
 				<CreateDayBookTypePanel ref={(ref) => this.createDayBookTypePanel = ref} onConfirm={this.handleCreateDayBookTypeSubmit} />
 				<CreateDayBookNewRecordPanel ref={(ref) => this.createDayBookNewRecordPanel = ref} onConfirm={this.handleCreateRecordSubmit} dayBook={get(this.props.dayBook, "current_day_book") || {}}/>
-				<RemoveDayBookRecordPanel ref={(ref) => this.removeDayBookRecordPanel = ref} onConfirm={this.handleRemoveRecordSubmit} record={this.state.record_to_remove}/>
-
+				<RemoveDayBookRecordPanel ref={(ref) => this.removeDayBookRecordPanel = ref} onConfirm={this.handleRemoveRecordSubmit} record={this.state.record_to_remove} />
+				<RemoveDayBookPanel ref={(ref) => this.removeDayBookPanel = ref} onConfirm={this.handleRemoveDayBookSubmit} dayBook={this.state.day_book_to_remove} />
+				<DateDurationPickerPanel ref={(ref) => this.dateDurationPickerPanel = ref} onConfirm={this.handleDateDurationPickerSubmit} />
 			</View>
 		);
 	}

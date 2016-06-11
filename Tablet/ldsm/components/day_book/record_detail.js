@@ -24,6 +24,17 @@ let style = StyleSheet.create({
 });
 
 export default class RecordDetail extends Component{
+	toNumberString = (input) => {
+		input += "";
+		var x = input.split(".");
+		var x1 = x[0];
+		var x2 = x.length > 1 ? "." + x[1] : "";
+		var rgx = /(\d+)(\d{3})/;
+		while (rgx.test(x1)) {
+			x1 = x1.replace(rgx, "$1" + "," + "$2");
+		}
+		return x1 + x2;
+	};
 	render(){
 		const recordDatetime = new Date(this.props.record.record_datetime);
 		return (
@@ -42,7 +53,7 @@ export default class RecordDetail extends Component{
 						<Text style={style.columnText}>{recordDatetime.getFullYear() + "." + (recordDatetime.getMonth() + 1) + "." + recordDatetime.getDate()}</Text>
 					</View>
 					<View style={[style.column, { flex: 1 }]}>
-						<Text style={style.columnText}>{this.props.record.amount}</Text>
+						<Text style={style.columnText}>{this.toNumberString(this.props.record.amount)}</Text>
 					</View>
 				</View>
 			</TouchableWithoutFeedback>

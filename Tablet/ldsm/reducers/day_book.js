@@ -13,6 +13,12 @@ exports.dayBook = handleActions({
 		current_day_book: action.payload,
 		loaded: true
 	}),
+	[Constant.DAYBOOK_CHANGE_DATE_DURATION]: (state, action) => Object.assign({}, state, {
+		date_duration: action.payload
+	}),
+	[Constant.DAYBOOK_CLEAR_DATE_DURATION]: (state) => Object.assign({}, state, {
+		date_duration: {}
+	})
 }, {
 	loaded: false
 });

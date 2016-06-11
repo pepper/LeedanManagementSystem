@@ -14,6 +14,7 @@ class DayBookCollect extends Collection{
 
 DayBookCollect.load = async (companyId, eventHandler) => {
 	let dayBookCollect = new DayBookCollect();
+	console.log("company/" + companyId + "/day_books");
 	await dayBookCollect.init("company/" + companyId + "/day_books", eventHandler);
 	return dayBookCollect;
 };
@@ -21,8 +22,11 @@ DayBookCollect.load = async (companyId, eventHandler) => {
 class DayBook extends Model{
 	async init(refPath, autoId, eventHandler, props, notInitUpdate){
 		if(props){
+			await checkPropertyRequire(props, "title");
+			await checkPropertyRequire(props, "account_way");
 			props = Object.assign({
 				title:				"",
+				account_way:		"",
 				type_list:			[],
 				record_list:		[],
 				total_amount:		0,
@@ -32,26 +36,6 @@ class DayBook extends Model{
 		}
 		await super.init(refPath, autoId, eventHandler, props, notInitUpdate);
 	}
-
-	// addType = async (property) => {
-	// 	await checkPropertyRequire(property, "type");
-	// 	if(this.type_list.indexOf(property.type) < 0){
-	// 		this.type_list.push(property.type);
-	// 		return await updateDocument(this);
-	// 	}
-	// 	return this;
-	// };
-	// removeType = async (property) => {
-	// 	await checkPropertyRequire(property, "type");
-	// 	const newTypeList = this.type_list.filter((origin) => {
-	// 		return origin != property.type;
-	// 	});
-	// 	if(newTypeList.length != this.type_list.length){
-	// 		this.type_list = newTypeList;
-	// 		return await updateDocument(this);
-	// 	}
-	// 	return this;
-	// };
 	addRecord = async (property) => {
 		await checkPropertyRequire(property, "title");
 		await checkPropertyRequire(property, "amount", "number");
@@ -100,9 +84,8 @@ class DayBook extends Model{
 			this.record_list = newRecordList;
 			this.total_amount -= amount;
 			this.modify_datetime = (new Date()).toString();
-			return await updateDocument(this);
+			this.update(this);
 		}
-		return this;
 	};
 	recalculate = async () => {
 		const newTotalAmount = this.record_list.reduce((total, record) => {

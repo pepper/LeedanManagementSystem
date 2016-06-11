@@ -49,7 +49,7 @@ export default class List extends Component{
 				dataSource={this.state.itemList}
 				enableEmptySections={true}
 				renderRow={(rowData, sectionID, rowID, highlightRow) => {
-					return (rowData)?this.props.renderRow(rowData, sectionID, rowID, highlightRow):<Item />
+					return (rowData)?this.props.renderRow(rowData, sectionID, rowID, highlightRow):<Item style={this.props.emptyItemStyle}/>
 				}}
 			/>
 		);

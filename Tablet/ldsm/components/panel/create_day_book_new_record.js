@@ -74,6 +74,7 @@ export default class CreateDayBookNewRecordPanel extends Component{
 		}
 		else{
 			this.setState({
+				show_new_type: false,
 				type: value
 			});
 		}

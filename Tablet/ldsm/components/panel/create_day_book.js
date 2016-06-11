@@ -2,9 +2,7 @@
 "use strict";
 
 import React, {Component, PropTypes} from "react";
-import {StyleSheet, View, Text, SegmentedControlIOS, TouchableWithoutFeedback, Image} from "react-native";
-import Camera from "react-native-camera";
-import Icon from "react-native-vector-icons/FontAwesome";
+import {StyleSheet, View, Text, SegmentedControlIOS} from "react-native";
 
 import ConfirmPanel from "./confirm";
 import TextInput from "../basic/text_input";
@@ -24,6 +22,9 @@ let style = StyleSheet.create({
 		padding: 5,
 		paddingLeft: 15,
 		marginBottom: 10
+	},
+	segmentedControl:{
+		height: 40,
 	}
 });
 
@@ -39,9 +40,15 @@ export default class CreateDayBookPanel extends Component{
 	};
 	handleConfirm = () => {
 		this.props.onConfirm({
-			title: this.state.title
+			title: this.state.title,
+			account_way: ["expenditure", "income"][this.state.accountWaySelectedIndex]
 		});
 		return true;
+	};
+	handleChangeAccountWay = (event) => {
+		this.setState({
+			accountWaySelectedIndex: event.nativeEvent.selectedSegmentIndex
+		});
 	};
 	render(){
 		return (
@@ -54,7 +61,13 @@ export default class CreateDayBookPanel extends Component{
 						autoCapitalize={"none"}
 						autoCorrect={false}
 						placeholder={I18n.t("company_create_daybook_panel_input_title")}
-						onChangeText={(text) => this.setState({title: text}) }
+						onChangeText={(text) => this.setState({title: text})}
+					/>
+					<SegmentedControlIOS values={["支出", "收入"]}
+						style={style.segmentedControl}
+						selectedIndex={this.state.accountWaySelectedIndex}
+						onChange={this.handleChangeAccountWay}
+						tintColor={Color.dark}
 					/>
 				</View>
 			</ConfirmPanel>

@@ -3,6 +3,9 @@ import { get } from "nested-property";
 import validator from "validator";
 import { FIRApp, FIRAuth, FIRDatabase } from "react-native-google-firebase";
 
+import { ErrorDinifition } from "../definitions";
+let error = ErrorDinifition;
+
 let auth;
 let database;
 

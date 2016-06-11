@@ -40,6 +40,8 @@ let apiActionConstant = [
 	"DAYBOOK_LOAD_FINISH",
 	"DAYBOOK_CHANGE",
 	"DAYBOOK_RELOAD",
+	"DAYBOOK_CHANGE_DATE_DURATION",
+	"DAYBOOK_CLEAR_DATE_DURATION"
 ];
 
 let viewActionConstant = [
