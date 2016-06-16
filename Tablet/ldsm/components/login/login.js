@@ -50,7 +50,7 @@ export default class Login extends Component{
 		});
 	};
 	handleLogin = async () => {
-		if(validator.toString(this.state.username) != "" && validator.toString(this.state.password) != ""){
+		if(validator.isEmail(this.state.username) && validator.toString(this.state.password) != ""){
 			this.props.dispatch(Company.login({
 				username: this.state.username,
 				password: this.state.password

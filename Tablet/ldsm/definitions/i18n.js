@@ -41,8 +41,8 @@ I18n.translations = {
 		login_enter_username: "Please enter your company username.",
 		login_enter_password: "Please enter your password.",
 		login_enter_password_again: "Please enter your password again.",
-		login_username_format_wong: "Please input your company username and password.",
-		login_register_format_wong: "All the field are required, and password and check password must same.",
+		login_username_format_wong: "Please input your company username and password. and your user name must be an email",
+		login_register_format_wong: "All the field are required, your username must be an email and password, check password must same.",
 
 		logout_panel_msssage: "Are you sure you want to logout system?",
 
@@ -144,8 +144,8 @@ I18n.translations = {
 		login_enter_username: "請輸入您的登入帳號",
 		login_enter_password: "請輸入您的密碼",
 		login_enter_password_again: "請再次輸入您的密碼",
-		login_username_format_wong: "請輸入正確的公司帳號及密碼",
-		login_register_format_wong: "註冊資訊所有項目均為必填項目，並且請注意您輸入的密碼及確認密碼必須一致",
+		login_username_format_wong: "請輸入正確的公司帳號及密碼，帳號必須為電子郵件格式",
+		login_register_format_wong: "註冊資訊所有項目均為必填項目，其中帳號為電子郵件信箱，並且請注意您輸入的密碼必須大於八碼及確認密碼必須一致",
 
 		logout_panel_msssage: "確定要登出系統嗎？",
 

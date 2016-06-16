@@ -62,10 +62,11 @@ export default class Register extends Component{
 	handleRegister = () => {
 		if(
 			validator.toString(this.state.title) != ""
-			&& validator.toString(this.state.username) != ""
+			&& validator.isEmail(this.state.username)
 			&& validator.toString(this.state.password) != ""
 			&& validator.toString(this.state.password_again) != ""
 			&& this.state.password_again == this.state.password
+			&& this.state.password.length >= 8
 		){
 			this.props.dispatch(Company.register({
 				title: this.state.title,
