@@ -10,6 +10,11 @@ I18n.translations = {
 		start_date: "Start date",
 		end_date: "End date",
 		clear_filter_rule: "Clear filter rule",
+		index: "Index",
+		type: "Type",
+		content: "Content",
+		time: "Time",
+		amount: "Amount",
 
 		system_preparing: "Preparing system please wait...",
 
@@ -74,11 +79,14 @@ I18n.translations = {
 		product_sku_number_already_token: "Product SKU number must be unique",
 
 		day_book_type_title: "Category",
+		day_book_detail: "Detail",
+		day_book_summary: "Summary",
 		day_book_total_amount_title: "Amount",
 		day_book_add_new_type: "Add new type",
-		day_book_change_day: "Change day range",
+
+		day_book_change_day: "Change range",
 		day_book_record_detail: "Detail",
-		day_book_summery: "Summery",
+		
 		day_book_add_new_record: "Add new record",
 		day_book_title_already_token: "This title already token",
 		day_book_amount_must_grade_then_zero: "Amount must grade then 0",
@@ -113,6 +121,11 @@ I18n.translations = {
 		start_date: "開始日期",
 		end_date: "結束日期",
 		clear_filter_rule: "清除篩選條件",
+		index: "序號",
+		type: "類別",
+		content: "內容",
+		time: "時間",
+		amount: "金額",
 
 		system_preparing: "系統準備中，請稍候...",
 
@@ -177,11 +190,14 @@ I18n.translations = {
 		product_sku_number_already_token: "產品料號必須要獨一無二",
 
 		day_book_type_title: "帳目分類",
+		day_book_detail: "交易明細",
+		day_book_summary: "帳簿統計",
 		day_book_total_amount_title: "總金額",
 		day_book_add_new_type: "新增帳目分類標籤",
+		
 		day_book_change_day: "更改日期區間",
 		day_book_record_detail: "交易明細",
-		day_book_summery: "帳簿統計",
+		
 		day_book_add_new_record: "新增紀錄",
 		day_book_title_already_token: "此帳目名稱已經被使用，請更換一個",
 		day_book_amount_must_grade_then_zero: "金額必須大於零",

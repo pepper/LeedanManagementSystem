@@ -3,7 +3,7 @@
 
 import React, {Component, PropTypes} from "react";
 import {StyleSheet, View, Text} from "react-native";
-import { Color, Size } from "../../definitions";
+import { Color, Size, I18n } from "../../definitions";
 
 let style = StyleSheet.create({
 	container:{
@@ -26,19 +26,19 @@ let style = StyleSheet.create({
 export default class RecordTitle extends Component{
 	state = {
 		column_list: [{
-			title: "序號",
+			title: I18n.t("index"),
 			width: 1
 		}, {
-			title: "類別",
+			title: I18n.t("type"),
+			width: 2
+		}, {
+			title: I18n.t("content"),
+			width: 3
+		}, {
+			title: I18n.t("time"),
 			width: 1
 		}, {
-			title: "標題",
-			width: 4
-		}, {
-			title: "時間",
-			width: 1
-		}, {
-			title: "金額",
+			title: I18n.t("amount"),
 			width: 1
 		}]
 	}

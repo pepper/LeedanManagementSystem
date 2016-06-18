@@ -1,6 +1,7 @@
 package com.tablet;
 
 import com.facebook.react.ReactActivity;
+import com.mybigday.rngooglefirebase.RNGoogleFirebasePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import rni18n.mobile.laplanete.ca.rni18n.RNI18nPackage;
 import me.fraserxu.rncouchbaselite.ReactCBLiteManager;
@@ -39,6 +40,7 @@ public class MainActivity extends ReactActivity {
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new RNGoogleFirebasePackage(),
             new VectorIconsPackage(),
             new RNI18nPackage(),
             new ReactCBLiteManager(),

@@ -249,7 +249,7 @@ class DayBookContainer extends Component {
 							});
 						}}>
 							<View style={[style.headTextContainer, {alignItems: "flex-end"}]}>
-								<Text style={style.headText}>{I18n.t("day_book_summery")}</Text>
+								<Text style={style.headText}>{I18n.t("day_book_summary")}</Text>
 							</View>
 						</TouchableWithoutFeedback>
 					</View>
