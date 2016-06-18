@@ -78,6 +78,7 @@ I18n.translations = {
 		stock_sku_number_already_token: "Stock SKU number must be unique",
 		product_sku_number_already_token: "Product SKU number must be unique",
 
+		day_book_list: "Day Book",
 		day_book_type_title: "Category",
 		day_book_detail: "Detail",
 		day_book_summary: "Summary",
@@ -189,6 +190,7 @@ I18n.translations = {
 		stock_sku_number_already_token: "庫存料號必須要獨一無二",
 		product_sku_number_already_token: "產品料號必須要獨一無二",
 
+		day_book_list: "帳簿列表",
 		day_book_type_title: "帳目分類",
 		day_book_detail: "交易明細",
 		day_book_summary: "帳簿統計",

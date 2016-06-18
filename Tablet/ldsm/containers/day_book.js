@@ -182,11 +182,8 @@ class DayBookContainer extends Component {
 			<View style={style.container}>
 				<Container style={style.peopleList} header={
 					<Title columnList={[{
-							flex: 11,
-							title: "帳目列表"
-						}, {
-							flex: 9,
-							title: "總金額"
+							flex: 1,
+							title: I18n.t("day_book_list")
 						}]}
 					/>
 				}>
