@@ -49,14 +49,14 @@ class DayBook extends Model{
 			uuid: uuid.v4(),
 			title: "",
 			type: "",
-			note: {},
+			note: "",
 			amount: 0,
 			record_datetime: (new Date()).toString(),
 			create_datetime: (new Date()).toString()
 		}, {
 			title: property.title,
 			type: property.type || "",
-			note: property.note || {},
+			note: property.note || "",
 			amount: property.amount,
 			record_datetime: property.record_datetime || (new Date()).toString()
 		});

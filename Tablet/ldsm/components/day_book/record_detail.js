@@ -6,6 +6,9 @@ import {StyleSheet, View, Text, TouchableWithoutFeedback} from "react-native";
 import { Color, Size } from "../../definitions";
 
 let style = StyleSheet.create({
+	wrap:{
+		flexDirection: "column"
+	},
 	container:{
 		flex: 0,
 		height: Size.row_height,
@@ -20,10 +23,21 @@ let style = StyleSheet.create({
 		fontSize: 14,
 		fontWeight: "bold",
 		color: Color.white
+	},
+	alignLeftColumn:{
+		alignItems: "flex-start",
+		paddingLeft: 10,
+	},
+	alignRightColumn:{
+		alignItems: "flex-end",
+		paddingRight: 10,
 	}
 });
 
 export default class RecordDetail extends Component{
+	state = {
+		show_note: false
+	};
 	toNumberString = (input) => {
 		input += "";
 		var x = input.split(".");
@@ -35,26 +49,45 @@ export default class RecordDetail extends Component{
 		}
 		return x1 + x2;
 	};
+	handleToggleNote = () => {
+		this.setState({
+			show_note: !this.state.show_note
+		});
+	};
 	render(){
 		const recordDatetime = new Date(this.props.record.record_datetime);
 		return (
-			<TouchableWithoutFeedback onLongPress={this.props.onLongPress}>
-				<View style={[style.container, this.props.style]}>
-					<View style={[style.column, { flex: 1 }]}>
-						<Text style={style.columnText}>{this.props.record.index}</Text>
+			<TouchableWithoutFeedback onLongPress={this.props.onLongPress} onPress={this.handleToggleNote}>
+				<View style={style.wrap}>
+					<View style={[style.container, this.props.style]}>
+						<View style={[style.column, { flex: 1 }, style.alignLeftColumn]}>
+							<Text style={style.columnText}>{this.props.record.index}</Text>
+						</View>
+						<View style={[style.column, { flex: 2 }, style.alignLeftColumn]}>
+							<Text style={style.columnText}>{this.props.record.type}</Text>
+						</View>
+						<View style={[style.column, { flex: 3 }, style.alignLeftColumn]}>
+							<Text style={style.columnText}>{this.props.record.title}</Text>
+						</View>
+						<View style={[style.column, { flex: 1 }, style.alignLeftColumn]}>
+							<Text style={style.columnText}>{recordDatetime.getFullYear() + "." + (recordDatetime.getMonth() + 1) + "." + recordDatetime.getDate()}</Text>
+						</View>
+						<View style={[style.column, { flex: 1 }, style.alignRightColumn]}>
+							<Text style={style.columnText}>{this.toNumberString(this.props.record.amount)}</Text>
+						</View>
 					</View>
-					<View style={[style.column, { flex: 1 }]}>
-						<Text style={style.columnText}>{this.props.record.type}</Text>
-					</View>
-					<View style={[style.column, { flex: 4 }]}>
-						<Text style={style.columnText}>{this.props.record.title}</Text>
-					</View>
-					<View style={[style.column, { flex: 1 }]}>
-						<Text style={style.columnText}>{recordDatetime.getFullYear() + "." + (recordDatetime.getMonth() + 1) + "." + recordDatetime.getDate()}</Text>
-					</View>
-					<View style={[style.column, { flex: 1 }]}>
-						<Text style={style.columnText}>{this.toNumberString(this.props.record.amount)}</Text>
-					</View>
+					{
+						(this.state.show_note)?
+						(
+							<View style={[style.container, this.props.style]}>
+								<View style={[style.column, style.alignLeftColumn]}>
+									<Text style={style.columnText}>{(!this.props.record.note || this.props.record.note == "")?"沒有備註資訊":this.props.record.note}</Text>
+								</View>
+							</View>
+						)
+						:
+						null
+					}
 				</View>
 			</TouchableWithoutFeedback>
 		);

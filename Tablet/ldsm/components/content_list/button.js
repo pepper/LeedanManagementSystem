@@ -21,6 +21,22 @@ const style = StyleSheet.create({
 		height: Size.row_height - Size.row_border_width,
 		width: Size.row_height,
 	},
+	avatar:{
+		height: Size.row_height * 0.6,
+		width: Size.row_height * 0.6,
+		marginLeft: 10,
+		borderRadius: 25,
+		backgroundColor: Color.light_blue,
+		justifyContent: "center", 
+		alignItems: "center"
+	},
+	avatarText:{
+		textAlign: "center",
+		fontSize: 28,
+		fontWeight: "bold",
+		color: Color.dark,
+		backgroundColor: Color.transparent,
+	},
 	textColumn:{
 		flex: 1,
 		fontSize: 18,
@@ -29,6 +45,17 @@ const style = StyleSheet.create({
 		paddingTop: -2,
 		paddingLeft: 12
 	},
+	subTextColumn:{
+		flex: 1,
+		fontSize: 14,
+		fontWeight: "bold",
+		paddingTop: 5,
+		paddingLeft: 12
+	},
+	text2LineColumn:{
+		flex: 1,
+		flexDirection: "column",
+	}
 });
 
 export default class Button extends Component {
@@ -37,8 +64,13 @@ export default class Button extends Component {
 		onLongPress: PropTypes.func,
 		icon: PropTypes.string,
 		text: PropTypes.string,
+		subText: PropTypes.string,
 		mode: PropTypes.string,
 		color: PropTypes.string,
+		avatarText: PropTypes.string,
+		selected: PropTypes.bool,
+		style: View.propTypes.style,
+		selectedStyle: View.propTypes.style,
 	};
 	static defaultProps = {
 		mode: "icon-text",
@@ -47,9 +79,19 @@ export default class Button extends Component {
 	render(){
 		let order = this.props.mode.split("-");
 		return (
-			<Item style={this.props.style}>
+			<Item style={[this.props.style, this.props.selected && this.props.selectedStyle]}>
 				<TouchableWithoutFeedback onPress={this.props.onPress} onLongPress={this.props.onLongPress}>
 					<View style={style.container}>
+						{
+							(order[0] && order[0] == "avatar")?
+							<View style={style.iconColumn} key={order.shift()}>
+								<View style={style.avatar}>
+									<Text style={style.avatarText}>{this.props.avatarText || this.props.text[0]}</Text>
+								</View>
+							</View>
+							:
+							null
+						}
 						{
 							(order[0] && order[0] == "icon")?
 							<View style={style.iconColumn} key={order.shift()}>
@@ -61,6 +103,15 @@ export default class Button extends Component {
 						{
 							(order[0] && order[0] == "text")?
 							<Text style={[style.textColumn, {color: this.props.color}]} key={order.shift()}>{this.props.text}</Text>
+							:
+							null
+						}
+						{
+							(order[0] && order[0] == "text2line")?
+							<View style={style.text2LineColumn}>
+								<Text style={[style.textColumn, ((this.props.text.length > 10)?{fontSize:14}:{}) ,{color: this.props.color}]} key={order.shift()}>{this.props.text}</Text>
+								<Text style={[style.subTextColumn, {color: this.props.color}]} key={order.shift()}>{this.props.subText}</Text>
+							</View>
 							:
 							null
 						}

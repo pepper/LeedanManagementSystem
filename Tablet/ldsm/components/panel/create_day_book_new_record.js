@@ -56,7 +56,8 @@ export default class CreateDayBookNewRecordPanel extends Component{
 			this.props.onConfirm({
 				title: this.state.title,
 				type: this.state.type,
-				amount: parseInt(this.state.amount)
+				amount: parseInt(this.state.amount),
+				note: this.state.note
 			});
 			return true;
 		}

@@ -5,11 +5,13 @@ import React, {Component} from "react";
 import {StyleSheet, View, Text, TouchableWithoutFeedback} from "react-native";
 import { connect } from "react-redux";
 import { get } from "nested-property";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 import { DayBook } from "../actions";
 import { Color, Size, I18n } from "../definitions";
-import ContentList, { Container, Title, Item, List, Button, People } from "../components/content_list";
+import ContentList, { Container, Title, Item, List, Button, People, Summary } from "../components/content_list";
 import { RecordTitle, RecordDetail, SummeryItem } from "../components/day_book";
+import SearchBar from "../components/search/container";
 
 import CreateDayBookPanel from "../components/panel/create_day_book";
 import CreateDayBookTypePanel from "../components/panel/create_day_book_type";
@@ -30,12 +32,23 @@ const style = StyleSheet.create({
 	content: {
 		flex: 1,
 		flexDirection: "column",
-		alignItems: "stretch"
+		alignItems: "stretch",
+		borderLeftWidth: 0.5,
+		borderColor: Color.gray
 	},
 	headArea: {
 		flexDirection: "row",
 		height: Size.first_row_height,
 		alignItems: "stretch",
+	},
+	footArea: {
+		backgroundColor: Color.red,
+		height: Size.row_height,
+	},
+	searchButton:{
+		position: "absolute",
+		top: 0,
+		right: 110,
 	},
 	headTextContainer:{
 		flex: 2,
@@ -55,18 +68,24 @@ const style = StyleSheet.create({
 		flex: 1,
 	},
 	summeryContainer:{
+		flex: 1,
 		flexDirection: "row",
 		flexWrap: "wrap"
 	},
 	emptyItemStyle:{
-		borderBottomWidth: 0
+		borderBottomWidth: 0.5,
+		borderColor: Color.gray
+	},
+	detailContainer:{
+		flex: 1,
 	}
 });
 
 class DayBookContainer extends Component {
 	state = {
+		show_search_bar: false,
 		show_type_select: false,
-		content_mode: "summery",
+		content_mode: "raw_date",
 		color_list:[
 			"rgb(215,114,30)",
 			"rgb(172,83,229)",
@@ -160,6 +179,12 @@ class DayBookContainer extends Component {
 			order_way: (this.state.order == type)?(!this.state.order_way):(true)
 		});
 	};
+	handleSearchResult = (type, key) => {
+		this.props.dispatch(DayBook.changeDayBook(type));
+		this.setState({
+			show_search_bar: false
+		});
+	};
 
 	toNumberString = (input) => {
 		input += "";
@@ -238,14 +263,21 @@ class DayBookContainer extends Component {
 					})}
 						currentItem={get(this.props.dayBook, "current_day_book_id")}
 						minimalRowCount={9}
+						emptyItemStyle={{ backgroundColor: Color.black }}
 						renderRow={(rowData, sectionID, rowID, highlightRow) => {
 							return (
-								<People
-									name={rowData.title}
-									idNumber={rowData.last_index + ""}
+								<Button
+									mode={"avatar-text2line"}
+									avatarText={{expenditure:"支", income:"收"}[rowData.account_way]}
+									style={{
+										backgroundColor: Color.black
+									}}
+									selectedStyle={{
+										backgroundColor: Color.red
+									}}
 									selected={rowData.selected}
-									totalScore={rowData.total_amount}
-									subTitle={"Total amount"}
+									text={rowData.title}
+									subText={rowData.last_index + ""}
 									onPress={() => {
 										this.handleChangeDayBook(rowData.key);
 									}}
@@ -268,6 +300,33 @@ class DayBookContainer extends Component {
 				</Container>
 				
 				<View style={style.content}>
+					{
+						(this.state.show_search_bar)?
+						(
+							<SearchBar 
+								listToSearch={(get(this.props.dayBook, "day_book_list") || []).map((dayBook) => {
+									return (get(dayBook, "record_list") || []).map((record) => {
+										return Object.assign({}, record, {
+											day_book_title: dayBook.title,
+											day_book_id: dayBook.key
+										});
+									});
+								}).reduce((result, recordList) => {
+									return result.concat(recordList);
+								}, []).map((record) => {
+									return {
+										item_type: record.day_book_id,
+										key: record.uuid,
+										name: "● " + record.day_book_title + " ● " + record.title,
+										search_text: JSON.stringify(record)
+									};
+								})}
+								selectSearchResult={this.handleSearchResult}
+							/>
+						)
+						:
+						null
+					}
 					<View style={style.headArea}>
 						<TouchableWithoutFeedback onPress={() => {
 							this.setState({
@@ -286,13 +345,20 @@ class DayBookContainer extends Component {
 						</TouchableWithoutFeedback>
 						<View style={style.headEmpty}></View>
 						<TouchableWithoutFeedback onPress={() => {
-							this.setState({
-								content_mode: "summery"
-							});
+							// this.setState({
+							// 	content_mode: "summery"
+							// });
 						}}>
 							<View style={[style.headTextContainer, {alignItems: "flex-end"}]}>
-								<Text style={style.headText}>{I18n.t("day_book_summary")}</Text>
+								<Text style={[style.headText, {color:Color.gray}]}>{I18n.t("day_book_summary")}</Text>
 							</View>
+						</TouchableWithoutFeedback>
+						<TouchableWithoutFeedback onPress={() => {
+							this.setState({
+								show_search_bar: !this.state.show_search_bar
+							});
+						}}>
+							<Icon style={style.searchButton} name={"angle-down"} size={30} color={Color.yellow} />
 						</TouchableWithoutFeedback>
 					</View>
 					{
@@ -318,16 +384,24 @@ class DayBookContainer extends Component {
 					}
 					{
 						(this.state.content_mode == "raw_date")?
-						<View>
+						<View style={style.detailContainer}>
 							<RecordTitle onPress={this.handleOrderChange}/>
 							<List itemList={recordList}
 								minimalRowCount={9}
 								emptyItemStyle={style.emptyItemStyle}
 								renderRow={(rowData, sectionID, rowID, highlightRow) => {
 									return (
-										<RecordDetail onLongPress={() => {
-											this.handleRemoveRecord(rowData.index);
-										}} key={rowData._id} record={rowData}/>
+										<RecordDetail
+											style={{
+												borderBottomWidth: 0.5,
+												borderColor: Color.gray
+											}}
+											onLongPress={() => {
+												this.handleRemoveRecord(rowData.index);
+											}}
+											key={rowData._id}
+											record={rowData}
+										/>
 									);
 								}}
 							/>
@@ -335,6 +409,14 @@ class DayBookContainer extends Component {
 						:
 						null
 					}
+					<View style={style.footArea}>
+						<Summary
+							quantity={get(this.props.dayBook, "current_day_book.last_index")}
+							sum={get(this.props.dayBook, "current_day_book.total_amount")}
+							date_start={startDate}
+							date_end={endDate}
+						/>
+					</View>
 				</View>
 
 				<CreateDayBookPanel ref={(ref) => this.createDayBookPanel = ref} onConfirm={this.handleCreateDayBookSubmit} />

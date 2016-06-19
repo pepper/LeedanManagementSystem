@@ -206,7 +206,7 @@ I18n.translations = {
 		day_book_add_new_type_input_type: "請輸入分類",
 		day_book_need_select_day_book_first: "請先選擇一本帳簿",
 		day_book_add_new_type_success: "成功新增一個帳目分類",
-		day_book_add_new_record_input_title: "請輸入帳目標題",
+		day_book_add_new_record_input_title: "請輸入帳目內容",
 		day_book_add_new_record_input_amount: "請輸入金額",
 		day_book_add_new_record_select_type: "請選擇一個分類",
 		day_book_add_new_record_new_type: "新增一個分類...",
