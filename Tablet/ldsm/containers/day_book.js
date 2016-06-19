@@ -154,6 +154,12 @@ class DayBookContainer extends Component {
 	handleDateDurationPickerSubmit = (start, end) => {
 		this.props.dispatch(DayBook.setDateDuration(start, end));
 	};
+	handleOrderChange = (type) => {
+		this.setState({
+			order: type,
+			order_way: (this.state.order == type)?(!this.state.order_way):(true)
+		});
+	};
 
 	toNumberString = (input) => {
 		input += "";
@@ -178,6 +184,25 @@ class DayBookContainer extends Component {
 			});
 			changeDateTitle = startDate.getFullYear() + "." + (startDate.getMonth() + 1) + "." + startDate.getDate() + "~" + endDate.getFullYear() + "." + (endDate.getMonth() + 1) + "." + endDate.getDate();
 		}
+		recordList.sort((a, b) => {
+			switch(this.state.order){
+				case I18n.t("index"):
+					if(this.state.order_way){
+						return (a.index > b.index);
+					}
+					else{
+						return (a.index < b.index);
+					}
+				case I18n.t("type"):
+					if(this.state.order_way){
+						return (a.type > b.type);
+					}
+					else{
+						return (a.type < b.type);
+					}
+			}
+			return true;
+		});
 		return (
 			<View style={style.container}>
 				<Container style={style.peopleList} header={
@@ -204,7 +229,6 @@ class DayBookContainer extends Component {
 										this.handleChangeDayBook(rowData.key);
 									}}
 									onLongPress={() => {
-										console.log("onLongPress:", rowData.key);
 										this.handleRemoveDayBook(rowData.key);
 									}}
 								/>
@@ -274,7 +298,7 @@ class DayBookContainer extends Component {
 					{
 						(this.state.content_mode == "raw_date")?
 						<View>
-							<RecordTitle />
+							<RecordTitle onPress={this.handleOrderChange}/>
 							<List itemList={recordList}
 								minimalRowCount={9}
 								emptyItemStyle={style.emptyItemStyle}

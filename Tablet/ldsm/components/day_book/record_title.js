@@ -2,7 +2,7 @@
 "use strict";
 
 import React, {Component, PropTypes} from "react";
-import {StyleSheet, View, Text} from "react-native";
+import {StyleSheet, View, Text, TouchableWithoutFeedback} from "react-native";
 import { Color, Size, I18n } from "../../definitions";
 
 let style = StyleSheet.create({
@@ -48,12 +48,18 @@ export default class RecordTitle extends Component{
 				{
 					this.state.column_list.map((column, index) => {
 						return (
-							<View key={column.title} style={[style.column, {
-								flex: column.width,
-								backgroundColor: (index % 2 == 0)?Color.light_blue:Color.light_blue_overlay
-							}]}>
-								<Text style={style.columnText}>{column.title}</Text>
-							</View>
+							<TouchableWithoutFeedback key={column.title} onPress={() => {
+								if(this.props.onPress){
+									this.props.onPress(column.title);
+								}
+							}}>
+								<View style={[style.column, {
+									flex: column.width,
+									backgroundColor: (index % 2 == 0)?Color.light_blue:Color.light_blue_overlay
+								}]}>
+									<Text style={style.columnText}>{column.title}</Text>
+								</View>
+							</TouchableWithoutFeedback>
 						);
 					})
 				}
