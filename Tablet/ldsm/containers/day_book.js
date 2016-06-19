@@ -200,6 +200,27 @@ class DayBookContainer extends Component {
 					else{
 						return (a.type < b.type);
 					}
+				case I18n.t("content"):
+					if(this.state.order_way){
+						return (a.title > b.title);
+					}
+					else{
+						return (a.title < b.title);
+					}
+				case I18n.t("time"):
+					if(this.state.order_way){
+						return (a.record_datetime > b.record_datetime);
+					}
+					else{
+						return (a.record_datetime < b.record_datetime);
+					}
+				case I18n.t("amount"):
+					if(this.state.order_way){
+						return (a.amount > b.amount);
+					}
+					else{
+						return (a.amount < b.amount);
+					}
 			}
 			return true;
 		});
