@@ -70,6 +70,9 @@ I18n.translations = {
 		company_create_daybook_success: "Create day book success",
 		company_create_daybook_fail: "Fail to create day book",
 		company_create_daybook_panel_input_title: "Please input title",
+		company_create_daybook_panel_select_group: "Please sselect a group",
+		company_create_daybook_panel_new_group: "Add new group",
+		company_create_daybook_panel_input_new_group: "Please input new group name",
 
 		employee_not_found: "Employee not found",
 		employee_login_success: "Employee login success",
@@ -177,11 +180,14 @@ I18n.translations = {
 		company_create_employee_panel_pemission_manage_working_record: "管理員工工作記錄",
 		company_create_employee_panel_pemission_manage_accounting: "管理公司薪資帳務",
 
-		company_create_daybook: "新增帳目類別",
+		company_create_daybook: "新增帳本及科目",
 		company_create_daybook_start: "開始建立帳簿",
 		company_create_daybook_success: "成功建立帳簿資料",
 		company_create_daybook_fail: "建立帳簿資料失敗",
-		company_create_daybook_panel_input_title: "請輸入帳簿標題",
+		company_create_daybook_panel_input_title: "請輸入科目標題",
+		company_create_daybook_panel_select_group: "請選擇一個帳本",
+		company_create_daybook_panel_new_group: "新增一個帳本",
+		company_create_daybook_panel_input_new_group: "請輸入新的帳本名稱",
 
 		employee_not_found: "找不到此員工紀錄",
 		employee_login_success: "員工登入成功",

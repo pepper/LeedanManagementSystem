@@ -26,7 +26,6 @@ const style = StyleSheet.create({
 		width: Size.row_height * 0.6,
 		marginLeft: 10,
 		borderRadius: 25,
-		backgroundColor: Color.light_blue,
 		justifyContent: "center", 
 		alignItems: "center"
 	},
@@ -67,7 +66,9 @@ export default class Button extends Component {
 		subText: PropTypes.string,
 		mode: PropTypes.string,
 		color: PropTypes.string,
+		selectTextColor: PropTypes.string,
 		avatarText: PropTypes.string,
+		selectAvatarTextColor: PropTypes.string,
 		selected: PropTypes.bool,
 		style: View.propTypes.style,
 		selectedStyle: View.propTypes.style,
@@ -85,8 +86,8 @@ export default class Button extends Component {
 						{
 							(order[0] && order[0] == "avatar")?
 							<View style={style.iconColumn} key={order.shift()}>
-								<View style={style.avatar}>
-									<Text style={style.avatarText}>{this.props.avatarText || this.props.text[0]}</Text>
+								<View style={[style.avatar, {backgroundColor: this.props.color}, this.props.selected && {backgroundColor: this.props.selectAvatarTextColor || this.props.color}]}>
+									<Text style={[style.avatarText]}>{this.props.avatarText || this.props.text[0]}</Text>
 								</View>
 							</View>
 							:
@@ -102,7 +103,7 @@ export default class Button extends Component {
 						}
 						{
 							(order[0] && order[0] == "text")?
-							<Text style={[style.textColumn, {color: this.props.color}]} key={order.shift()}>{this.props.text}</Text>
+							<Text style={[style.textColumn, {color: this.props.color}, this.props.selected && {color: this.props.selectTextColor || this.props.color}]} key={order.shift()}>{this.props.text}</Text>
 							:
 							null
 						}

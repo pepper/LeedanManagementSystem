@@ -3,7 +3,7 @@
 
 import validator from "validator";
 import React, {Component, PropTypes} from "react";
-import {StyleSheet, View, Text, SegmentedControlIOS, TouchableWithoutFeedback, Image, Picker} from "react-native";
+import {StyleSheet, View, Text, SegmentedControlIOS, DatePickerIOS, TouchableWithoutFeedback, Image, Picker} from "react-native";
 import DropDown, { Select, Option, OptionList, updatePosition } from "react-native-dropdown";
 
 import ConfirmPanel from "./confirm";
@@ -32,7 +32,12 @@ let style = StyleSheet.create({
 	select:{
 		marginRight: 10,
 		borderRadius: 10
-	}
+	},
+	datePicker:{
+		flex: 1,
+		alignItems: "center",
+		justifyContent: "center"
+	},
 });
 
 export default class CreateDayBookNewRecordPanel extends Component{
@@ -40,7 +45,8 @@ export default class CreateDayBookNewRecordPanel extends Component{
 		title: "",
 		type: "",
 		amount: "",
-		show_new_type: false
+		show_new_type: false,
+		record_datetime: new Date()
 	};
 	show = () => {
 		this.confirm.show();
@@ -57,7 +63,8 @@ export default class CreateDayBookNewRecordPanel extends Component{
 				title: this.state.title,
 				type: this.state.type,
 				amount: parseInt(this.state.amount),
-				note: this.state.note
+				note: this.state.note,
+				record_datetime: new Date(this.state.record_datetime.getFullYear(), this.state.record_datetime.getMonth(), this.state.record_datetime.getDate(), 14, 0, 0),
 			});
 			return true;
 		}
@@ -107,6 +114,13 @@ export default class CreateDayBookNewRecordPanel extends Component{
 						onChangeText={(text) => this.setState({note: text}) }
 					/>
 					<View style={style.selectorContainer}>
+						<DatePickerIOS mode={"date"}
+							style={style.datePicker}
+							date={new Date(this.state.record_datetime)}
+							onDateChange={(date) => {
+								this.setState({record_datetime: date});
+							}}
+						/>
 						<Select width={300}
 							style={style.select}
 							ref={(ref) => this.selectRef = ref}

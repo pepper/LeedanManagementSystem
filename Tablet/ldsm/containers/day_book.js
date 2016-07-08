@@ -51,11 +51,12 @@ const style = StyleSheet.create({
 		right: 110,
 	},
 	headTextContainer:{
-		flex: 2,
+		flex: 1,
+		alignItems: "flex-end",
 	},
 	changeDateTitle:{
-		flex: 4,
-		alignItems: "center",
+		flex: 2,
+		alignItems: "flex-start",
 	},
 	headText:{
 		color: "#DDDDDD",
@@ -71,6 +72,9 @@ const style = StyleSheet.create({
 		flex: 1,
 		flexDirection: "row",
 		flexWrap: "wrap"
+	},
+	totalContainer:{
+		flex: 1,
 	},
 	emptyItemStyle:{
 		borderBottomWidth: 0.5,
@@ -110,8 +114,17 @@ class DayBookContainer extends Component {
 	handleCreateDayBookSubmit = (property) => {
 		this.props.dispatch(DayBook.create(property));
 	};
+	handleChangeDayBookTotalGroup = (group) =>{
+		this.props.dispatch(DayBook.changeDayBookTotalGroup(group));
+	};
+	handleChangeDayBookGroup = (group) =>{
+		this.props.dispatch(DayBook.changeDayBookGroup(group));
+	};
 	handleChangeDayBook = (dayBookId) => {
 		this.props.dispatch(DayBook.changeDayBook(dayBookId));
+		this.setState({
+			content_mode: "raw_date"
+		});
 	};
 	handleCreateDayBookType = () => {
 		if(get(this.props.dayBook, "current_day_book")){
@@ -198,6 +211,63 @@ class DayBookContainer extends Component {
 		return x1 + x2;
 	};
 	render(){
+		let dayBookDictionary = (get(this.props.dayBook, "day_book_list") || []).reduce((dict, dayBook) => {
+			if(!dict["DayBookGroup" + dayBook.group]){
+				dict["DayBookGroup" + dayBook.group] = {
+					revenue: 0,
+					balance: 0,
+					dayBookList: []
+				};
+			}
+			dict["DayBookGroup" + dayBook.group].revenue = (dayBook.account_way == "expenditure")?(dict["DayBookGroup" + dayBook.group].revenue - dayBook.revenue):(dict["DayBookGroup" + dayBook.group].revenue + dayBook.revenue);
+			dict["DayBookGroup" + dayBook.group].balance = (dayBook.account_way == "expenditure")?(dict["DayBookGroup" + dayBook.group].balance - dayBook.balance):(dict["DayBookGroup" + dayBook.group].balance + dayBook.balance);
+			dict["DayBookGroup" + dayBook.group].dayBookList.push(dayBook);
+			return dict;
+		}, {});
+		let groupLetter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+		let dayBookMenuList = Object.entries(dayBookDictionary).map((entry, index) => {
+			const key = entry[0];
+			const value = entry[1];
+			let result = [{
+				type: "group",
+				title: key.replace("DayBookGroup", ""),
+				letter: groupLetter[index]
+			}];
+			if(get(this.props.dayBook, "current_day_book_group") == key.replace("DayBookGroup", "")){
+				return result.concat(value.dayBookList);
+			}
+			else{
+				return result;
+			}
+		}).reduce((result, dayBookList) => {
+			return result.concat(dayBookList);
+		}, []);
+		
+		let totalRevenue = 0;
+		let totalBalance = 0;
+		let dayBookTotalList = Object.entries(dayBookDictionary).map((entry, index) => {
+			const key = entry[0];
+			const value = entry[1];
+			let result = [{
+				type: "group",
+				title: key.replace("DayBookGroup", ""),
+				letter: groupLetter[index],
+				revenue: value.revenue,
+				balance: value.balance,
+			}];
+			totalRevenue += value.revenue;
+			totalBalance += value.balance;
+			if(get(this.props.dayBook, "current_day_book_total_group") == key.replace("DayBookGroup", "")){
+				return result.concat(value.dayBookList);
+			}
+			else{
+				return result;
+			}
+		}).reduce((result, dayBookList) => {
+			return result.concat(dayBookList);
+		}, []);
+
 		let recordList = (get(this.props.dayBook, "current_day_book.record_list") || []);
 		let startDate = get(this.props.dayBook, "date_duration.start");
 		let endDate = get(this.props.dayBook, "date_duration.end");
@@ -258,13 +328,54 @@ class DayBookContainer extends Component {
 						}]}
 					/>
 				}>
-					<List itemList={(get(this.props.dayBook, "day_book_list") || []).map((dayBook) => {
-						return (dayBook.key == get(this.props.dayBook, "current_day_book_key"))?Object.assign({}, dayBook, {selected: true}):Object.assign({}, dayBook)
+					<Button
+						mode={"avatar-text"}
+						style={{
+							backgroundColor: Color.black
+						}}
+						selectedStyle={{
+							backgroundColor: Color.red
+						}}
+						color={Color.yellow}
+						text={"總帳"}
+						onPress={() => {
+							this.setState({
+								content_mode: "total"
+							});
+						}}
+					/>
+					<List itemList={(dayBookMenuList || []).map((dayBook) => {
+						if(dayBook.type == "group"){
+							return (dayBook.title == get(this.props.dayBook, "current_day_book_group"))?Object.assign({}, dayBook, {selected: true}):Object.assign({}, dayBook);
+						}
+						return (dayBook.key == get(this.props.dayBook, "current_day_book_key"))?Object.assign({}, dayBook, {selected: true}):Object.assign({}, dayBook);
 					})}
 						currentItem={get(this.props.dayBook, "current_day_book_id")}
 						minimalRowCount={9}
 						emptyItemStyle={{ backgroundColor: Color.black }}
 						renderRow={(rowData, sectionID, rowID, highlightRow) => {
+							if(rowData.type == "group"){
+								return (
+									<Button
+										mode={"avatar-text"}
+										avatarText={rowData.letter}
+										style={{
+											backgroundColor: Color.black
+										}}
+										selectedStyle={{
+											backgroundColor: Color.yellow
+										}}
+										selectAvatarTextColor={Color.white}
+										selectTextColor={Color.black}
+										color={Color.yellow}
+										selected={rowData.selected}
+										text={rowData.title}
+										onPress={() => {
+											this.handleChangeDayBookGroup(rowData.title);
+										}}
+									/>
+								);
+							}
 							return (
 								<Button
 									mode={"avatar-text2line"}
@@ -328,6 +439,12 @@ class DayBookContainer extends Component {
 						null
 					}
 					<View style={style.headArea}>
+						<TouchableWithoutFeedback onPress={this.handleDateDurationPicker}>
+							<View style={[style.headTextContainer, style.changeDateTitle]}>
+								<Text style={style.headText}>{changeDateTitle}</Text>
+							</View>
+						</TouchableWithoutFeedback>
+						<View style={style.headEmpty}></View>
 						<TouchableWithoutFeedback onPress={() => {
 							this.setState({
 								content_mode: "raw_date"
@@ -337,13 +454,6 @@ class DayBookContainer extends Component {
 								<Text style={style.headText}>{I18n.t("day_book_record_detail")}</Text>
 							</View>
 						</TouchableWithoutFeedback>
-						<View style={style.headEmpty}></View>
-						<TouchableWithoutFeedback onPress={this.handleDateDurationPicker}>
-							<View style={[style.headTextContainer, style.changeDateTitle]}>
-								<Text style={style.headText}>{changeDateTitle}</Text>
-							</View>
-						</TouchableWithoutFeedback>
-						<View style={style.headEmpty}></View>
 						<TouchableWithoutFeedback onPress={() => {
 							// this.setState({
 							// 	content_mode: "summery"
@@ -383,6 +493,101 @@ class DayBookContainer extends Component {
 						null
 					}
 					{
+						(this.state.content_mode == "total")?
+						<View style={style.totalContainer}>
+							{
+								<Item style={{
+									borderTopWidth: 0.5,
+									borderBottomWidth: 0.5,
+									borderColor: Color.gray,
+									flexDirection: "row",
+									alignItems: "center"
+								}}>
+									<Text style={{
+										flex: 1,
+										fontSize: 18,
+										fontWeight: "bold",
+										lineHeight: 24,
+										paddingTop: -2,
+										paddingLeft: 12,
+										color: Color.yellow
+									}}>
+										{"本期總損益：" + this.toNumberString(totalRevenue)}
+									</Text>
+									<Text style={{
+										flex: 1,
+										fontSize: 18,
+										fontWeight: "bold",
+										lineHeight: 24,
+										paddingTop: -2,
+										paddingRight: 12,
+										color: Color.yellow,
+										textAlign: "right"
+									}}>
+										{"本期總結餘：" + this.toNumberString(totalBalance)}
+									</Text>
+								</Item>
+							}
+							<List itemList={(dayBookTotalList || []).map((dayBook) => {
+								if(dayBook.type == "group"){
+									return (dayBook.title == get(this.props.dayBook, "current_day_book_total_group"))?Object.assign({}, dayBook, {selected: true}):Object.assign({}, dayBook);
+								}
+								return (dayBook.key == get(this.props.dayBook, "current_day_book_key"))?Object.assign({}, dayBook, {selected: true}):Object.assign({}, dayBook);
+							})}
+								currentItem={get(this.props.dayBook, "current_day_book_id")}
+								minimalRowCount={9}
+								emptyItemStyle={style.emptyItemStyle}
+								renderRow={(rowData, sectionID, rowID, highlightRow) => {
+									if(rowData.type == "group"){
+										return (
+											<Button
+												mode={"avatar-text"}
+												avatarText={rowData.letter}
+												style={{
+													paddingLeft: 40,
+													borderBottomWidth: 0.5,
+													borderColor: Color.gray
+												}}
+												selectedStyle={{
+													backgroundColor: Color.light_blue
+												}}
+												selectAvatarTextColor={Color.white}
+												selectTextColor={Color.white}
+												color={Color.yellow}
+												selected={rowData.selected}
+												text={rowData.title + "：" + this.toNumberString(rowData.revenue)}
+												onPress={() => {
+													this.handleChangeDayBookTotalGroup(rowData.title);
+												}}
+											/>
+										);
+									}
+									return (
+										<Button
+											mode={"avatar-text"}
+											avatarText={{expenditure:"支", income:"收"}[rowData.account_way]}
+											style={{
+												paddingLeft: 120,
+												borderBottomWidth: 0.5,
+												borderColor: Color.gray
+											}}
+											selected={rowData.selected}
+											text={rowData.title + "：" + this.toNumberString(rowData.revenue)}
+											onPress={() => {
+												this.handleChangeDayBook(rowData.key);
+											}}
+											onLongPress={() => {
+												this.handleRemoveDayBook(rowData.key);
+											}}
+										/>
+									);
+								}}
+							/>
+						</View>
+						:
+						null
+					}
+					{
 						(this.state.content_mode == "raw_date")?
 						<View style={style.detailContainer}>
 							<RecordTitle onPress={this.handleOrderChange}/>
@@ -411,15 +616,17 @@ class DayBookContainer extends Component {
 					}
 					<View style={style.footArea}>
 						<Summary
-							quantity={get(this.props.dayBook, "current_day_book.last_index")}
-							sum={get(this.props.dayBook, "current_day_book.total_amount")}
+							hideSum={this.state.content_mode == "total"}
+							hideQuantity={this.state.content_mode == "total"}
+							quantity={recordList.length}
+							sum={get(this.props.dayBook, "current_day_book.revenue")}
 							date_start={startDate}
 							date_end={endDate}
 						/>
 					</View>
 				</View>
 
-				<CreateDayBookPanel ref={(ref) => this.createDayBookPanel = ref} onConfirm={this.handleCreateDayBookSubmit} />
+				<CreateDayBookPanel ref={(ref) => this.createDayBookPanel = ref} onConfirm={this.handleCreateDayBookSubmit} groupList={Object.keys(dayBookDictionary).map((group) => (group.replace("DayBookGroup", "")))} />
 				<CreateDayBookTypePanel ref={(ref) => this.createDayBookTypePanel = ref} onConfirm={this.handleCreateDayBookTypeSubmit} />
 				<CreateDayBookNewRecordPanel ref={(ref) => this.createDayBookNewRecordPanel = ref} onConfirm={this.handleCreateRecordSubmit} dayBook={get(this.props.dayBook, "current_day_book") || {}}/>
 				<RemoveDayBookRecordPanel ref={(ref) => this.removeDayBookRecordPanel = ref} onConfirm={this.handleRemoveRecordSubmit} record={this.state.record_to_remove} />

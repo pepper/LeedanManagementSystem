@@ -27,6 +27,7 @@ class DayBook extends Model{
 			props = Object.assign({
 				title:				"",
 				account_way:		"",
+				group:				"",
 				type_list:			[],
 				record_list:		[],
 				total_amount:		0,
@@ -58,7 +59,7 @@ class DayBook extends Model{
 			type: property.type || "",
 			note: property.note || "",
 			amount: property.amount,
-			record_datetime: property.record_datetime || (new Date()).toString()
+			record_datetime: property.record_datetime.toString() || (new Date()).toString()
 		});
 
 		this.record_list.push(newRecord);

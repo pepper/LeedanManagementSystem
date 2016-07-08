@@ -98,12 +98,30 @@ export default class Summary extends Component {
 					<Text style={[style.dateText, {paddingTop: 7}]}>{startDate.getFullYear() + "." + this.fillZero(startDate.getMonth() + 1) + "." + this.fillZero(startDate.getDate()) + "-" + endDate.getFullYear() + "." + this.fillZero(endDate.getMonth() + 1) + "." + this.fillZero(endDate.getDate())}</Text>
 				</View>
 				<View style={style.quantityContainer}>
-					<Text style={style.titleText}>{"Quantity"}</Text>
-					<Text style={style.contentText}>{this.props.quantity + ""}</Text>
+					{
+						(!this.props.hideQuantity)?
+						(
+							<View>
+								<Text style={style.titleText}>{"Quantity"}</Text>
+								<Text style={style.contentText}>{this.props.quantity + ""}</Text>
+							</View>
+						)
+						:
+						null
+					}
 				</View>
 				<View style={style.sumContainer}>
-					<Text style={style.titleText}>{"Sum of Transactions"}</Text>
-					<Text style={style.contentText}>{this.toNumberString(this.props.sum)}</Text>
+					{
+						(!this.props.hideSum)?
+						(
+							<View>
+								<Text style={style.titleText}>{"Sum of Transactions"}</Text>
+								<Text style={style.contentText}>{this.toNumberString(this.props.sum)}</Text>
+							</View>
+						)
+						:
+						null
+					}
 				</View>
 				<View style={style.iconContainer}>
 					<TouchableWithoutFeedback onPress={() => {

@@ -40,6 +40,18 @@ exports.sync = () => {
 	};
 };
 
+exports.changeDayBookTotalGroup = (group) => {
+	return async (dispatch, getState) => {
+		dispatch(createAction(Constant.DAYBOOK_TOTAL_GROUP_CHANGE)(group));
+	};
+};
+
+exports.changeDayBookGroup = (group) => {
+	return async (dispatch, getState) => {
+		dispatch(createAction(Constant.DAYBOOK_GROUP_CHANGE)(group));
+	};
+};
+
 exports.changeDayBook = (dayBookKey) => {
 	return async (dispatch, getState) => {
 		const dayBookList = get(getState().dayBook, "day_book_list") || [];
