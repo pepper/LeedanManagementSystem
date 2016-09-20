@@ -123,13 +123,25 @@ export default class Summary extends Component {
 						null
 					}
 				</View>
-				<View style={style.iconContainer}>
-					<TouchableWithoutFeedback onPress={() => {
-						alert("此功能尚未開放");
-					}}>
-						<Icon name={"print"} size={Size.row_height * 0.6} color={Color.light_blue} />
-					</TouchableWithoutFeedback>
-				</View>
+				{
+					(!this.props.disablePrint)?
+					(
+						<View style={style.iconContainer}>
+							<TouchableWithoutFeedback onPress={() => {
+								if(this.props.onPrint){
+									this.props.onPrint();
+								}
+								else{
+									alert("此功能尚未開放");
+								}
+							}}>
+								<Icon name={"print"} size={Size.row_height * 0.6} color={Color.light_blue} />
+							</TouchableWithoutFeedback>
+						</View>
+					)
+					:
+					null
+				}
 			</Item>
 		)
 	}

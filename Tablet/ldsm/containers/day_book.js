@@ -2,7 +2,7 @@
 "use strict";
 
 import React, {Component} from "react";
-import {StyleSheet, View, Text, TouchableWithoutFeedback} from "react-native";
+import { NativeModules, StyleSheet, View, Text, TouchableWithoutFeedback, ActionSheetIOS } from "react-native";
 import { connect } from "react-redux";
 import { get } from "nested-property";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -198,6 +198,213 @@ class DayBookContainer extends Component {
 			show_search_bar: false
 		});
 	};
+	handleGeneratePDF = () => {
+		let group = get(this.props.dayBook, "current_day_book_total_group");
+		let startDate = get(this.props.dayBook, "date_duration.start");
+		let endDate = get(this.props.dayBook, "date_duration.end");
+		if(group && group != ""){
+			if(startDate && endDate){
+				let dayBookDictionary = (get(this.props.dayBook, "day_book_list") || []).reduce((dict, dayBook) => {
+					if(dayBook.group == group){
+						dict.revenue = (dayBook.account_way == "expenditure")?(dict.revenue - dayBook.revenue):(dict.revenue + dayBook.revenue);
+						dict.balance = (dayBook.account_way == "expenditure")?(dict.balance - dayBook.balance):(dict.balance + dayBook.balance);
+						dict.dayBookList.push(dayBook);
+					}
+					return dict;
+				}, {
+					revenue: 0,
+					balance: 0,
+					dayBookList: []
+				});
+				let html = `
+					<div style="width:100%">
+						<div style="display:inline-block;white-space:nowrap;vertical-align:bottom;width:49%">
+							<span style="font-size:24px;font-weight:bold">${this.props.company.company.title}帳務列表</span>
+						</div>
+						<div style="display:inline-block;vertical-align:top;text-align:right;width:49%">
+							<span style="font-size:20px;font-weight:bold">帳本名稱：${this.props.dayBook.current_day_book_total_group}</span>
+						</div>
+					</div>
+					<hr />
+					<br />
+					<div style="width:100%;">
+						<div style="display:inline-block;white-space:nowrap;vertical-align:bottom;width:39%">
+							<div style="display:inline-block;white-space:nowrap;margin-right:20px">
+								<div style="width:70;height:70;border:solid 1px #000000"></div>
+								<div style="font-size:12px;">財務確認人A</div>
+							</div>
+							<div style="display:inline-block;white-space:nowrap;margin-right:20px">
+								<div style="width:70;height:70;border:solid 1px #000000"></div>
+								<div style="font-size:12px;">財務確認人B</div>
+							</div>
+							<div style="display:inline-block;white-space:nowrap;margin-right:20px">
+								<div style="width:70;height:70;border:solid 1px #000000"></div>
+								<div style="font-size:12px;">財務確認人C</div>
+							</div>
+						</div>
+						<div style="display:inline-block;vertical-align:top;width:59%">
+							<div style="text-align:right;width:100%;">
+								<span style="font-size:16px;color:#666666">帳務統計區間：${startDate.getFullYear()}.${startDate.getMonth() + 1}.${startDate.getDate()}~${endDate.getFullYear()}.${endDate.getMonth() + 1}.${endDate.getDate()}</span>
+							</div>
+							<div style="text-align:right;margin-top:10px;width:100%;">
+								<span style="font-size:18px;">本期總損益：</span>
+								<span style="font-size:26px;font-weight:bold">${this.toNumberString(dayBookDictionary.revenue)}</span>
+							</div>
+							<div style="text-align:right;margin-top:10px;width:100%;">
+								<span style="font-size:18px;">本期總結餘：</span>
+								<span style="font-size:26px;font-weight:bold">${this.toNumberString(dayBookDictionary.balance)}</span>
+							</div>
+						</div>
+					</div>
+					<hr />
+					<br />
+				`;
+
+				let incomeHTML = "";
+				let incomeIndex = 0;
+				let incomeTotal = 0;
+				let expenditureHTML = "";
+				let expenditureIndex = 0;
+				let expenditureTotal = 0;
+				dayBookDictionary.dayBookList.forEach((dayBook) => {
+					switch(dayBook.account_way){
+						case "income":
+							incomeIndex++;
+							incomeHTML += `
+								<div style="font-size:16px;margin-top:10px;">${((incomeIndex < 10)?"0":"") + incomeIndex}.${dayBook.title}：${this.toNumberString(dayBook.revenue)}</div>
+							`;
+							incomeTotal += dayBook.revenue;
+							break;
+						case "expenditure":
+							expenditureIndex++;
+							expenditureHTML += `
+								<div style="font-size:16px;margin-top:10px;">${((expenditureIndex < 10)?"0":"") + expenditureIndex}.${dayBook.title}：${this.toNumberString(dayBook.revenue)}</div>
+							`;
+							expenditureTotal += dayBook.revenue;
+							break;
+					}
+				});
+				html += `
+					<div style="width:100%;font-size:20px;font-weight:bold;">本期 會務經費 各科目統計 ▼</div>
+					<div style="width:100%;margin-top:20px;">
+						<div style="display:inline-block;white-space:nowrap;width:49%">
+							<span style="font-size:20px;font-weight:bold">收-總計：${this.toNumberString(incomeTotal)}</span>
+						</div>
+						<div style="display:inline-block;white-space:nowrap;width:49%">
+							<span style="font-size:20px;font-weight:bold">支-總計：${this.toNumberString(expenditureTotal)}</span>
+						</div>
+					</div>
+					<hr />
+					<div style="width:100%;margin-top:20px;">
+						<div style="display:inline-block;white-space:nowrap;vertical-align:top;width:49%">
+							${incomeHTML}
+						</div>
+						<div style="display:inline-block;white-space:nowrap;vertical-align:top;width:49%">
+							${expenditureHTML}
+						</div>
+					</div>
+					<hr />
+					<div style="width:100%;font-size:20px;font-weight:bold;page-break-before:always;">附件：帳本各科目明細 ▼</div>
+				`;
+				let pageBreak = 0;
+
+				let addLine = (line) => {
+					pageBreak += line;
+					let result = "";
+					if(pageBreak > 25){
+						pageBreak = (line > 25)?0:line;
+						result = `<div style="page-break-before:always;"/></div>`;
+					}
+					return result;
+				};
+
+				dayBookDictionary.dayBookList.forEach((dayBook) => {
+					html += `
+						${(dayBook.record_list.length + 4 + pageBreak > 25)?addLine(30):""}
+						<div style="font-size:14px;font-weight:bold;margin-top:10px;">科目名稱：${{expenditure:"支", income:"收"}[dayBook.account_way]}–${dayBook.title}</div>
+						${addLine(1)}
+						<div style="display:flex;width:100%;margin-top:10px;font-size:10px;font-weight:bold;">
+							<div style="text-align:center;width:60px;padding:8px;margin-right:1px;background:#E6E6E6">序號</div>
+							<div style="text-align:center;flex:18;padding:8px;margin-right:1px;background:#E6E6E6">類別</div>
+							<div style="text-align:center;flex:35;padding:8px;margin-right:1px;background:#E6E6E6">內容</div>
+							<div style="text-align:center;flex:9;padding:8px;margin-right:1px;background:#E6E6E6">時間</div>
+							<div style="text-align:right;flex:12;padding:8px;margin-right:1px;background:#E6E6E6">金額</div>
+							<div style="text-align:center;flex:7;padding:8px;margin-right:1px;background:#E6E6E6">備註</div>
+						</div>
+						${addLine(1)}
+						${
+							dayBook.record_list.reduce((result, record, index) => {
+								let recordDatetime = new Date(record.record_datetime);
+								let color = (index % 2 == 0)?"#B6B6B6":"#E6E6E6";
+								result += `
+									<div style="display:flex;width:100%;margin-top:1px;font-size:10px;">
+										<div style="text-align:center;width:60px;padding:8px;margin-right:1px;background:${color}">${index + 1}</div>
+										<div style="text-align:center;flex:18;padding:8px;margin-right:1px;background:${color}">${record.type + " "}</div>
+										<div style="text-align:center;flex:35;padding:8px;margin-right:1px;background:${color}">${record.title + " "}</div>
+										<div style="text-align:center;flex:9;padding:8px;margin-right:1px;background:${color}">${recordDatetime.getMonth() + 1}.${recordDatetime.getDate()}</div>
+										<div style="text-align:right;flex:12;padding:8px;margin-right:1px;background:${color}">${this.toNumberString(record.amount)}</div>
+										<div style="text-align:center;flex:7;padding:8px;margin-right:1px;background:${color}">${(record.note && record.note != "")?"V":"X"}</div>
+									</div>
+									${addLine(1)}
+								`;
+								if(record.note && record.note != ""){
+									result += `
+										<div style="display:flex;width:100%;margin-top:1px;font-size:10px;">
+											<div style="text-align:center;width:60px;padding:8px;margin-right:1px;background:${color}">備註</div>
+											<div style="text-align:left;flex:1;padding:8px;margin-right:1px;background:${color}">${record.note}</div>
+										</div>
+										${addLine(1)}
+									`;
+								}
+								return result;
+							}, "")
+						}
+						<div style="display:flex;width:100%;margin-top:1px;font-size:10px;font-weight:bold;">
+							<div style="flex:1;padding:8px;margin-right:1px;background:${(dayBook.record_list.length % 2 == 0)?"#B6B6B6":"#E6E6E6"}">
+								<span style="float:right">總計：${dayBook.revenue}</span>
+							</div>
+						</div>
+						<hr />
+						${addLine(2)}
+					`;
+					// pageBreak += 5;
+					// pageBreak += dayBook.record_list.reduce((result, record) => {
+					// 	return result + 1 + ((record.note && record.note != "")?1:0);
+					// }, 0);
+					// console.log("pageBreak: " + pageBreak);
+					// if(pageBreak > 20){
+					// 	pageBreak = 0;
+					// 	html += `<div style="page-break-before:always;"/></div>`;
+					// }
+				});
+				NativeModules.RNHTMLtoPDF.convert({
+					html: html,
+					fileName: "test",
+					directory: "docs"
+				}).then((filePath) => {
+					console.log(filePath);
+					setTimeout(() => {
+						ActionSheetIOS.showShareActionSheetWithOptions({
+							url: `file://${filePath}`,
+							message: "",
+							subject: `${this.props.company.company.title}帳務列表`,
+							excludedActivityTypes: []
+						},
+						(error) => alert(error),
+						(success, method) => {
+							console.log("Use " + method);
+						});
+					}, 500);
+				});
+			}
+			else{
+				alert("請先選擇日期區間");
+			}
+		}
+		else{
+			alert("請先選擇一本帳本");
+		}
+	};
 
 	toNumberString = (input) => {
 		input += "";
@@ -272,6 +479,10 @@ class DayBookContainer extends Component {
 		let startDate = get(this.props.dayBook, "date_duration.start");
 		let endDate = get(this.props.dayBook, "date_duration.end");
 		let changeDateTitle = I18n.t("day_book_change_day");
+		recordList = recordList.map((record, index) => {
+			record.index = index + 1;
+			return record;
+		});
 		if(startDate && endDate){
 			recordList = recordList.filter((record) => {
 				let recordDate = new Date(record.record_datetime);
@@ -281,13 +492,13 @@ class DayBookContainer extends Component {
 		}
 		recordList.sort((a, b) => {
 			switch(this.state.order){
-				case I18n.t("index"):
-					if(this.state.order_way){
-						return (a.index > b.index);
-					}
-					else{
-						return (a.index < b.index);
-					}
+				// case I18n.t("index"):
+				// 	if(this.state.order_way){
+				// 		return (a.index > b.index);
+				// 	}
+				// 	else{
+				// 		return (a.index < b.index);
+				// 	}
 				case I18n.t("type"):
 					if(this.state.order_way){
 						return (a.type > b.type);
@@ -317,7 +528,7 @@ class DayBookContainer extends Component {
 						return (a.amount < b.amount);
 					}
 			}
-			return true;
+			return false;
 		});
 		return (
 			<View style={style.container}>
@@ -622,6 +833,8 @@ class DayBookContainer extends Component {
 							sum={get(this.props.dayBook, "current_day_book.revenue")}
 							date_start={startDate}
 							date_end={endDate}
+							disablePrint={this.state.content_mode != "total"}
+							onPrint={this.handleGeneratePDF}
 						/>
 					</View>
 				</View>
@@ -639,6 +852,7 @@ class DayBookContainer extends Component {
 
 export default connect((state) => {
 	return {
+		company: state.company,
 		dayBook: state.dayBook
 	};
 })(DayBookContainer);

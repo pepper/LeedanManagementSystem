@@ -49,10 +49,12 @@
 		A4B6ACDBDF3B4AF18E80FEE0 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 414753BE711D44F88AF41999 /* Zocial.ttf */; };
 		BC68571DAEC2441393EEEA68 /* libRCTCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE9A598DB3E24ED9A43F8C75 /* libRCTCamera.a */; };
 		BE231436AC3641FC91609CA7 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 413EEBCA29974FE796622257 /* Entypo.ttf */; };
+		C4703FB9868441A69B0B04FB /* libRNHTMLtoPDF.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C1B07217B1294C65A73BA7CD /* libRNHTMLtoPDF.a */; };
 		C644A537BB584D348B052AD7 /* libReactCBLite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B6088D76F064860BD60F583 /* libReactCBLite.a */; };
 		CD15EBA009004975AA3105C7 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5CDE8DC5317E4456B537C29B /* Foundation.ttf */; };
 		D4BA81F27B2C4279B1ED4277 /* libRNGoogleFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91D524FAAF5448F797DF28F0 /* libRNGoogleFirebase.a */; };
 		D8ADBFDD67384270A1499719 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 857E777973EF4DC193628E0B /* Ionicons.ttf */; };
+		E75974A3DD6B482EBBB98F3A /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 28247CE432BF4A7CBDF1F166 /* libRNFS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -126,6 +128,27 @@
 			remoteGlobalIDString = 5672D48D1CFDC6D3000D61B6;
 			remoteInfo = RNGoogleFirebase;
 		};
+		56818E131D3250ED00486C1F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3A97EEFC74DD4AA0A5D6E7E6 /* RNFS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F12AFB9B1ADAF8F800E0535D;
+			remoteInfo = RNFS;
+		};
+		56818E181D3250ED00486C1F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 01CCF52457AD4735972E565D /* RNHTMLtoPDF.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 117405EF1B9954BF004425E1;
+			remoteInfo = RNHTMLtoPDF;
+		};
+		56818E1A1D3250ED00486C1F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 01CCF52457AD4735972E565D /* RNHTMLtoPDF.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 117405FA1B9954BF004425E1;
+			remoteInfo = RNHTMLtoPDFTests;
+		};
 		56B5CA321CE61B1100E3CC4F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 148A77FF779541FE9D5F4C16 /* RCTCamera.xcodeproj */;
@@ -187,6 +210,7 @@
 		00E356EE1AD99517003FC87E /* TabletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TabletTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* TabletTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TabletTests.m; sourceTree = "<group>"; };
+		01CCF52457AD4735972E565D /* RNHTMLtoPDF.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNHTMLtoPDF.xcodeproj; path = "../node_modules/react-native-html-to-pdf/RNHTMLtoPDF.xcodeproj"; sourceTree = "<group>"; };
 		0E8FF2D904A44B31BB5FCB24 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
@@ -199,6 +223,8 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Tablet/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		148A77FF779541FE9D5F4C16 /* RCTCamera.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTCamera.xcodeproj; path = "../node_modules/react-native-camera/ios/RCTCamera.xcodeproj"; sourceTree = "<group>"; };
+		28247CE432BF4A7CBDF1F166 /* libRNFS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFS.a; sourceTree = "<group>"; };
+		3A97EEFC74DD4AA0A5D6E7E6 /* RNFS.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFS.xcodeproj; path = "../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; };
 		3CB68FBD80784209B2DDC05C /* ReactCBLite.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactCBLite.xcodeproj; path = "../node_modules/react-native-couchbase-lite/ios/ReactCBLite.xcodeproj"; sourceTree = "<group>"; };
 		413EEBCA29974FE796622257 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		414753BE711D44F88AF41999 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
@@ -231,6 +257,7 @@
 		91D524FAAF5448F797DF28F0 /* libRNGoogleFirebase.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNGoogleFirebase.a; sourceTree = "<group>"; };
 		AE96793E6FAF435FA725B565 /* RNI18n.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNI18n.xcodeproj; path = "../node_modules/react-native-i18n-complete/iOS/RNI18n.xcodeproj"; sourceTree = "<group>"; };
 		B51706F4007B405B83F43409 /* RNGoogleFirebase.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNGoogleFirebase.xcodeproj; path = "../node_modules/react-native-google-firebase/ios/RNGoogleFirebase.xcodeproj"; sourceTree = "<group>"; };
+		C1B07217B1294C65A73BA7CD /* libRNHTMLtoPDF.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNHTMLtoPDF.a; sourceTree = "<group>"; };
 		DA98BC9CD1FD44BF9E826F0A /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		E5E33E09B4364DC9994D2C03 /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
 		E69303D8EA114F218464C36E /* libRNI18n.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNI18n.a; sourceTree = "<group>"; };
@@ -282,6 +309,8 @@
 				2D61D3750C91474EAEF6440F /* libRNI18n.a in Frameworks */,
 				565C14C002EF4492A32B4E32 /* libRNVectorIcons.a in Frameworks */,
 				D4BA81F27B2C4279B1ED4277 /* libRNGoogleFirebase.a in Frameworks */,
+				E75974A3DD6B482EBBB98F3A /* libRNFS.a in Frameworks */,
+				C4703FB9868441A69B0B04FB /* libRNHTMLtoPDF.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -408,6 +437,23 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		56818E021D3250ED00486C1F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				56818E141D3250ED00486C1F /* libRNFS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		56818E041D3250ED00486C1F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				56818E191D3250ED00486C1F /* libRNHTMLtoPDF.a */,
+				56818E1B1D3250ED00486C1F /* RNHTMLtoPDFTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		56B5CA281CE61B1000E3CC4F /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -477,6 +523,8 @@
 				AE96793E6FAF435FA725B565 /* RNI18n.xcodeproj */,
 				574117F4DEFC4744B2093A34 /* RNVectorIcons.xcodeproj */,
 				B51706F4007B405B83F43409 /* RNGoogleFirebase.xcodeproj */,
+				3A97EEFC74DD4AA0A5D6E7E6 /* RNFS.xcodeproj */,
+				01CCF52457AD4735972E565D /* RNHTMLtoPDF.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -579,6 +627,9 @@
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
+					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = Q5AB6DLD5L;
+					};
 				};
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Tablet" */;
@@ -642,8 +693,16 @@
 					ProjectRef = 3CB68FBD80784209B2DDC05C /* ReactCBLite.xcodeproj */;
 				},
 				{
+					ProductGroup = 56818E021D3250ED00486C1F /* Products */;
+					ProjectRef = 3A97EEFC74DD4AA0A5D6E7E6 /* RNFS.xcodeproj */;
+				},
+				{
 					ProductGroup = 566DC3501CFEF70C0069503D /* Products */;
 					ProjectRef = B51706F4007B405B83F43409 /* RNGoogleFirebase.xcodeproj */;
+				},
+				{
+					ProductGroup = 56818E041D3250ED00486C1F /* Products */;
+					ProjectRef = 01CCF52457AD4735972E565D /* RNHTMLtoPDF.xcodeproj */;
 				},
 				{
 					ProductGroup = 56B5CA2C1CE61B1000E3CC4F /* Products */;
@@ -724,6 +783,27 @@
 			fileType = archive.ar;
 			path = libRNGoogleFirebase.a;
 			remoteRef = 566DC35F1CFEF70C0069503D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		56818E141D3250ED00486C1F /* libRNFS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNFS.a;
+			remoteRef = 56818E131D3250ED00486C1F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		56818E191D3250ED00486C1F /* libRNHTMLtoPDF.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNHTMLtoPDF.a;
+			remoteRef = 56818E181D3250ED00486C1F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		56818E1B1D3250ED00486C1F /* RNHTMLtoPDFTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = RNHTMLtoPDFTests.xctest;
+			remoteRef = 56818E1A1D3250ED00486C1F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		56B5CA331CE61B1100E3CC4F /* libRCTCamera.a */ = {
@@ -894,6 +974,8 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tablet.app/Tablet";
@@ -915,6 +997,8 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tablet.app/Tablet";
@@ -925,6 +1009,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -940,6 +1026,8 @@
 					"$(SRCROOT)/../node_modules/react-native-i18n-complete/iOS/RNI18n",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-google-firebase/ios/RNGoogleFirebase/**",
+					"$(SRCROOT)/../node_modules/react-native-fs/**",
+					"$(SRCROOT)/../node_modules/react-native-html-to-pdf/RNHTMLtoPDF/**",
 				);
 				INFOPLIST_FILE = Tablet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -951,8 +1039,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "tw.fu-good.leedan";
+				PRODUCT_BUNDLE_IDENTIFIER = "tw.fu-good.LeedanManagement";
 				PRODUCT_NAME = Tablet;
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
@@ -961,6 +1050,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -976,6 +1067,8 @@
 					"$(SRCROOT)/../node_modules/react-native-i18n-complete/iOS/RNI18n",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-google-firebase/ios/RNGoogleFirebase/**",
+					"$(SRCROOT)/../node_modules/react-native-fs/**",
+					"$(SRCROOT)/../node_modules/react-native-html-to-pdf/RNHTMLtoPDF/**",
 				);
 				INFOPLIST_FILE = Tablet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -987,8 +1080,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "tw.fu-good.leedan";
+				PRODUCT_BUNDLE_IDENTIFIER = "tw.fu-good.LeedanManagement";
 				PRODUCT_NAME = Tablet;
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
@@ -1036,6 +1130,8 @@
 					"$(SRCROOT)/../node_modules/react-native-i18n-complete/iOS/RNI18n",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-google-firebase/ios/RNGoogleFirebase/**",
+					"$(SRCROOT)/../node_modules/react-native-fs/**",
+					"$(SRCROOT)/../node_modules/react-native-html-to-pdf/RNHTMLtoPDF/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -1081,6 +1177,8 @@
 					"$(SRCROOT)/../node_modules/react-native-i18n-complete/iOS/RNI18n",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-google-firebase/ios/RNGoogleFirebase/**",
+					"$(SRCROOT)/../node_modules/react-native-fs/**",
+					"$(SRCROOT)/../node_modules/react-native-html-to-pdf/RNHTMLtoPDF/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;

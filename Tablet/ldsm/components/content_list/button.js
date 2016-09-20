@@ -110,7 +110,7 @@ export default class Button extends Component {
 						{
 							(order[0] && order[0] == "text2line")?
 							<View style={style.text2LineColumn}>
-								<Text style={[style.textColumn, ((this.props.text.length > 10)?{fontSize:14}:{}) ,{color: this.props.color}]} key={order.shift()}>{this.props.text}</Text>
+								<Text lineBreakMode={"tail"} numberOfLines={1} style={[style.textColumn, ((this.props.text.length > 10)?{fontSize:14}:{}) ,{color: this.props.color}]} key={order.shift()}>{this.props.text}</Text>
 								<Text style={[style.subTextColumn, {color: this.props.color}]} key={order.shift()}>{this.props.subText}</Text>
 							</View>
 							:

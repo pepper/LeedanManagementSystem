@@ -32,9 +32,15 @@ export default class CreateDayBookTypePanel extends Component{
 		type: ""
 	};
 	show = () => {
+		this.state = {
+			type: ""
+		};
 		this.confirm.show();
 	};
 	hide = () => {
+		this.state = {
+			type: ""
+		};
 		this.confirm.hide();
 	};
 	handleConfirm = () => {

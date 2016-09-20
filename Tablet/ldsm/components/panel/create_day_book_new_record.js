@@ -49,9 +49,23 @@ export default class CreateDayBookNewRecordPanel extends Component{
 		record_datetime: new Date()
 	};
 	show = () => {
+		this.state = {
+			title: "",
+			type: "",
+			amount: "",
+			show_new_type: false,
+			record_datetime: new Date()
+		};
 		this.confirm.show();
 	};
 	hide = () => {
+		this.state = {
+			title: "",
+			type: "",
+			amount: "",
+			show_new_type: false,
+			record_datetime: new Date()
+		};
 		this.confirm.hide();
 	};
 	getOptionList = () => {

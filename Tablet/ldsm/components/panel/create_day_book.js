@@ -43,9 +43,15 @@ export default class CreateDayBookPanel extends Component{
 		title: ""
 	};
 	show = () => {
+		this.state = {
+			title: ""
+		};
 		this.confirm.show();
 	};
 	hide = () => {
+		this.state = {
+			title: ""
+		};
 		this.confirm.hide();
 	};
 	getOptionList = () => {
