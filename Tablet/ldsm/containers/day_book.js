@@ -333,7 +333,10 @@ class DayBookContainer extends Component {
 						</div>
 						${addLine(1)}
 						${
-							dayBook.record_list.reduce((result, record, index) => {
+							dayBook.record_list.filter((record) => {
+								let recordDate = new Date(record.record_datetime);
+								return recordDate >= startDate && recordDate <= endDate;
+							}).reduce((result, record, index) => {
 								let recordDatetime = new Date(record.record_datetime);
 								let color = (index % 2 == 0)?"#B6B6B6":"#E6E6E6";
 								result += `
