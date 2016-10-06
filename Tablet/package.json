@@ -4,43 +4,39 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "hack-react-native": "./tool/hack_react_native.sh",
-    "remove-all-babelrc": "./tool/remove_all_babelrc.sh",
     "lint": "eslint ldsm/**",
-    "postinstall": "rnpm link && remotedev-debugger --port 5678 --injectserver"
+    "postinstall": "react-native link && remotedev-debugger --port 5678 --injectserver"
   },
   "dependencies": {
     "assert": "^1.3.0",
     "bluebird": "^3.3.5",
-    "clone": "^1.0.2",
+    "clone": "^2.0.0",
     "custom-error": "^0.2.1",
+    "firebase": "^3.4.1",
     "md5": "^2.1.0",
-    "nested-property": "0.0.6",
-    "react": "^0.14.0",
-    "react-native": "^0.25.1",
-    "react-native-camera": "^0.3.8",
-    "react-native-couchbase-lite": "^0.2.4",
+    "nested-property": "0.0.7",
+    "react": "^15.3.2",
+    "react-native": "^0.34.1",
     "react-native-dropdown": "0.0.6",
     "react-native-fs": "^1.5.1",
-    "react-native-google-firebase": "^0.0.2",
     "react-native-html-to-pdf": "^0.1.3",
     "react-native-i18n-complete": "^0.1.8",
     "react-native-list-popover": "^1.0.5",
     "react-native-vector-icons": "^2.0.2",
     "react-redux": "^4.4.5",
     "redux": "^3.4.0",
-    "redux-actions": "^0.9.1",
+    "redux-actions": "^0.12.0",
     "redux-thunk": "^2.1.0",
     "underscore": "^1.8.3",
     "uuid": "^2.0.2",
-    "validator": "^5.2.0"
+    "validator": "^6.0.0"
   },
   "devDependencies": {
-    "babel-eslint": "^6.0.4",
-    "eslint": "^2.9.0",
+    "babel-eslint": "^7.0.0",
+    "eslint": "^3.7.1",
     "eslint-config-mybigday": "0.0.3",
-    "eslint-plugin-react": "^5.1.1",
-    "remote-redux-devtools": "^0.3.2",
-    "remote-redux-devtools-on-debugger": "^0.4.0"
+    "eslint-plugin-react": "^6.3.0",
+    "remote-redux-devtools": "^0.4.9",
+    "remote-redux-devtools-on-debugger": "^0.6.2"
   }
 }

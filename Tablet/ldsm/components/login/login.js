@@ -10,8 +10,6 @@ import { I18n } from "../../definitions";
 
 import { Company, Message } from "../../actions";
 
-import { FIRAuth, FIRDatabase } from "react-native-google-firebase";
-
 let style = StyleSheet.create({
 	container:{
 		flex: 1,

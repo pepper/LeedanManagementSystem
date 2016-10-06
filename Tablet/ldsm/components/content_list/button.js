@@ -54,6 +54,8 @@ const style = StyleSheet.create({
 	text2LineColumn:{
 		flex: 1,
 		flexDirection: "column",
+		justifyContent: "center",
+		backgroundColor: Color.transparent,
 	}
 });
 

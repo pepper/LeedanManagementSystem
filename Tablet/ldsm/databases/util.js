@@ -1,8 +1,8 @@
 import _ from "underscore";
 import { get } from "nested-property";
 import validator from "validator";
-import { FIRApp, FIRAuth, FIRDatabase } from "react-native-google-firebase";
-
+// import { FIRApp, FIRAuth, FIRDatabase } from "react-native-google-firebase";
+import firebase from "firebase";
 import { ErrorDinifition } from "../definitions";
 let error = ErrorDinifition;
 
@@ -10,17 +10,17 @@ let auth;
 let database;
 
 exports.initFirebase = async () => {
-	FIRApp.configure();
-};
-
-exports.initAuth = async () => {
-	auth = await FIRAuth.auth();
-	return auth;
-};
-
-exports.initDatabase = async () => {
-	database = await FIRDatabase.database(true);
-	return database;
+	// FIRApp.configure();
+	var config = {
+		apiKey: "AIzaSyBESpJhyP-OLPr7O_iDyr1Lv2qDnVSRLOI",
+		authDomain: "project-4087478582471658430.firebaseapp.com",
+		databaseURL: "https://project-4087478582471658430.firebaseio.com",
+		storageBucket: "project-4087478582471658430.appspot.com",
+		messagingSenderId: "137623236536"
+	};
+	firebase.initializeApp(config);
+	auth = firebase.auth();
+	database = firebase.database();
 };
 
 exports.auth = () => {

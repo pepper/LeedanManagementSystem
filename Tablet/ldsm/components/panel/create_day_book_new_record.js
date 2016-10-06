@@ -3,11 +3,11 @@
 
 import validator from "validator";
 import React, {Component, PropTypes} from "react";
-import {StyleSheet, View, Text, SegmentedControlIOS, DatePickerIOS, TouchableWithoutFeedback, Image, Picker} from "react-native";
-import DropDown, { Select, Option, OptionList, updatePosition } from "react-native-dropdown";
+import {StyleSheet, View, Text, SegmentedControlIOS, DatePickerIOS, TouchableWithoutFeedback, Image, Picker, ActionSheetIOS} from "react-native";
 
 import ConfirmPanel from "./confirm";
 import TextInput from "../basic/text_input";
+import Button from "../basic/button.js";
 import { Color, I18n } from "../../definitions";
 
 let style = StyleSheet.create({
@@ -23,7 +23,6 @@ let style = StyleSheet.create({
 		borderColor: Color.dark,
 		padding: 5,
 		paddingLeft: 15,
-		marginBottom: 10
 	},
 	selectorContainer:{
 		flex: 1,
@@ -33,10 +32,11 @@ let style = StyleSheet.create({
 		marginRight: 10,
 		borderRadius: 10
 	},
+	selectTypeButton: {
+		flex: 1,
+	},
 	datePicker:{
 		flex: 1,
-		alignItems: "center",
-		justifyContent: "center"
 	},
 });
 
@@ -88,18 +88,24 @@ export default class CreateDayBookNewRecordPanel extends Component{
 		}
 	};
 	handleSelectType = (value) => {
-		if(value == I18n.t("day_book_add_new_record_new_type")){
-			this.setState({
-				show_new_type: true,
-				type: ""
-			});
-		}
-		else{
-			this.setState({
-				show_new_type: false,
-				type: value
-			});
-		}
+		let options = (this.props.dayBook.type_list || []).concat([I18n.t("day_book_add_new_record_new_type")]);
+		ActionSheetIOS.showActionSheetWithOptions({
+			options: options,
+		},
+		(buttonIndex) => {
+			if(options[buttonIndex] == I18n.t("day_book_add_new_record_new_type")){
+				this.setState({
+					show_new_type: true,
+					type: ""
+				});
+			}
+			else{
+				this.setState({
+					show_new_type: false,
+					type: options[buttonIndex]
+				});
+			}
+		});
 	};
 	render(){
 		return (
@@ -135,30 +141,12 @@ export default class CreateDayBookNewRecordPanel extends Component{
 								this.setState({record_datetime: date});
 							}}
 						/>
-						<Select width={300}
-							style={style.select}
-							ref={(ref) => this.selectRef = ref}
-							optionListRef={this.getOptionList}
-							defaultValue={I18n.t("day_book_add_new_record_select_type")}
-							onSelect={this.handleSelectType}>
-							{
-								(this.props.dayBook.type_list || []).map((type) => {
-									return (
-										<Option key={"CreateDayBookNewRecordPanel" + type}>{type}</Option>
-									);
-								})
-							}
-							<Option>{I18n.t("day_book_add_new_record_new_type")}</Option>
-						</Select>
-						<OptionList ref={(ref) => {
-							this.optionListRef = ref;
-							setTimeout(() => {
-								if(this.selectRef && this.optionListRef){
-									updatePosition(this.selectRef);
-									updatePosition(this.optionListRef);
-								}
-							}, 500);
-						}}/>
+						<Button
+							style={style.selectTypeButton}
+							onPress={this.handleSelectType}
+						>
+							<Text>{(this.state.type !== "")?this.state.type:I18n.t("day_book_add_new_record_select_type")}</Text>
+						</Button>
 						{
 							(this.state.show_new_type)?
 							(

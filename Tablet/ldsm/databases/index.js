@@ -15,8 +15,6 @@ exports.init = async (dbName) => {
 	// await createDesignDocument("stock", Stock.views);
 
 	initFirebase();
-	await initAuth()
-	await initDatabase();
 };
 
 exports.Company = Company;

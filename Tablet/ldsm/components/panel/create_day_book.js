@@ -2,11 +2,13 @@
 "use strict";
 
 import React, {Component, PropTypes} from "react";
-import {StyleSheet, View, Text, SegmentedControlIOS} from "react-native";
-import DropDown, { Select, Option, OptionList, updatePosition } from "react-native-dropdown";
+import {StyleSheet, View, Text, SegmentedControlIOS, ActionSheetIOS} from "react-native";
+
+
 
 import ConfirmPanel from "./confirm";
 import TextInput from "../basic/text_input";
+import Button from "../basic/button.js";
 import { Color, I18n } from "../../definitions";
 
 let style = StyleSheet.create({
@@ -66,18 +68,24 @@ export default class CreateDayBookPanel extends Component{
 		return true;
 	};
 	handleSelectGroup = (value) => {
-		if(value == I18n.t("company_create_daybook_panel_new_group")){
-			this.setState({
-				show_new_group: true,
-				group: ""
-			});
-		}
-		else{
-			this.setState({
-				show_new_group: false,
-				group: value
-			});
-		}
+		let options = (this.props.groupList || []).concat([I18n.t("company_create_daybook_panel_new_group")]);
+		ActionSheetIOS.showActionSheetWithOptions({
+			options: options,
+		},
+		(buttonIndex) => {
+			if(options[buttonIndex] == I18n.t("company_create_daybook_panel_new_group")){
+				this.setState({
+					show_new_group: true,
+					group: ""
+				});
+			}
+			else{
+				this.setState({
+					show_new_group: false,
+					group: options[buttonIndex]
+				});
+			}
+		});
 	};
 	handleChangeAccountWay = (event) => {
 		this.setState({
@@ -87,7 +95,7 @@ export default class CreateDayBookPanel extends Component{
 	render(){
 		return (
 			<ConfirmPanel ref={(ref) => this.confirm = ref}
-				title={I18n.t("company_create_daybook")}
+				 xtitle={I18n.t("company_create_daybook")}
 				onConfirm={this.handleConfirm}
 			>
 				<View style={style.container}>
@@ -104,30 +112,10 @@ export default class CreateDayBookPanel extends Component{
 						tintColor={Color.dark}
 					/>
 					<View style={style.selectorContainer}>
-						<Select width={300}
-							style={style.select}
-							ref={(ref) => this.selectRef = ref}
-							optionListRef={this.getOptionList}
-							defaultValue={I18n.t("company_create_daybook_panel_select_group")}
-							onSelect={this.handleSelectGroup}>
-							{
-								(this.props.groupList || []).map((group) => {
-									return (
-										<Option key={"CompanyCreateDaybookPanelGroup" + group}>{group}</Option>
-									);
-								})
-							}
-							<Option>{I18n.t("company_create_daybook_panel_new_group")}</Option>
-						</Select>
-						<OptionList ref={(ref) => {
-							this.optionListRef = ref;
-							setTimeout(() => {
-								if(this.selectRef && this.optionListRef){
-									updatePosition(this.selectRef);
-									updatePosition(this.optionListRef);
-								}
-							}, 500);
-						}}/>
+						<Button onPress={this.handleSelectGroup}>
+							<Text>{(this.state.group && this.state.group !== "")?this.state.group:I18n.t("company_create_daybook_panel_select_group")}</Text>
+						</Button>
+						
 						{
 							(this.state.show_new_group)?
 							(

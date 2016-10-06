@@ -3,7 +3,6 @@
 
 import React, {Component, PropTypes} from "react";
 import {StyleSheet, View, Text, SegmentedControlIOS, TouchableWithoutFeedback, Image} from "react-native";
-import Camera from "react-native-camera";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 import ConfirmPanel from "./confirm";
@@ -184,23 +183,6 @@ export default class CreateEmployeePanel extends Component{
 									);
 								}.bind(this))
 							}
-						</View>
-					</View>
-					<View style={style.avatarContainer}>
-						<View style={style.cameraContainer}>
-							<TouchableWithoutFeedback onPress={this.takePhotoHandler}>
-								<Camera
-									ref="cam"
-									style={style.cameraView}
-									type={this.state.cameraType}
-									orientation={Camera.constants.Orientation.landscapeRight}
-								>
-									<Icon name={"camera"} size={20} color={Color.white} style={style.takePhotoButton} />
-								</Camera>
-							</TouchableWithoutFeedback>
-						</View>
-						<View style={style.cameraContainer}>
-							<Image style={style.avatarImage} source={{uri: this.state.avatar }} />
 						</View>
 					</View>
 				</View>

@@ -27,9 +27,7 @@ let style = StyleSheet.create({
 		fontWeight: "bold"
 	},
 	datePicker:{
-		flex: 1,
-		alignItems: "center",
-		justifyContent: "center"
+		flex: 1
 	},
 	clearFilter:{
 		backgroundColor: Color.red,

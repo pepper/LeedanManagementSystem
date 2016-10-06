@@ -1,4 +1,3 @@
-import { FIRDatabase } from "react-native-google-firebase";
 import { database } from "./util";
 
 export default class Model {
@@ -7,9 +6,10 @@ export default class Model {
 		if(!refPath || refPath == ""){
 			throw new Error("Must provide reference path.");
 		}
-		this.ref = await database().rootReference.child(refPath);
+		this.ref = database().ref(refPath);
 		if(autoId){
-			this.ref = await this.ref.childByAutoId();
+			// this.ref = await this.ref.childByAutoId();
+			this.ref = firebase.database().ref(refPath).push();
 		}
 		if(eventHandler){
 			await this.observe(eventHandler);
@@ -26,18 +26,21 @@ export default class Model {
 		}
 	}
 	update(props){
-		console.log("Model", this);
 		let input = Object.assign({}, props);
+		Object.entries(input).forEach((entry) => {
+			if (typeof entry[1] === "function") {
+				input[entry[0]] = null;
+			}
+		});
 		delete input.ref;
-		this.ref.setValue(input);
+		this.ref.set(input);
 	}
 	remove(){
-		this.ref.removeValue();
+		this.ref.remove();
 	}
 	async observe(eventHandler){
-		this.handle = await this.ref.observeEventType(FIRDatabase.FIRDataEventType.FIRDataEventTypeValue, (value) => {
-			delete value.ref;
-			Object.assign(this, value);
+		this.handle = await this.ref.on("value", (snapshot) => {
+			Object.assign(this, snapshot.val());
 			eventHandler(this);
 		});
 	}

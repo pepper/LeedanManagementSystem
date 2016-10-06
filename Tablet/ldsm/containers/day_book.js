@@ -559,6 +559,7 @@ class DayBookContainer extends Component {
 						if(dayBook.type == "group"){
 							return (dayBook.title == get(this.props.dayBook, "current_day_book_group"))?Object.assign({}, dayBook, {selected: true}):Object.assign({}, dayBook);
 						}
+						console.log(dayBook);
 						return (dayBook.key == get(this.props.dayBook, "current_day_book_key"))?Object.assign({}, dayBook, {selected: true}):Object.assign({}, dayBook);
 					})}
 						currentItem={get(this.props.dayBook, "current_day_book_id")}
@@ -599,7 +600,7 @@ class DayBookContainer extends Component {
 									}}
 									selected={rowData.selected}
 									text={rowData.title}
-									subText={rowData.last_index + ""}
+									subText={rowData.record_list.length + ""}
 									onPress={() => {
 										this.handleChangeDayBook(rowData.key);
 									}}

@@ -3,7 +3,6 @@
 
 import React, {Component, PropTypes} from "react";
 import {StyleSheet, View, Text, SegmentedControlIOS, TouchableWithoutFeedback, Image} from "react-native";
-import Camera from "react-native-camera";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 import ConfirmPanel from "./confirm";

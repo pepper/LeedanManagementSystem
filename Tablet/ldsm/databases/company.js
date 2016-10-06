@@ -189,7 +189,7 @@ Company.register = async (property) => {
 	checkPropertyRequire(property, "username");
 	checkPropertyRequire(property, "password");
 
-	let user = await auth().createUserWithEmail(property.username, property.password);
+	let user = await (auth()).createUserWithEmailAndPassword(property.username, property.password);
 	
 	let company = new Company();
 	await company.init("company/" + user.uid + "/basic", null, {
@@ -206,7 +206,7 @@ Company.login = async (property) => {
 	checkPropertyRequire(property, "username");
 	checkPropertyRequire(property, "password");
 
-	let user = await auth().signInWithEmail(property.username, property.password);
+	let user = await (auth()).signInWithEmailAndPassword(property.username, property.password);
 	return user.uid;
 };
 

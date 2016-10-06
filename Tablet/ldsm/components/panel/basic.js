@@ -44,7 +44,7 @@ export default class Panel extends Component {
 	};
 	render(){
 		return (
-			<Modal animated={true}
+			<Modal animationType={"fade"}
 				transparent={true}
 				visible={this.state.show}
 				onRequestClose={() => {}}
