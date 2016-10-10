@@ -24,7 +24,7 @@ let style = StyleSheet.create({
 		marginRight:10,
 	},
 	fullWidthTextInput:{
-		flex: 1,
+		flex: 0,
 		height: 40,
 		borderWidth: 0.5,
 		borderColor: Color.dark,

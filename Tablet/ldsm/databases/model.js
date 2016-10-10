@@ -9,7 +9,7 @@ export default class Model {
 		this.ref = database().ref(refPath);
 		if(autoId){
 			// this.ref = await this.ref.childByAutoId();
-			this.ref = firebase.database().ref(refPath).push();
+			this.ref = database().ref(refPath).push();
 		}
 		if(eventHandler){
 			await this.observe(eventHandler);
